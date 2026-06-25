@@ -30,7 +30,7 @@ class CartDrawer extends Component
     {
         if (! Auth::check()) {
             $this->dispatch('toast',
-                message: 'Silakan login dahulu untuk menambahkan ke keranjang.',
+                message: 'Silahkan login dahulu untuk menambahkan ke keranjang.',
                 actionText: 'Login',
                 actionUrl: route('login'),
                 duration: 4000
