@@ -8,10 +8,10 @@ use Livewire\Component;
 
 class CareGuide extends Component
 {
-    #[Layout('layouts.app')]
-    #[Title('Panduan Perawatan')]
-    public function render()
-    {
-        return view('livewire.landing-page.care-guide');
-    }
+  #[Layout('layouts.app')]
+  #[Title('Panduan Perawatan')]
+  public function render()
+  {
+    return view('livewire.landing-page.care-guide');
+  }
 }

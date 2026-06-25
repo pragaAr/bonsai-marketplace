@@ -9,12 +9,12 @@ use Livewire\Component;
 
 class Article extends Component
 {
-    #[Layout('layouts.app')]
-    #[Title('Artikel')]
-    public function render()
-    {
-        $journals = JournalEntry::orderBy('published_date', 'desc')->get();
+  #[Layout('layouts.app')]
+  #[Title('Artikel')]
+  public function render()
+  {
+    $journals = JournalEntry::orderBy('published_date', 'desc')->get();
 
-        return view('livewire.landing-page.article', compact('journals'));
-    }
+    return view('livewire.landing-page.article', compact('journals'));
+  }
 }

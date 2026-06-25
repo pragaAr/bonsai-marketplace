@@ -9,12 +9,12 @@ use Livewire\Component;
 
 class LandingPage extends Component
 {
-    #[Layout('layouts.app')]
-    #[Title('')]
-    public function render()
-    {
-        $featuredProducts = Product::where('featured', true)->take(6)->get();
+  #[Layout('layouts.app')]
+  #[Title('')]
+  public function render()
+  {
+    $featuredProducts = Product::where('featured', true)->take(6)->get();
 
-        return view('livewire.landing-page.index', compact('featuredProducts'));
-    }
+    return view('livewire.landing-page.index', compact('featuredProducts'));
+  }
 }
