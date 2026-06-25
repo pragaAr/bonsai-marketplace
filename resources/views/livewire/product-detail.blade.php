@@ -80,7 +80,7 @@
 
         <!-- Add & Buy Actions -->
         <div class="flex flex-col gap-3 w-full">
-          <!-- Row 1: Chat Penjual (Memenuhi lebar penuh) -->
+         
           <div class="w-full">
             <x-whatsapp-chat-link
               :product="$product"
@@ -89,28 +89,13 @@
             />
           </div>
 
-          <!-- Row 2: Keranjang dan Beli (Berdampingan seimbang) -->
           <div class="flex gap-3 w-full"> 
-            <button
-              x-data="{ loading: false }"
-              @click="loading = true; $dispatch('add-to-cart', { productId: {{ $product->id }} })"
-              @cart-updated.window="loading = false"
-              @toast.window="loading = false"
-              :disabled="loading"
-              :class="loading ? 'opacity-60 cursor-not-allowed' : 'hover:bg-opacity-90'"
-              class="btn-lift flex-1 bg-primary text-cream py-3 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
-            >
-              <!-- Spinner (loading) -->
-              <svg x-show="loading" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-              </svg>
-              <!-- Plus icon (idle) -->
-              <svg x-show="!loading" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-              </svg>
-              <span x-text="loading ? 'Menambahkan…' : 'Keranjang'"></span>
-            </button>
+            <x-cart-button
+              :product="$product"
+              label="Keranjang"
+              iconClass="w-5 h-5"
+              class="btn-lift flex-1 bg-primary text-cream py-3 rounded-xl text-sm font-semibold transition-colors cursor-pointer flex items-center justify-center gap-2 hover:bg-opacity-90"
+            />
             
             <x-buy-button
               :product="$product"
@@ -133,7 +118,7 @@
             <h2 class="text-2xl font-semibold text-primary">Koleksi terkait</h2>
             <p class="text-xs text-primary/50 mt-1">Beragam jenis produk yang mungkin Anda sukai</p>
           </div>
-          <a href="/shop" class="text-xs text-accent hover:text-primary transition-colors flex items-center gap-1">
+          <a href="/shop" wire:navigate class="text-xs text-accent hover:text-primary transition-colors flex items-center gap-1">
             Lihat semua
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -162,27 +147,12 @@
                 </a>
                 
                 <div class="flex gap-2 mt-4 pt-3 border-t border-primary/5">
-                  <button
-                    x-data="{ loading: false }"
-                    @click="loading = true; $dispatch('add-to-cart', { productId: {{ $related->id }} })"
-                    @cart-updated.window="loading = false"
-                    @toast.window="loading = false"
-                    :disabled="loading"
-                    :class="loading ? 'opacity-60 cursor-not-allowed' : 'hover:bg-opacity-90'"
-                    aria-label="Add {{ $related->name }} to cart"
-                    class="btn-lift flex-1 flex items-center justify-center gap-1.5 bg-primary text-cream text-xs py-2.5 px-3 rounded-lg transition-colors"
-                  >
-                    <!-- Spinner (loading) -->
-                    <svg x-show="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-                    </svg>
-                    <!-- Plus icon (idle) -->
-                    <svg x-show="!loading" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    <span class="hidden sm:inline" x-text="loading ? 'Menambahkan…' : 'Keranjang'"></span>
-                  </button>
+                  <x-cart-button
+                    :product="$related"
+                    label="Keranjang"
+                    spanClass="hidden sm:inline"
+                    class="btn-lift flex-1 flex items-center justify-center gap-1.5 bg-primary text-cream text-xs py-2.5 px-3 rounded-lg transition-colors cursor-pointer hover:bg-opacity-90"
+                  />
                   <x-buy-button
                     :product="$related"
                     label="Beli"

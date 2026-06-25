@@ -14,7 +14,7 @@
         @foreach($categories as $cat)
           <button 
             wire:click="selectCategory('{{ $cat }}')"
-            class="filter-btn flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-medium border border-primary/20 hover:border-primary transition-colors duration-200 {{ $category === $cat ? 'active' : '' }} {{ $loop->index >= 5 ? 'md:hidden' : '' }}"
+            class="filter-btn flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-medium border border-primary/20 hover:border-primary transition-colors duration-200 cursor-pointer {{ $category === $cat ? 'active' : '' }} {{ $loop->index >= 5 ? 'md:hidden' : '' }}"
             @if($loop->index >= 5)
               :class="{ 'md:!inline-flex': showAll }"
             @endif
@@ -26,7 +26,7 @@
         @if(count($categories) > 5)
           <button 
             @click="showAll = !showAll" 
-            class="hidden md:inline-flex flex-shrink-0 items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border border-primary/20 hover:border-primary transition-colors duration-200 bg-white text-primary"
+            class="hidden md:inline-flex flex-shrink-0 items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border border-primary/20 hover:border-primary transition-colors duration-200 bg-white text-primary cursor-pointer"
           >
             <span x-text="showAll ? 'Show Less' : 'More Categories'"></span>
             <svg class="w-3.5 h-3.5 transition-transform duration-200" :class="showAll ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -40,12 +40,12 @@
       <div class="flex items-center justify-between md:justify-end gap-4">
         
         <select wire:model.live="sort" 
-                class="bg-white border border-primary/15 rounded-lg px-3 py-2 text-xs text-primary focus:outline-none focus:border-primary/40">
+                class="bg-white border border-primary/15 rounded-lg px-3 py-2 text-xs text-primary focus:outline-none focus:border-primary/40 cursor-pointer">
           <option value="default">Default Sorting</option>
           <option value="price_asc">Price: Low to High</option>
           <option value="price_desc">Price: High to Low</option>
-          <option value="name_asc">Alphabetical: A–Z</option>
-          <option value="name_desc">Alphabetical: Z–A</option>
+          <option value="name_asc">Alphabetical: A-Z</option>
+          <option value="name_desc">Alphabetical: Z-A</option>
         </select>
       </div>
     </div>
@@ -100,27 +100,12 @@
               <!-- Cart & Buy Actions -->
               <div class="flex gap-2 mt-4 pt-3 border-t border-primary/5">
                 <!-- Add to Cart (Livewire Event dispatch) -->
-                <button
-                  x-data="{ loading: false }"
-                  @click="loading = true; $dispatch('add-to-cart', { productId: {{ $product->id }} })"
-                  @cart-updated.window="loading = false"
-                  @toast.window="loading = false"
-                  :disabled="loading"
-                  :class="loading ? 'opacity-60 cursor-not-allowed' : 'hover:bg-opacity-90'"
-                  aria-label="Add {{ $product->name }} to cart"
-                  class="btn-lift flex-1 flex items-center justify-center gap-1.5 bg-primary text-cream text-xs py-2.5 px-3 rounded-lg transition-colors"
-                >
-                  <!-- Spinner (loading) -->
-                  <svg x-show="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-                  </svg>
-                  <!-- Plus icon (idle) -->
-                  <svg x-show="!loading" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                  </svg>
-                  <span class="hidden sm:inline" x-text="loading ? 'Menambahkan…' : 'Keranjang'"></span>
-                </button>
+                <x-cart-button
+                  :product="$product"
+                  label="Keranjang"
+                  spanClass="hidden sm:inline"
+                  class="btn-lift flex-1 flex items-center justify-center gap-1.5 bg-primary text-cream text-xs py-2.5 px-3 rounded-lg transition-colors cursor-pointer hover:bg-opacity-90"
+                />
                 
                 <x-buy-button
                   :product="$product"

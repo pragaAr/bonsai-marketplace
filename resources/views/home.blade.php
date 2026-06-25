@@ -63,27 +63,11 @@
             
             <div class="flex gap-2 mt-4 pt-3 border-t border-primary/5">
               <!-- Add to Cart (Livewire dispatch) -->
-              <button
-                x-data="{ loading: false }"
-                @click="loading = true; Livewire.dispatch('add-to-cart', { productId: {{ $product->id }} })"
-                @cart-updated.window="loading = false"
-                @toast.window="loading = false"
-                :disabled="loading"
-                :class="loading ? 'opacity-60 cursor-not-allowed' : 'hover:bg-opacity-90'"
-                aria-label="Add {{ $product->name }} to cart"
-                class="btn-lift flex-1 flex items-center justify-center gap-1.5 bg-primary text-cream text-xs py-2.5 px-3 rounded-lg transition-colors"
-              >
-                <!-- Spinner (loading) -->
-                <svg x-show="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-                </svg>
-                <!-- Plus icon (idle) -->
-                <svg x-show="!loading" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                </svg>
-                <span x-text="loading ? 'Menambahkan…' : 'Cart'"></span>
-              </button>
+              <x-cart-button
+                :product="$product"
+                label="Cart"
+                class="btn-lift flex-1 flex items-center justify-center gap-1.5 bg-primary text-cream text-xs py-2.5 px-3 rounded-lg transition-colors hover:bg-opacity-90"
+              />
               
               <x-whatsapp-chat-link
                 :product="$product"
