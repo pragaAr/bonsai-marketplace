@@ -99,7 +99,7 @@ class CartDrawer extends Component
             session()->put('cart', $cart);
             $this->dispatch('cart-updated');
 
-            $this->dispatch('toast', message: "'{$name}' removed from cart", duration: 3000);
+            $this->dispatch('toast', message: "'{$name}' dihapus dari keranjang", duration: 3000);
         }
     }
 
@@ -107,7 +107,7 @@ class CartDrawer extends Component
     {
         session()->forget('cart');
         $this->dispatch('cart-updated');
-        $this->dispatch('toast', message: 'Cart cleared', duration: 3000);
+        $this->dispatch('toast', message: 'Keranjang berhasil dibersihkan', duration: 3000);
     }
 
     public function checkout()
