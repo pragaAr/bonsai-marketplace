@@ -30,7 +30,7 @@ class CartDrawer extends Component
     {
         if (! Auth::check()) {
             $this->dispatch('toast',
-                message: 'Silakan login terlebih dahulu untuk menambahkan ke keranjang.',
+                message: 'Silakan login dahulu untuk menambahkan ke keranjang.',
                 actionText: 'Login',
                 actionUrl: route('login'),
                 duration: 4000
@@ -68,7 +68,7 @@ class CartDrawer extends Component
             ->log("Added '{$product->name}' to shopping cart");
 
         // Dispatch browser toast notification
-        $this->dispatch('toast', message: "'{$product->name}' added to cart!", duration: 3000);
+        $this->dispatch('toast', message: "'{$product->name}' dimasukkan ke keranjang!", duration: 3000);
 
         // Auto open drawer to delight user (Disabled as per user request)
         // $this->isOpen = true;
