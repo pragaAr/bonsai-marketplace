@@ -15,6 +15,10 @@
   --font-sans: 'Inter', system-ui, sans-serif;
 }
 
+[x-cloak] {
+  display: none !important;
+}
+
 input {
   font-size: 0.8rem;
 }
