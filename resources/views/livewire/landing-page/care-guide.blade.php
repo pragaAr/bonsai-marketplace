@@ -115,9 +115,9 @@
     <section class="bg-primary/[0.03] border-t border-primary/5 py-16">
       <div class="max-w-xl mx-auto px-4 text-center">
         <h2 class="text-xl md:text-2xl font-semibold text-primary">Siap mulai merawat bonsai?</h2>
-        <p class="mt-3 text-sm text-primary/50">Temukan alat, pot, dan media tanam yang sudah diuji langsung oleh komunitas.</p>
+        <p class="mt-3 text-sm text-primary/50">Temukan bonsai siap kontes, bahan, alat, pot, dan media tanam yang sudah diuji langsung oleh komunitas.</p>
         <a href="/shop" wire:navigate class="inline-flex items-center gap-2 mt-6 border-2 border-primary text-primary px-6 py-3 rounded-lg text-sm font-semibold hover:bg-primary hover:text-cream transition-colors duration-300 btn-lift">
-          Lihat Produk Kami
+          Lihat Koleksi Kami
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
           </svg>
