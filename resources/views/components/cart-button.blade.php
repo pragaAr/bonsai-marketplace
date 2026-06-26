@@ -36,15 +36,15 @@
     @endif
   </button>
 @else
-  <a href="{{ route('login') }}"
+  <a x-data="{ loading: false }" href="{{ route('login') }}"
     @click.prevent="$dispatch('toast', { 
         message: @js('Silakan login terlebih dahulu untuk menambahkan produk ke keranjang.'), 
         duration: 3000, 
         actionText: 'Login', 
         actionUrl: @js(route('login')) 
-    })
-    aria-label="Add
-    {{ $product->name }} to cart" {{ $attributes }}>
+    })"
+    aria-label="Add {{ $product->name }} to cart"
+    {{ $attributes }}>
     <!-- Plus icon -->
     <svg class="{{ $iconClass }}" fill="none"
       stroke="currentColor" stroke-width="2"
