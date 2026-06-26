@@ -19,7 +19,7 @@
             <svg class="w-4 h-4 text-cream" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1H4zm1 2h10v2H5V5zm0 4h10v6H5V9z" />
             </svg>
-            <span class="font-medium text-cream">Admin Dashboard</span>
+            <span class="font-medium text-cream">Dashboard</span>
           </a>
 
           <div class="px-3 pt-1 text-[11px] uppercase tracking-[0.2em] text-cream/60">Toko</div>
