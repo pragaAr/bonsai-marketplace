@@ -1,27 +1,30 @@
 <div x-data x-init="$watch('$wire.isOpen', val => $dispatch(val ? 'cart-opened' : 'cart-closed'))">
   <!-- Backdrop -->
-  <div x-show="$wire.isOpen" 
-       x-transition:enter="transition ease-out duration-300"
-       x-transition:enter-start="opacity-0"
-       x-transition:enter-end="opacity-100"
-       x-transition:leave="transition ease-in duration-300"
-       x-transition:leave-start="opacity-100"
-       x-transition:leave-end="opacity-0"
-       @click="$wire.isOpen = false"
-       class="fixed inset-0 bg-black/30 z-[55]" 
-       style="display: none;"></div>
+  <div 
+    x-show="$wire.isOpen" 
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-300"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    @click="$wire.isOpen = false"
+    class="fixed inset-0 bg-black/30 z-[55]" 
+    style="display: none;">
+  </div>
 
   <!-- Cart Panel -->
-  <aside x-show="$wire.isOpen" 
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="transform translate-x-full"
-         x-transition:enter-end="transform translate-x-0"
-         x-transition:leave="transition ease-in duration-300"
-         x-transition:leave-start="transform translate-x-0"
-         x-transition:leave-end="transform translate-x-full"
-         class="fixed inset-y-0 right-0 w-full max-w-md bg-cream z-[56] flex flex-col shadow-2xl" 
-         aria-label="Shopping cart"
-         style="display: none;">
+  <aside 
+    x-show="$wire.isOpen" 
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="transform translate-x-full"
+    x-transition:enter-end="transform translate-x-0"
+    x-transition:leave="transition ease-in duration-300"
+    x-transition:leave-start="transform translate-x-0"
+    x-transition:leave-end="transform translate-x-full"
+    class="fixed inset-y-0 right-0 w-full max-w-md bg-cream z-[56] flex flex-col shadow-2xl" 
+    aria-label="Shopping cart"
+    style="display: none;">
     
     <!-- Drawer Header -->
     <div class="flex items-center justify-between h-16 px-4 sm:px-6 border-b border-primary/10">

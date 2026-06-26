@@ -67,7 +67,7 @@
       <svg class="w-4 h-4 text-accent flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
       </svg>
-      <span class="flex-1" x-text="toast.message"></span>
+      <span class="flex-1 min-w-0 break-words" x-text="toast.message"></span>
       <a x-show="toast.actionUrl" :href="toast.actionUrl" class="flex-shrink-0 rounded-full bg-cream px-3 py-1 text-xs font-semibold text-primary transition-colors hover:bg-accent">
         <span x-text="toast.actionText ?? 'Buka'"></span>
       </a>

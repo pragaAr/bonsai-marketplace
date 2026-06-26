@@ -2,7 +2,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
     <!-- Back Button -->
     <div class="mb-8">
-      <a href="/shop" class="inline-flex items-center gap-1.5 text-xs text-primary/60 hover:text-primary transition-colors">
+      <a href="/shop" wire:navigate class="inline-flex items-center gap-1.5 text-xs text-primary/60 hover:text-primary transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>
@@ -156,7 +156,8 @@
                   <x-buy-button
                     :product="$related"
                     label="Beli"
-                    class="btn-lift flex items-center justify-center gap-1.5 bg-[#C65A3A] text-white text-xs font-semibold py-2.5 px-3 rounded-lg hover:bg-[#A94B31] transition-colors"
+                    spanClass="hidden sm:inline"
+                    class="btn-lift flex-1 flex items-center justify-center gap-1.5 bg-[#C65A3A] text-white text-xs font-semibold py-2.5 px-3 rounded-lg hover:bg-[#A94B31] transition-colors"
                   />
                 </div>
               </div>
