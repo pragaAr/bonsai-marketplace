@@ -8,10 +8,10 @@ use Livewire\Component;
 
 class ProfileOrders extends Component
 {
-  #[Layout('layouts.app')]
-  #[Title('History Pembelian')]
-  public function render()
-  {
-    return view('livewire.profile-orders');
-  }
+    #[Layout('layouts.app')]
+    #[Title('History Pembelian')]
+    public function render()
+    {
+        return view('livewire.profile-orders');
+    }
 }
