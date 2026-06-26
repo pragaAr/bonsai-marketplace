@@ -2,7 +2,9 @@
   <div class="flex items-center justify-between">
     <div>
       <h1 class="text-2xl font-bold text-primary">Dashboard</h1>
-      <p class="text-sm text-primary/60 mt-1">Selamat datang, {{ auth()->user()->name }}</p>
+      <p class="text-sm text-primary/60 mt-1">
+        Selamat datang, {{ auth()->user()->name }}
+      </p>
     </div>
   </div>
 
@@ -17,7 +19,9 @@
           </svg>
         </div>
         <div>
-          <p class="text-2xl font-bold text-primary">{{ \App\Models\Product::count() }}</p>
+          <p class="text-2xl font-bold text-primary">
+            {{ \App\Models\Product::count() }}
+          </p>
           <p class="text-xs text-primary/50">Total Produk</p>
         </div>
       </div>
@@ -32,7 +36,9 @@
           </svg>
         </div>
         <div>
-          <p class="text-2xl font-bold text-primary">{{ \App\Models\Product::where('status', 'pending')->count() }}</p>
+          <p class="text-2xl font-bold text-primary">
+            {{ \App\Models\Product::where('status', 'pending')->count() }}
+          </p>
           <p class="text-xs text-primary/50">Menunggu Persetujuan</p>
         </div>
       </div>
@@ -47,7 +53,9 @@
           </svg>
         </div>
         <div>
-          <p class="text-2xl font-bold text-primary">{{ \App\Models\Product::where('status', 'approved')->count() }}</p>
+          <p class="text-2xl font-bold text-primary">
+            {{ \App\Models\Product::where('status', 'approved')->count() }}
+          </p>
           <p class="text-xs text-primary/50">Disetujui</p>
         </div>
       </div>
@@ -64,7 +72,9 @@
           </svg>
         </div>
         <div>
-          <p class="text-2xl font-bold text-primary">{{ \App\Models\User::count() }}</p>
+          <p class="text-2xl font-bold text-primary">
+            {{ \App\Models\User::count() }}
+          </p>
           <p class="text-xs text-primary/50">Total Pengguna</p>
         </div>
       </div>
@@ -89,9 +99,15 @@
         <tbody class="divide-y divide-primary/10">
           @forelse(\App\Models\Product::latest()->take(5)->get() as $product)
           <tr class="hover:bg-primary/5 transition-colors">
-            <td class="px-5 py-3 font-medium text-primary">{{ $product->name }}</td>
-            <td class="px-5 py-3 text-primary/70">{{ $product->category }}</td>
-            <td class="px-5 py-3 text-primary/70">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+            <td class="px-5 py-3 font-medium text-primary">
+              {{ $product->name }}
+            </td>
+            <td class="px-5 py-3 text-primary/70">
+              {{ $product->category }}
+            </td>
+            <td class="px-5 py-3 text-primary/70">
+              Rp {{ number_format($product->price, 0, ',', '.') }}
+            </td>
             <td class="px-5 py-3">
               @if($product->status === 'approved')
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Disetujui</span>
@@ -101,7 +117,9 @@
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Ditolak</span>
               @endif
             </td>
-            <td class="px-5 py-3 text-primary/70">{{ $product->created_at->format('d M Y') }}</td>
+            <td class="px-5 py-3 text-primary/70">
+              {{ $product->created_at->format('d M Y') }}
+            </td>
           </tr>
           @empty
           <tr>
