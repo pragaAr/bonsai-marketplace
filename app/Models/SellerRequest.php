@@ -12,6 +12,10 @@ class SellerRequest extends Model
     protected $fillable = [
         'user_id',
         'store_name',
+        'owner_name',
+        'city_name',
+        'province_name',
+        'description',
         'whatsapp',
         'notes',
         'status',
