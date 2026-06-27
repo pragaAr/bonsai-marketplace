@@ -69,15 +69,20 @@ class Profile extends Component
         return Auth::user();
     }
 
-    public function toggleEditor(): void
+    public function openEditor(): void
     {
-        $this->showEditor = ! $this->showEditor;
-        if (! $this->showEditor) {
-            $this->mount();
-            $this->password = '';
-            $this->password_confirmation = '';
-            $this->avatarFile = null;
-        }
+        $this->showEditor = true;
+    }
+
+    public function closeEditor(): void
+    {
+        $this->showEditor = false;
+
+        $this->mount();
+
+        $this->password = '';
+        $this->password_confirmation = '';
+        $this->avatarFile = null;
     }
 
     public function saveProfile(): void
