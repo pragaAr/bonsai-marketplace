@@ -6,7 +6,7 @@
     x-transition:leave="transition ease-in duration-300"
     x-transition:leave-start="opacity-100"
     x-transition:leave-end="opacity-0"
-    @click="$wire.toggleEditor()"
+    @click="$wire.closeEditor()"
     class="fixed inset-0 bg-black/30 z-[55]"
     style="display: none;"></div>
 
@@ -23,7 +23,7 @@
       class="flex items-center justify-between h-16 px-4 sm:px-6 border-b border-primary/10 shrink-0">
       <h2 class="text-lg font-semibold text-primary">Ubah
         Profil</h2>
-      <button @click="$wire.toggleEditor()"
+      <button @click="$wire.closeEditor()"
         aria-label="Tutup form edit profil"
         class="p-2 -me-2 rounded-full hover:bg-primary/5 min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer transition-colors">
         <svg class="w-5 h-5 text-primary" fill="none"
@@ -155,17 +155,35 @@
         <div
           class="mt-8 flex flex-wrap gap-3 border-t border-primary/10 pt-6">
           <button type="submit"
-            class="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90"
+            class="inline-flex items-center gap-2 justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90 cursor-pointer"
             wire:loading.attr="disabled">
             <span wire:loading.remove
-              wire:target="saveProfile">Simpan
-              perubahan</span>
-            <span wire:loading
-              wire:target="saveProfile">Menyimpan…</span>
+              wire:target="saveProfile">
+              Simpan perubahan
+            </span>
+            <span wire:loading wire:target="saveProfile">
+              <span
+                class="inline-flex items-center justify-center gap-2">
+                <svg class="h-4 w-4 animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25"
+                    cx="12" cy="12" r="10"
+                    stroke="currentColor"
+                    stroke-width="4">
+                  </circle>
+                  <path class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                  </path>
+                </svg>
+                <span>Menyimpan...</span>
+              </span>
+            </span>
           </button>
           <button type="button"
-            @click="$wire.toggleEditor()"
-            class="inline-flex items-center justify-center rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5">
+            @click="$wire.closeEditor()"
+            class="inline-flex items-center justify-center rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5 cursor-pointer">
             Batal
           </button>
         </div>
@@ -275,15 +293,30 @@
           </div>
 
           <div class="mt-8 flex flex-wrap gap-3">
-            <button type="button"
-              wire:click="toggleEditor"
-              class="inline-flex items-center justify-center rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5">
+            <button type="button" wire:click="openEditor"
+              wire:loading.attr="disabled"
+              wire:target="openEditor"
+              class="inline-flex items-center gap-2 justify-center rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5 cursor-pointer">
+
+              <svg wire:loading wire:target="openEditor"
+                class="h-4 w-4 animate-spin"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12"
+                  cy="12" r="10"
+                  stroke="currentColor" stroke-width="4">
+                </circle>
+                <path class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+              </svg>
               Ubah profil
             </button>
             @if ($hasGoogleAvatar && !$hasCustomAvatar)
               <button type="button"
                 wire:click="useGoogleAvatar"
-                class="inline-flex items-center justify-center rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5">
+                class="inline-flex items-center justify-center rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5 cursor-pointer">
                 Sync Foto profile Google
               </button>
             @endif
