@@ -390,8 +390,7 @@
       <div class="border-t border-primary/10 p-6 bg-cream">
         <p class="text-xs text-primary/40 text-center">
           &copy; {{ date('Y') }}
-          bonsaiku. Keindahan yang Tumbuh, Nilai yang
-          Bertahan.
+          bonsaiku. Temukan, Rawat, Berkarya
         </p>
       </div>
     </nav>
@@ -607,8 +606,7 @@
         class="mt-12 pt-6 border-t border-cream/10 text-center">
         <p class="text-xs text-cream/40">
           &copy; {{ date('Y') }}
-          bonsaiku. Keindahan yang Tumbuh, Nilai yang
-          Bertahan.
+          bonsaiku. Temukan, Rawat, Berkarya
         </p>
       </div>
     </div>
