@@ -18,13 +18,11 @@ class SellerApply extends Component
 
     public string $province_name = '';
 
-    public string $description = '';
-
     public string $whatsapp = '';
 
     public string $notes = '';
 
-    public string $agree = '';
+    public string $agreement = '';
 
     public function mount(): void
     {
@@ -42,7 +40,7 @@ class SellerApply extends Component
             $this->description = $request->description;
             $this->whatsapp = $request->whatsapp;
             $this->notes = $request->notes ?? '';
-            $this->agree = $request->agree ?? '';
+            $this->agreement = $request->agreement ?? '';
         }
     }
 
@@ -56,7 +54,7 @@ class SellerApply extends Component
                 'city_name' => ['required', 'string', 'max:255'],
                 'description' => ['nullable', 'string', 'max:1000'],
                 'whatsapp' => ['required', 'string', 'max:50'],
-                'agree' => ['required', 'boolean'],
+                'agreement' => ['required', 'boolean'],
             ],
             [
                 'store_name.required' => 'Nama toko wajib diisi.',
@@ -64,7 +62,7 @@ class SellerApply extends Component
                 'province_name.required' => 'Provinsi wajib diisi.',
                 'city_name.required' => 'Kota wajib diisi.',
                 'whatsapp.required' => 'WhatsApp wajib diisi.',
-                'agree.required' => 'Anda harus menyetujui syarat dan ketentuan.',
+                'agreement.required' => 'Anda harus menyetujui syarat dan ketentuan.',
             ]
         );
 
@@ -77,7 +75,7 @@ class SellerApply extends Component
                 'owner_name' => $validated['owner_name'],
                 'province_name' => $validated['province_name'],
                 'city_name' => $validated['city_name'],
-                'description' => $validated['description'] ?? null,
+                'agreement' => $validated['agreement'],
                 'whatsapp' => $validated['whatsapp'],
                 'notes' => $validated['notes'] ?? null,
                 'status' => 'pending',

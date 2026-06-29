@@ -15,7 +15,7 @@ class SellerRequest extends Model
         'owner_name',
         'city_name',
         'province_name',
-        'description',
+        'agreement',
         'whatsapp',
         'notes',
         'status',
