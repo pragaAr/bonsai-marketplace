@@ -102,15 +102,27 @@
         <div
           class="pt-6 border-t border-primary/5 flex items-center justify-between gap-4">
           <a href="/article" wire:navigate
+            x-data="{ loading: false }" @click="loading = true"
             class="btn-lift inline-flex items-center gap-2 bg-primary text-cream px-5 py-3 rounded-lg text-xs font-semibold hover:bg-opacity-90 transition-colors">
-            <svg class="w-4 h-4" fill="none"
-              stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24">
+
+            <svg x-show="!loading" class="w-4 h-4"
+              fill="none" stroke="currentColor"
+              stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round"
                 stroke-linejoin="round"
                 d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Kembali ke Semua Artikel
+
+            <x-spinner x-show="loading" x-cloak
+              class="h-4 w-4 text-current" />
+
+            <span x-show="!loading">
+              Kembali ke Semua Artikel
+            </span>
+
+            <span x-show="loading" x-cloak>
+              Memuat...
+            </span>
           </a>
 
           <!-- Share Button with Toast -->

@@ -119,17 +119,11 @@
           <button wire:click="checkout"
             wire:loading.attr="disabled"
             class="w-full bg-primary text-cream py-3 rounded-lg text-sm font-semibold hover:bg-opacity-90 transition-colors cursor-pointer duration-200 btn-lift flex items-center justify-center gap-2">
+
             <!-- Spinner -->
-            <svg wire:loading wire:target="checkout"
-              class="animate-spin w-4 h-4 text-cream"
-              fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12"
-                cy="12" r="10" stroke="currentColor"
-                stroke-width="4" />
-              <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-              </path>
-            </svg>
+            <x-spinner wire:loading wire:target="checkout"
+              class="h-4 w-4 text-cream" />
+
             <span wire:loading.remove
               wire:target="checkout">Buat Pesanan</span>
             <span wire:loading
@@ -140,23 +134,17 @@
           <button wire:click="downloadInvoice"
             wire:loading.attr="disabled"
             class="w-full border-2 border-accent text-primary py-3 rounded-lg text-sm font-semibold hover:bg-accent hover:text-cream transition-colors cursor-pointer duration-200 btn-lift flex items-center justify-center gap-2">
+
             <!-- Spinner -->
-            <svg wire:loading wire:target="downloadInvoice"
-              class="animate-spin w-4 h-4 text-current"
-              fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12"
-                cy="12" r="10"
-                stroke="currentColor" stroke-width="4" />
-              <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-              </path>
-            </svg>
+            <x-spinner wire:loading
+              wire:target="downloadInvoice"
+              class="h-4 w-4 text-current" />
+
             <!-- Invoice Icon -->
             <svg wire:loading.remove
-              wire:target="downloadInvoice"
-              class="w-4 h-4" fill="none"
-              stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24">
+              wire:target="downloadInvoice" class="w-4 h-4"
+              fill="none" stroke="currentColor"
+              stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round"
                 stroke-linejoin="round"
                 d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -172,17 +160,11 @@
           <button wire:click="clearCart"
             wire:loading.attr="disabled"
             class="w-full text-xs text-primary/40 hover:text-primary transition-colors cursor-pointer py-2 flex items-center justify-center gap-1.5">
+
             <!-- Spinner -->
-            <svg wire:loading wire:target="clearCart"
-              class="animate-spin w-3 h-3 text-current"
-              fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12"
-                cy="12" r="10"
-                stroke="currentColor" stroke-width="3" />
-              <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-              </path>
-            </svg>
+            <x-spinner wire:loading wire:target="clearCart"
+              class="h-4 w-4 text-current" />
+
             <span wire:loading.remove
               wire:target="clearCart">Kosongkan
               Keranjang</span>

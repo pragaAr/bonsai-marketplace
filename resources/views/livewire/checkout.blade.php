@@ -194,7 +194,7 @@
               <label
                 class="flex cursor-pointer gap-4 rounded-2xl border p-4 transition-colors {{ $paymentMethod === 'rekening_bersama' ? 'border-primary bg-primary/5' : 'border-primary/10 hover:border-primary/25' }}">
                 <input type="radio"
-                  wire:model.live="paymentMethod"
+                  wire:model.defer="paymentMethod"
                   value="rekening_bersama"
                   class="mt-1 h-4 w-4 text-primary" />
                 <span>
@@ -216,7 +216,7 @@
               <label
                 class="flex cursor-pointer gap-4 rounded-2xl border p-4 transition-colors {{ $paymentMethod === 'qris' ? 'border-primary bg-primary/5' : 'border-primary/10 hover:border-primary/25' }}">
                 <input type="radio"
-                  wire:model.live="paymentMethod"
+                  wire:model.defer="paymentMethod"
                   value="qris"
                   class="mt-1 h-4 w-4 text-primary" />
                 <span
@@ -242,7 +242,7 @@
               <label
                 class="flex cursor-pointer gap-4 rounded-2xl border p-4 transition-colors {{ $paymentMethod === 'cod' ? 'border-primary bg-primary/5' : 'border-primary/10 hover:border-primary/25' }}">
                 <input type="radio"
-                  wire:model.live="paymentMethod"
+                  wire:model.defer="paymentMethod"
                   value="cod"
                   class="mt-1 h-4 w-4 text-primary" />
                 <span>
@@ -262,14 +262,13 @@
           </section>
 
           <button type="submit"
-            class="btn-lift inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-4 text-sm font-semibold text-cream transition-colors hover:bg-primary/90 sm:w-auto">
-            <svg class="h-5 w-5" fill="none"
-              stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24">
-              <path stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M5 13l4 4L19 7" />
-            </svg>
+            class="btn-lift inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-4 text-sm font-semibold text-cream transition-colors cursor-pointer hover:bg-primary/90 sm:w-auto"
+            wire:loading.attr="disabled">
+
+            <x-spinner wire:loading
+              wire:target="submitOrder"
+              class="h-4 w-4 text-current" />
+
             Buat pesanan
           </button>
         </form>
@@ -303,7 +302,7 @@
                 class="mb-2 block text-sm font-medium text-primary">Jumlah</label>
               <input id="quantity" type="number"
                 min="1" max="99"
-                wire:model.live="quantity"
+                wire:model.defer="quantity"
                 class="w-28 rounded-xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors focus:border-primary/35" />
               @error('quantity')
                 <p class="mt-2 text-xs text-red-600">

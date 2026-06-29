@@ -305,19 +305,9 @@
               wire:target="openEditor"
               class="inline-flex items-center gap-2 justify-center rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5 cursor-pointer">
 
-              <svg wire:loading wire:target="openEditor"
-                class="h-4 w-4 animate-spin"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12"
-                  cy="12" r="10"
-                  stroke="currentColor" stroke-width="4">
-                </circle>
-                <path class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                </path>
-              </svg>
+              <x-spinner wire:loading
+                wire:target="openEditor"
+                class="h-4 w-4" />
               Ubah profil
             </button>
             @if ($hasGoogleAvatar && !$hasCustomAvatar)
@@ -379,18 +369,8 @@
                   @click="loading = true"
                   class="inline-flex items-center justify-center gap-2 rounded-full bg-cream px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-cream/90">
 
-                  <svg x-show="loading" x-cloak
-                    class="h-4 w-4 animate-spin"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25"
-                      cx="12" cy="12" r="10"
-                      stroke="currentColor"
-                      stroke-width="4" />
-                    <path class="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
+                  <x-spinner x-show="loading" x-cloak
+                    class="h-4 w-4 text-current" />
 
                   <span x-show="!loading">
                     {{ $sellerStatus === 'rejected' ? 'Ajukan Kembali' : 'Jadi Penjual' }}
@@ -420,9 +400,20 @@
 
             <div class="mt-6">
               <a href="{{ route('profile.orders') }}"
-                wire:navigate
-                class="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90">
-                Buka history pembelian
+                wire:navigate x-data="{ loading: false }"
+                @click="loading = true"
+                class="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90">
+
+                <x-spinner x-show="loading" x-cloak
+                  class="h-4 w-4 text-current" />
+
+                <span x-show="!loading">
+                  History pembelian
+                </span>
+
+                <span x-show="loading" x-cloak>
+                  Memuat...
+                </span>
               </a>
             </div>
           </div>

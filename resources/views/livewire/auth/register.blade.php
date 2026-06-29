@@ -161,6 +161,7 @@
           wire:loading.attr="disabled"
           wire:loading.class="opacity-70"
           wire:target="register">
+
           <span wire:loading.remove wire:target="register">
             Daftar
           </span>
