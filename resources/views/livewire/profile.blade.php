@@ -206,6 +206,13 @@
         </p>
       </div>
 
+      @if (session('success'))
+        <div
+          class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+          {{ session('success') }}
+        </div>
+      @endif
+
       <div class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <section
           class="rounded-3xl border border-primary/10 bg-white/85 p-6 shadow-sm backdrop-blur sm:p-8">
@@ -333,9 +340,18 @@
                   class="text-xs font-medium uppercase tracking-[0.25em] text-cream/60">
                   Penjual</p>
                 <h2 class="mt-2 text-xl font-semibold">
-                  {{ $sellerLabel }}</h2>
+                  {{ $sellerLabel }}
+                </h2>
 
-                @if (!$isSeller)
+                @if ($sellerStatus === 'pending')
+                  <p class="mt-4 text-xs leading-5">
+                    Pengajuan sedang ditinjau oleh admin,
+                    anda
+                    akan mendapatkan notifikasi terkait
+                    progres pengajuan.
+                  </p>
+                @endif
+                @if (!$sellerStatus === 'seller')
                   <p
                     class="mt-2 text-sm leading-6 text-cream/75">
                     Ingin menjual produk anda? Ajukan
@@ -346,12 +362,17 @@
             </div>
 
             <div class="mt-6 flex flex-wrap gap-3">
-              @if ($isSeller)
+              @if ($sellerStatus === 'seller')
                 <a href="{{ route('seller.dashboard') }}"
                   wire:navigate
                   class="inline-flex items-center justify-center rounded-full bg-cream px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-cream/90">
                   Seller Dashboard
                 </a>
+              @elseif ($sellerStatus === 'pending')
+                <span
+                  class="inline-flex items-center justify-center rounded-full bg-cream/60 px-5 py-3 text-sm font-semibold text-primary/75">
+                  Sedang ditinjau
+                </span>
               @else
                 <a href="{{ route('seller.apply') }}"
                   wire:navigate x-data="{ loading: false }"
@@ -370,9 +391,13 @@
                       fill="currentColor"
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
-                  <span
-                    x-text="loading ? 'Memuat...' : 'Jadi Penjual'">
-                    Jadi Penjual
+
+                  <span x-show="!loading">
+                    {{ $sellerStatus === 'rejected' ? 'Ajukan Kembali' : 'Jadi Penjual' }}
+                  </span>
+
+                  <span x-show="loading" x-cloak>
+                    Memuat...
                   </span>
                 </a>
               @endif
