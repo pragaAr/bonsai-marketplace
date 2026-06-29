@@ -76,7 +76,7 @@
           class="text-xs bg-primary/5 text-primary/60 px-3 py-1 rounded-full flex items-center gap-1.5">
           Search: "{{ $search }}"
           <button wire:click="$set('search', '')"
-            class="hover:text-red-500 font-bold">×</button>
+            class="hover:text-red-500 font-bold">x</button>
         </span>
       </div>
     @endif
