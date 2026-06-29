@@ -92,13 +92,14 @@
             stroke-linejoin="round"
             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
-        <h3 class="text-base font-semibold text-primary">No
-          Specimens Found</h3>
+        <h3 class="text-base font-semibold text-primary">
+          Produk tidak ditemukan</h3>
         <p
           class="text-xs text-primary/50 mt-1 max-w-xs mx-auto">
-          We couldn't find any bonsai trees matching your
-          current criteria. Try adjusting your filters or
-          search term.</p>
+          Kami tidak dapat menemukan apa yang anda cari.
+          <br>
+          Coba ubah keyword yang anda masukkan.
+        </p>
         <button
           wire:click="$set('category', 'All'); $set('search', ''); $set('sort', 'default')"
           class="mt-4 inline-flex text-xs text-accent hover:underline">
