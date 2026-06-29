@@ -111,4 +111,29 @@ class User extends Authenticatable implements HasMedia
     {
         return filled($url) && str_contains($url, 'googleusercontent.com');
     }
+
+    public function sellerRequest()
+    {
+        return $this->hasOne(SellerRequest::class);
+    }
+
+    public function getSellerStatusAttribute(): string
+    {
+        if ($this->hasRole('seller')) {
+            return 'seller';
+        }
+
+        return $this->sellerRequest?->status ?? 'none';
+    }
+
+    public function getSellerLabelAttribute(): string
+    {
+        return match ($this->seller_status) {
+            'seller' => 'Sudah menjadi penjual',
+            'pending' => 'Pengajuan sedang ditinjau',
+            'approved' => 'Pengajuan disetujui',
+            'rejected' => 'Pengajuan ditolak',
+            default => 'Belum menjadi penjual',
+        };
+    }
 }
