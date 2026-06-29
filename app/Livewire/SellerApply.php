@@ -66,9 +66,11 @@ class SellerApply extends Component
             ]
         );
 
-        SellerRequest::updateOrCreate(
+        $user = Auth::user();
+
+        $sellerRequest = SellerRequest::updateOrCreate(
             [
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
             ],
             [
                 'store_name' => $validated['store_name'],
@@ -81,6 +83,12 @@ class SellerApply extends Component
                 'status' => 'pending',
             ]
         );
+
+        activity('seller_request')
+            ->performedOn($sellerRequest)
+            ->causedBy($user)
+            ->event('seller_application')
+            ->log("User {$user->name} mengajukan menjadi seller");
 
         session()->flash(
             'success',
