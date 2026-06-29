@@ -29,12 +29,6 @@ Fitur besar yang masih direncanakan:
 - Payment gateway / transfer manual.
 - Shipping, kemungkinan integrasi KiriminAja.
 
-Untuk handoff AI agent, baca juga:
-
-- `AI_CONTEXT.md`
-- `AI_CURRENT_TASK.md`
-- `.aiignore`
-
 ## Stack Teknologi
 
 - PHP 8.2+
