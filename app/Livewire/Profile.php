@@ -33,11 +33,11 @@ class Profile extends Component
 
     public string $password_confirmation = '';
 
+    public string $sellerStatus = '';
+
     public string $sellerLabel = '';
 
     public bool $isGoogleOnly = false;
-
-    public bool $isSeller = false;
 
     public bool $showEditor = false;
 
@@ -47,7 +47,7 @@ class Profile extends Component
 
     public function mount(): void
     {
-        $user = Auth::user();
+        $user = Auth::user()->load('sellerRequest');
 
         $this->name = $user->name;
         $this->email = $user->email;
@@ -56,8 +56,8 @@ class Profile extends Component
         $this->avatar = $user->avatar ?? '';
 
         $this->isGoogleOnly = filled($user->google_id) && blank($user->password);
-        $this->isSeller = $user->hasRole('seller');
-        $this->sellerLabel = $this->isSeller ? 'Sudah menjadi penjual' : 'Belum menjadi penjual';
+        $this->sellerStatus = $user->seller_status;
+        $this->sellerLabel = $user->seller_label;
 
         $rawAvatar = $user->getRawOriginal('avatar');
         $this->hasGoogleAvatar = filled($user->google_id) && filled($rawAvatar) && (str_starts_with($rawAvatar, 'http://') || str_starts_with($rawAvatar, 'https://'));
