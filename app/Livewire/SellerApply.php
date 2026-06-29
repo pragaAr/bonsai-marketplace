@@ -24,6 +24,8 @@ class SellerApply extends Component
 
     public string $notes = '';
 
+    public string $agree = '';
+
     public function mount(): void
     {
         if (Auth::user()->hasRole('seller')) {
@@ -40,6 +42,7 @@ class SellerApply extends Component
             $this->description = $request->description;
             $this->whatsapp = $request->whatsapp;
             $this->notes = $request->notes ?? '';
+            $this->agree = $request->agree ?? '';
         }
     }
 
@@ -53,14 +56,15 @@ class SellerApply extends Component
                 'city_name' => ['required', 'string', 'max:255'],
                 'description' => ['nullable', 'string', 'max:1000'],
                 'whatsapp' => ['required', 'string', 'max:50'],
-                'notes' => ['nullable', 'string', 'max:1000'],
+                'agree' => ['required', 'boolean'],
             ],
             [
                 'store_name.required' => 'Nama toko wajib diisi.',
                 'owner_name.required' => 'Nama pemilik wajib diisi.',
-                'province_name.required' => 'Nama provinsi wajib diisi.',
-                'city_name.required' => 'Nama kota wajib diisi.',
-                'whatsapp.required' => 'Nomor WhatsApp wajib diisi.',
+                'province_name.required' => 'Provinsi wajib diisi.',
+                'city_name.required' => 'Kota wajib diisi.',
+                'whatsapp.required' => 'WhatsApp wajib diisi.',
+                'agree.required' => 'Anda harus menyetujui syarat dan ketentuan.',
             ]
         );
 
