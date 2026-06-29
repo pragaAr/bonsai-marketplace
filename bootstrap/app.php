@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
+            'can-apply-seller' => \App\Http\Middleware\CanApplySeller::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
