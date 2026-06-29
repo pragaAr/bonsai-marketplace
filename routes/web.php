@@ -66,7 +66,11 @@ Route::post('/logout', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', Profile::class)->name('profile');
     Route::get('/profile/orders', ProfileOrders::class)->name('profile.orders');
-    Route::get('/seller/apply', SellerApply::class)->name('seller.apply');
+
+    Route::middleware('can-apply-seller')->group(function () {
+        Route::get('/seller/apply', SellerApply::class)->name('seller.apply');
+    });
+
     Route::get('/checkout', Checkout::class)->name('checkout');
     Route::get('/checkout/{slug}', Checkout::class)->name('checkout.product');
 });
