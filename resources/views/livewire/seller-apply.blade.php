@@ -101,7 +101,7 @@
             class="mt-6 rounded-xl border border-primary/10 bg-white p-4">
             <label
               class="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" wire:model="agree"
+              <input type="checkbox" wire:model="agreement"
                 class="mt-1 h-4 w-4 rounded border-primary/30 text-primary focus:ring-primary">
 
               <span
@@ -115,7 +115,7 @@
               </span>
             </label>
 
-            @error('agree')
+            @error('agreement')
               <p class="mt-2 text-xs text-red-600">
                 {{ $message }}</p>
             @enderror
