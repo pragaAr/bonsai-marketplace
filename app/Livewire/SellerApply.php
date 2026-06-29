@@ -22,7 +22,7 @@ class SellerApply extends Component
 
     public string $notes = '';
 
-    public string $agreement = '';
+    public bool $agreement = false;
 
     public function mount(): void
     {
@@ -37,10 +37,9 @@ class SellerApply extends Component
             $this->owner_name = $request->owner_name;
             $this->province_name = $request->province_name;
             $this->city_name = $request->city_name;
-            $this->description = $request->description;
             $this->whatsapp = $request->whatsapp;
-            $this->notes = $request->notes ?? '';
-            $this->agreement = $request->agreement ?? '';
+            $this->notes = $request->notes;
+            $this->agreement = $request->agreement;
         }
     }
 
@@ -52,8 +51,8 @@ class SellerApply extends Component
                 'owner_name' => ['required', 'string', 'max:255'],
                 'province_name' => ['required', 'string', 'max:255'],
                 'city_name' => ['required', 'string', 'max:255'],
-                'description' => ['nullable', 'string', 'max:1000'],
                 'whatsapp' => ['required', 'string', 'max:50'],
+                'notes' => ['required', 'string', 'max:255'],
                 'agreement' => ['required', 'boolean'],
             ],
             [
@@ -61,7 +60,8 @@ class SellerApply extends Component
                 'owner_name.required' => 'Nama pemilik wajib diisi.',
                 'province_name.required' => 'Provinsi wajib diisi.',
                 'city_name.required' => 'Kota wajib diisi.',
-                'whatsapp.required' => 'WhatsApp wajib diisi.',
+                'whatsapp.required' => 'WhatsApp aktif wajib diisi.',
+                'notes.required' => 'Beri sedikit catatan untuk toko anda',
                 'agreement.required' => 'Anda harus menyetujui syarat dan ketentuan.',
             ]
         );
@@ -77,12 +77,15 @@ class SellerApply extends Component
                 'city_name' => $validated['city_name'],
                 'agreement' => $validated['agreement'],
                 'whatsapp' => $validated['whatsapp'],
-                'notes' => $validated['notes'] ?? null,
+                'notes' => $validated['notes'],
                 'status' => 'pending',
             ]
         );
 
-        $this->dispatch('toast', message: 'Pengajuan menjadi penjual berhasil dikirim.', duration: 3000);
+        session()->flash(
+            'success',
+            'Pengajuan menjadi penjual berhasil dikirim. Silakan tunggu konfirmasi dari admin'
+        );
 
         $this->redirectRoute('profile');
     }
