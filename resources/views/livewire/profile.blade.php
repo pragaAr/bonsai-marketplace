@@ -354,9 +354,26 @@
                 </a>
               @else
                 <a href="{{ route('seller.apply') }}"
-                  wire:navigate
-                  class="inline-flex items-center justify-center rounded-full bg-cream px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-cream/90">
-                  Jadi Penjual
+                  wire:navigate x-data="{ loading: false }"
+                  @click="loading = true"
+                  class="inline-flex items-center justify-center gap-2 rounded-full bg-cream px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-cream/90">
+
+                  <svg x-show="loading" x-cloak
+                    class="h-4 w-4 animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25"
+                      cx="12" cy="12" r="10"
+                      stroke="currentColor"
+                      stroke-width="4" />
+                    <path class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  <span
+                    x-text="loading ? 'Memuat...' : 'Jadi Penjual'">
+                    Jadi Penjual
+                  </span>
                 </a>
               @endif
             </div>
