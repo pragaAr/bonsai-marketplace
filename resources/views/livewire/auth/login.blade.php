@@ -38,7 +38,8 @@
         <div class="mb-4">
           <label for="email"
             class="block text-sm font-medium text-primary mb-1">Email</label>
-          <input wire:model.defer="email" type="email"
+          <input x-data x-init="$nextTick(() => $el.focus())"
+            wire:model.defer="email" type="email"
             name="email" id="email"
             class="w-full border border-primary/15 rounded px-3 py-2 focus:outline-none focus:border-primary/40"
             placeholder="Masukan email anda"

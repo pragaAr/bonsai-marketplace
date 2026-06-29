@@ -11,7 +11,8 @@
         <div class="mb-4">
           <label for="name"
             class="block text-sm font-medium text-primary mb-1">Nama</label>
-          <input wire:model.defer="name" type="text"
+          <input x-data x-init="$nextTick(() => $el.focus())"
+            wire:model.defer="name" type="text"
             name="name" id="name"
             class="w-full border border-primary/15 rounded px-3 py-2 focus:outline-none focus:border-primary/40"
             placeholder="Nama anda" autocomplete="name"
