@@ -26,6 +26,7 @@
         <h1 class="text-xl font-bold">bonsaiku</h1>
         <button @click="sidebarOpen = false"
           class="md:hidden text-cream hover:text-cream/80">
+
           <svg xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5" viewBox="0 0 20 20"
             fill="currentColor">
@@ -60,10 +61,16 @@
             class="inline-flex p-2 rounded hover:bg-primary/5">
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 text-primary"
-              viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M6 4a1 1 0 000 2h8a1 1 0 100-2H6zm-2 5a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zm1 4a1 1 0 000 2h8a1 1 0 100-2H6z"
-                clip-rule="evenodd" />
+              viewBox="0 0 24 24" fill="currentColor"
+              stroke="currentColor" stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="4" x2="20"
+                y1="12" y2="12" />
+              <line x1="4" x2="20"
+                y1="6" y2="6" />
+              <line x1="4" x2="20"
+                y1="18" y2="18" />
             </svg>
           </button>
           <h1 x-show="!sidebarOpen"

@@ -4,7 +4,8 @@
     class="relative w-full h-[90vh] md:h-[100vh] overflow-hidden">
     <img src="{{ asset('images/hero2.png') }}"
       alt="Beautiful bonsai tree in a serene setting"
-      class="absolute inset-0 w-full h-full object-cover" />
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager" />
     <div class="hero-overlay absolute inset-0"></div>
     <div
       class="relative z-10 flex items-center h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -248,26 +249,6 @@
               </p>
             </a>
 
-            {{-- <div class="flex gap-2 mt-4 pt-3 border-t border-primary/5">
-              <!-- Add to Cart (Livewire dispatch) -->
-              <button
-                @click="requireAuth(() => $wire.$dispatch('add-to-cart', {productId: {{ $product->id }}}))"
-                aria-label="Add {{ $product->name }} to cart"
-                class="btn-lift flex-1 flex items-center justify-center gap-1.5 bg-primary text-cream text-xs py-2.5 px-3 rounded-lg hover:bg-opacity-90 transition-colors cursor-pointer"
-              >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                </svg>
-                <span class="hidden sm:inline">Tambah</span>
-              </button>
-              
-              <!-- WhatsApp Checkout -->
-              <x-whatsapp-chat-link
-                :product="$product"
-                label="Chat"
-                class="btn-lift flex items-center justify-center gap-1.5 bg-green-600 text-white text-xs py-2.5 px-3 rounded-lg hover:bg-green-700 transition-colors"
-              />
-            </div> --}}
           </div>
         </div>
       @endforeach
