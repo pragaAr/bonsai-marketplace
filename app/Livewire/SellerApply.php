@@ -53,7 +53,7 @@ class SellerApply extends Component
                 'city_name' => ['required', 'string', 'max:255'],
                 'whatsapp' => ['required', 'string', 'max:50'],
                 'notes' => ['required', 'string', 'max:255'],
-                'agreement' => ['required', 'boolean'],
+                'agreement' => ['accepted'],
             ],
             [
                 'store_name.required' => 'Nama toko wajib diisi.',
@@ -62,7 +62,7 @@ class SellerApply extends Component
                 'city_name.required' => 'Kota wajib diisi.',
                 'whatsapp.required' => 'WhatsApp aktif wajib diisi.',
                 'notes.required' => 'Beri sedikit catatan untuk toko anda',
-                'agreement.required' => 'Anda harus menyetujui syarat dan ketentuan.',
+                'agreement.accepted' => 'Anda harus menyetujui syarat dan ketentuan.',
             ]
         );
 
