@@ -16,7 +16,7 @@ class Role extends Component
     use WithPagination;
 
     #[Url(as: 'q')]
-    public $search = '';
+    public string $search = '';
 
     public string $name = '';
 
