@@ -1,4 +1,3 @@
-<!-- resources/views/components/sidebar.blade.php -->
 <div class="flex flex-1 min-h-0 flex-col text-sm">
   @php
     $linkBase =
