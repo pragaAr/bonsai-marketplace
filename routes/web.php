@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\GoogleController;
 use App\Livewire\About;
 use App\Livewire\Admin\Access\Role;
+use App\Livewire\Admin\Access\Permission;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Article;
 use App\Livewire\ArticleDetail;
@@ -84,7 +85,6 @@ Route::prefix('seller')
     ->name('seller.')
     ->group(function () {
         Route::get('/dashboard', SellerDashboard::class)->name('dashboard');
-        // Add more seller routes here later
     });
 
 // ============================================================
@@ -96,5 +96,5 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
         Route::get('/role', Role::class)->name('role');
-        // Add more admin routes here later
+        Route::get('/permission', Permission::class)->name('permission');
     });
