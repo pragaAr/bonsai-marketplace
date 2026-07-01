@@ -1,8 +1,13 @@
 /* Toastify base styles (customized for bonsaiku) */
 .toastify {
   padding: 10px 14px;
-  color: #F5F5F0;
-  display: inline-block;
+  color: #f5f5f0;
+  /* UBAH dari inline-block menjadi flex agar isi di dalamnya sejajar */
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+
   box-shadow: 0 4px 16px rgba(45, 62, 47, 0.18);
   border-radius: 8px;
   position: fixed;
@@ -12,8 +17,8 @@
   pointer-events: auto;
   z-index: 2147483647;
   max-width: 380px;
-  background: #2D3E2F;
-  font-family: 'Inter', sans-serif;
+  background: #2d3e2f;
+  font-family: "Inter", sans-serif;
   font-size: 14px;
   line-height: 1.4;
 }
@@ -49,7 +54,7 @@
 .toast-close {
   background: transparent;
   border: 0;
-  color: #F5F5F0;
+  color: #f5f5f0;
   cursor: pointer;
   font-size: 14px;
   line-height: 1;
@@ -74,14 +79,24 @@
   border-radius: 2px;
 }
 
-/* Stack multiple toasts */
-@media only screen and (max-width: 360px) {
-  .toastify.toastify-right,
-  .toastify.toastify-left {
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    max-width: fit-content;
+@media only screen and (max-width: 639px) {
+  .toastify {
+    /* 1. Reset posisi right bawaan JavaScript Toastify */
+    right: auto !important;
+
+    /* 2. Taruh titik awal tepat di tengah layar (50%) */
+    left: 50% !important;
+
+    /* 3. Geser mundur setengah dari lebar toast agar posisinya benar-benar center */
+    transform: translateX(-50%) !important;
+
+    /* 4. Berikan lebar aman agar ada jarak kiri-kanan sekitar 16px */
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+  }
+
+  /* Animasi posisi saat toast aktif muncul dari bawah */
+  .toastify.on.toastify-bottom {
+    bottom: 16px !important;
   }
 }
