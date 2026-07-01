@@ -10,14 +10,14 @@ html {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F5F5F0;
+  background: #f5f5f0;
 }
 ::-webkit-scrollbar-thumb {
-  background: #B4A67F;
+  background: #b4a67f;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2D3E2F;
+  background: #2d3e2f;
 }
 
 /* Hide scrollbar for horizontal scroll containers */
@@ -31,7 +31,7 @@ html {
 
 /* Focus visible styles */
 *:focus-visible {
-  outline: 2px solid #2D3E2F;
+  outline: 2px solid #2d3e2f;
   outline-offset: 2px;
 }
 
@@ -46,7 +46,7 @@ html {
     to right,
     rgba(245, 245, 240, 0.92) 0%,
     rgba(245, 245, 240, 0.7) 50%,
-    rgba(245, 245, 240, 0.0) 100%
+    rgba(245, 245, 240, 0) 100%
   );
 }
 
@@ -103,7 +103,7 @@ html {
 
 /* Toastify custom theme for bonsaiku */
 .toastify {
-  font-family: 'Inter', sans-serif !important;
+  font-family: "Inter", sans-serif !important;
   border-radius: 8px !important;
   padding: 10px 14px !important;
   max-width: 380px !important;
@@ -132,12 +132,14 @@ html {
 
 /* Gallery thumbnail active state */
 .gallery-thumb.active {
-  border-color: #2D3E2F;
+  border-color: #2d3e2f;
   opacity: 1;
 }
 .gallery-thumb {
   opacity: 0.6;
-  transition: opacity 0.2s ease, border-color 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    border-color 0.2s ease;
 }
 .gallery-thumb:hover {
   opacity: 0.85;
@@ -145,21 +147,67 @@ html {
 
 /* Pagination active */
 .page-btn.active {
-  background-color: #2D3E2F;
-  color: #F5F5F0;
+  background-color: #2d3e2f;
+  color: #f5f5f0;
+}
+
+.pagination-wrapper .pagination {
+  display: inline-flex;
+  gap: 0.35rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pagination-wrapper .pagination li {
+  display: inline-flex;
+}
+
+.pagination-wrapper .pagination li a,
+.pagination-wrapper .pagination li span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  padding: 0 0.75rem;
+  font-size: 0.75rem;
+  color: #ffffff;
+  background-color: #2d3e2f;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pagination-wrapper .pagination li a:hover {
+  background-color: #3d4f3f;
+}
+
+.pagination-wrapper .pagination li.disabled span,
+.pagination-wrapper .pagination li.disabled a {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-wrapper .pagination li.active span {
+  background-color: #13220e;
+  color: #ffffff;
 }
 
 /* Category filter active */
 .filter-btn.active {
-  background-color: #2D3E2F;
-  color: #F5F5F0;
+  background-color: #2d3e2f;
+  color: #f5f5f0;
 }
 
 /* Search overlay */
 .search-overlay {
   opacity: 0;
   transform: translateY(-10px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
   pointer-events: none;
 }
 .search-overlay.active {
@@ -174,8 +222,14 @@ html {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Stagger children animation */
@@ -183,25 +237,57 @@ html {
   opacity: 0;
   animation: fadeIn 0.4s ease forwards;
 }
-.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
-.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
-.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
-.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
-.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
-.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
-.stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
-.stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
-.stagger-children > *:nth-child(9) { animation-delay: 0.45s; }
-.stagger-children > *:nth-child(10) { animation-delay: 0.5s; }
-.stagger-children > *:nth-child(11) { animation-delay: 0.55s; }
-.stagger-children > *:nth-child(12) { animation-delay: 0.6s; }
-.stagger-children > *:nth-child(13) { animation-delay: 0.65s; }
-.stagger-children > *:nth-child(14) { animation-delay: 0.7s; }
-.stagger-children > *:nth-child(15) { animation-delay: 0.75s; }
+.stagger-children > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.stagger-children > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.stagger-children > *:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.stagger-children > *:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.stagger-children > *:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.stagger-children > *:nth-child(6) {
+  animation-delay: 0.3s;
+}
+.stagger-children > *:nth-child(7) {
+  animation-delay: 0.35s;
+}
+.stagger-children > *:nth-child(8) {
+  animation-delay: 0.4s;
+}
+.stagger-children > *:nth-child(9) {
+  animation-delay: 0.45s;
+}
+.stagger-children > *:nth-child(10) {
+  animation-delay: 0.5s;
+}
+.stagger-children > *:nth-child(11) {
+  animation-delay: 0.55s;
+}
+.stagger-children > *:nth-child(12) {
+  animation-delay: 0.6s;
+}
+.stagger-children > *:nth-child(13) {
+  animation-delay: 0.65s;
+}
+.stagger-children > *:nth-child(14) {
+  animation-delay: 0.7s;
+}
+.stagger-children > *:nth-child(15) {
+  animation-delay: 0.75s;
+}
 
 /* Button hover lift */
 .btn-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 .btn-lift:hover {
   transform: translateY(-1px);
@@ -216,15 +302,25 @@ html {
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* Cart badge pop animation */
 @keyframes cartPop {
-  0% { transform: scale(0.6); }
-  50% { transform: scale(1.4); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0.6);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 .animate-cart-pop {
   animation: cartPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
