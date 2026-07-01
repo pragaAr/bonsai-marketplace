@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Access;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Permission;
@@ -14,7 +15,8 @@ class Role extends Component
 {
     use WithPagination;
 
-    public string $search = '';
+    #[Url(as: 'q')]
+    public $search = '';
 
     public string $name = '';
 
