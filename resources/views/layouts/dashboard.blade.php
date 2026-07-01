@@ -40,7 +40,8 @@
           </svg>
         </button>
       </div>
-      <x-sidebar />
+
+      @include('partials.sidebar')
     </aside>
 
     <div x-show="sidebarOpen"
@@ -63,15 +64,14 @@
             message: detail
           } : detail;
 
-          // 1. Tentukan warna berdasarkan tipe (success / error)
           var toastType = opts.type || 'success';
           var bgColor =
-            '#4a8552'; // default hijau (success)
+            '#4a8552';
           var shadowColor =
             '0 4px 16px rgba(78, 129, 85, 0.25)';
 
           if (toastType === 'error') {
-            bgColor = '#b91c1c'; // merah (error)
+            bgColor = '#b91c1c';
             shadowColor =
               '0 4px 16px rgba(185, 28, 28, 0.25)';
           }
@@ -80,7 +80,6 @@
           node.style.cssText =
             'display:flex;align-items:center;gap:10px;width:100%;';
 
-          // Message
           var msg = document.createElement('span');
           msg.style.cssText =
             'flex:1;font-size:14px;line-height:1.4;';
