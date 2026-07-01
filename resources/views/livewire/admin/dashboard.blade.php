@@ -1,10 +1,11 @@
 <div class="space-y-6">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-primary">Dashboard
+      <h1 class="text-2xl font-bold text-primary">
+        {{ $title ?: '' }}
       </h1>
       <p class="text-sm text-primary/60 mt-1">
-        Selamat datang, {{ auth()->user()->name }}
+        {{ $subTitle ?: '' }}
       </p>
     </div>
   </div>
