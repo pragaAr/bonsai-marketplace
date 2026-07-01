@@ -2,7 +2,6 @@
 .toastify {
   padding: 10px 14px;
   color: #f5f5f0;
-  /* UBAH dari inline-block menjadi flex agar isi di dalamnya sejajar */
   display: flex !important;
   align-items: center;
   gap: 12px;
@@ -81,21 +80,13 @@
 
 @media only screen and (max-width: 639px) {
   .toastify {
-    /* 1. Reset posisi right bawaan JavaScript Toastify */
     right: auto !important;
-
-    /* 2. Taruh titik awal tepat di tengah layar (50%) */
     left: 50% !important;
-
-    /* 3. Geser mundur setengah dari lebar toast agar posisinya benar-benar center */
     transform: translateX(-50%) !important;
-
-    /* 4. Berikan lebar aman agar ada jarak kiri-kanan sekitar 16px */
     width: calc(100vw - 32px) !important;
     max-width: calc(100vw - 32px) !important;
   }
 
-  /* Animasi posisi saat toast aktif muncul dari bawah */
   .toastify.on.toastify-bottom {
     bottom: 16px !important;
   }
