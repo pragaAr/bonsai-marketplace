@@ -21,7 +21,7 @@
               $user->hasRole('system_admin'))
         <div class="space-y-2">
           <a href="{{ route('admin.dashboard') }}"
-            class="{{ $linkBase }} {{ request()->routeIs('admin.*') ? $activeLink : '' }}">
+            class="{{ $linkBase }} {{ request()->routeIs('admin.dashboard') ? $activeLink : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg"
               class="w-4 h-4" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2"
@@ -162,11 +162,13 @@
             </summary>
             <div
               class="flex flex-col px-4 py-2 space-y-1 text-cream/90">
-              <a href="#" class="{{ $subLinkBase }}">
+              <a href="{{ route('admin.role') }}"
+                class="{{ $linkBase }} {{ request()->routeIs('admin.role') ? $activeLink : '' }}">
                 <x-icons.minus class="w-4 h-4" />
                 <span>Role</span>
               </a>
-              <a href="#" class="{{ $subLinkBase }}">
+              <a href="#"
+                class="{{ $subLinkBase }}">
                 <x-icons.minus class="w-4 h-4" />
 
                 <span>Permissions</span>
