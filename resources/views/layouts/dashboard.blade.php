@@ -9,6 +9,10 @@
     {{ $title ?? 'Dashboard - bonsaiku' }}
   </title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <!-- Toastify -->
+  <link rel="stylesheet"
+    href="{{ asset('css/toastify.css') }}" />
+  <script src="{{ asset('js/toastify.js') }}"></script>
   @livewireStyles
 </head>
 
@@ -50,6 +54,68 @@
       class="fixed inset-0 z-30 bg-primary/50 backdrop-blur-sm md:hidden"
       style="display: none;">
     </div>
+
+    <!-- Toastify bridge: listen for the 'toast' window event and call Toastify() -->
+    <script>
+      (function() {
+        window.showToast = function(detail) {
+          var opts = typeof detail === 'string' ? {
+            message: detail
+          } : detail;
+
+          // 1. Tentukan warna berdasarkan tipe (success / error)
+          var toastType = opts.type || 'success';
+          var bgColor =
+            '#4a8552'; // default hijau (success)
+          var shadowColor =
+            '0 4px 16px rgba(78, 129, 85, 0.25)';
+
+          if (toastType === 'error') {
+            bgColor = '#b91c1c'; // merah (error)
+            shadowColor =
+              '0 4px 16px rgba(185, 28, 28, 0.25)';
+          }
+
+          var node = document.createElement('div');
+          node.style.cssText =
+            'display:flex;align-items:center;gap:10px;width:100%;';
+
+          // Message
+          var msg = document.createElement('span');
+          msg.style.cssText =
+            'flex:1;font-size:14px;line-height:1.4;';
+          msg.textContent = opts.message || '';
+          node.appendChild(msg);
+
+          Toastify({
+            node: node,
+            duration: opts.duration ?? 3000,
+            gravity: 'bottom',
+            position: 'right',
+            stopOnFocus: true,
+            close: true,
+            style: {
+              background: bgColor,
+              boxShadow: shadowColor,
+            },
+            offset: {
+              x: 16,
+              y: 72
+            },
+          }).showToast();
+        };
+
+        // Guard: hanya register listener sekali untuk mencegah duplikat saat wire:navigate
+        // Livewire SPA mode (wire:navigate) mengeksekusi ulang inline <script> setiap
+        // navigasi, sehingga tanpa guard ini addEventListener terpanggil berkali-kali.
+        if (!window.__toastListenerRegistered) {
+          window.__toastListenerRegistered = true;
+          window.addEventListener('toast', function(e) {
+            window.showToast(e.detail);
+          });
+        }
+      })();
+    </script>
 
     <!-- Main Content -->
     <div class="flex-1 flex flex-col overflow-y-auto">
