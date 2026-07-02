@@ -9,12 +9,12 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     #[Layout('layouts.dashboard')]
-    #[Title('Admin Dashboard')]
+    #[Title('Dashboard')]
     public function render()
     {
         return view('livewire.admin.dashboard', [
             'title' => 'Dashboard',
-            'subTitle' => 'Selamat datang, ' . auth()->user()->name,
+            'subTitle' => 'Selamat datang, '.auth()->user()->name,
         ]);
     }
 }
