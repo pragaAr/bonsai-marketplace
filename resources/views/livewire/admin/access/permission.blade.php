@@ -155,10 +155,10 @@
             Nama Permission
           </label>
           <input wire:model="name" type="text"
-            placeholder="contoh: access.roles.view"
+            placeholder="contoh: roles.manage"
             class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
           @error('name')
-            <p class="mt-1 text-xs text-danger-600">
+            <p class="mt-1 text-xs text-red-600">
               {{ $message }}</p>
           @enderror
         </div>
@@ -172,7 +172,7 @@
             placeholder="contoh: Lihat Role"
             class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
           @error('label')
-            <p class="mt-1 text-xs text-danger-600">
+            <p class="mt-1 text-xs text-red-600">
               {{ $message }}</p>
           @enderror
         </div>
