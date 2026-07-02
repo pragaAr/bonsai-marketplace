@@ -48,6 +48,15 @@ class Role extends Component
         ];
     }
 
+    protected function messages(): array
+    {
+        return [
+            'name.required' => 'Nama role wajib diisi.',
+            'name.unique' => 'Nama role sudah digunakan.',
+            'name.max' => 'Nama role maksimal 255 karakter.',
+        ];
+    }
+
     public function openCreate(): void
     {
         $this->reset(['name', 'selectedPermissions', 'editId', 'isEditing']);
