@@ -1,0 +1,458 @@
+<div>
+  <div class="space-y-6">
+    <div
+      class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-primary">
+          {{ $title ?: '' }}
+        </h1>
+        <p class="text-sm text-primary/60 mt-1">
+          {{ $subTitle ?: '' }}
+        </p>
+      </div>
+
+      <button wire:click="openCreate"
+        wire:loading.attr="disabled" wire:target="openCreate"
+        class="w-full sm:w-auto px-5 py-2 bg-primary text-white text-sm font-semibold rounded-xl hover:shadow-lg transition-smooth cursor-pointer inline-flex items-center justify-center gap-2 disabled:opacity-50 self-start sm:self-center">
+
+        <svg wire:loading.remove wire:target="openCreate"
+          xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+          viewBox="0 0 24 24" stroke-width="2"
+          stroke="currentColor" fill="none"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z"
+            fill="none" />
+          <path d="M12 5l0 14" />
+          <path d="M5 12l14 0" />
+        </svg>
+
+        <x-icons.spinner wire:loading
+          wire:target="openCreate"
+          class="h-3.5 w-3.5 text-current" />
+
+        <span>Tambah</span>
+      </button>
+    </div>
+
+    <div class="w-full mb-6">
+      <input wire:model.live.debounce.300ms="search"
+        type="text" placeholder="Cari user..."
+        class="px-4 py-2 rounded-xl bg-white/50 border border-primary/20 text-sm focus:border-primary/40 outline-none w-full">
+    </div>
+
+    <div
+      class="bg-white rounded-xl shadow-sm border border-primary/10">
+      <div class="overflow-x-auto px-6 py-4">
+        <table
+          class="min-w-full text-sm border border-primary/10 border-collapse text-center">
+          <thead class="bg-primary/5">
+            <tr>
+              <th
+                class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
+                Nama User</th>
+              <th
+                class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
+                Email</th>
+              <th
+                class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
+                Whatsapp</th>
+              <th
+                class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
+                Alamat</th>
+              <th
+                class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
+                Role</th>
+              <th
+                class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
+                Direct Permissions</th>
+              <th
+                class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-primary/10">
+                Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse($users as $q)
+              <tr class="border-b border-primary/10"
+                wire:key="{{ $q->id }}">
+                <td
+                  class="px-5 py-3 text-primary border-r border-primary/10">
+                  {{ $q->name }}
+                </td>
+                <td
+                  class="px-5 py-3 {{ $q->google_id ? 'text-green-500' : 'text-primary' }} border-r border-primary/10">
+                  {{ $q->email }}
+                </td>
+                <td
+                  class="px-5 py-3 text-primary border-r border-primary/10">
+                  {{ $q->whatsapp }}
+                </td>
+                <td
+                  class="px-5 py-3 text-primary border-r border-primary/10">
+                  {{ $q->address }}
+                </td>
+                <td
+                  class="px-5 py-3 text-primary border-r border-primary/10">
+                  @forelse($q->roles as $role)
+                    <span
+                      class="inline-flex items-center rounded-full bg-blue-400/10 px-2 py-1 text-xs font-medium text-blue-400 inset-ring inset-ring-blue-400/30">{{ $role->name }}</span>
+                  @empty
+                    <span>-</span>
+                  @endforelse
+                </td>
+                <td
+                  class="px-5 py-3 text-primary border-r border-primary/10">
+                  {{ $q->permissions->count() }}
+                </td>
+                <td
+                  class="px-5 py-3 text-center whitespace-nowrap space-x-3">
+                  <button
+                    wire:click="openEdit({{ $q->id }})"
+                    wire:loading.attr="disabled"
+                    class="inline-flex items-center gap-1 text-xs text-orange-600 hover:text-orange-800 font-medium cursor-pointer transition-opacity disabled:opacity-50"
+                    title="Edit">
+                    <x-icons.spinner wire:loading
+                      wire:target="openEdit({{ $q->id }})"
+                      class="h-3.5 w-3.5 text-current" />
+
+                    <span wire:loading.remove
+                      wire:target="openEdit({{ $q->id }})">
+                      <x-icons.edit />
+                    </span>
+                  </button>
+
+                  <button
+                    wire:click="openAccess({{ $q->id }})"
+                    wire:loading.attr="disabled"
+                    class="inline-flex items-center gap-1 text-xs text-blue-500 hover:text-blue-700 font-medium cursor-pointer transition-opacity disabled:opacity-50"
+                    title="Kelola akses">
+                    <x-icons.spinner wire:loading
+                      wire:target="openAccess({{ $q->id }})"
+                      class="h-3.5 w-3.5 text-current" />
+
+                    <span wire:loading.remove
+                      wire:target="openAccess({{ $q->id }})">
+                      <x-icons.lock class="h-4 w-4" />
+                    </span>
+                  </button>
+
+                  <button
+                    wire:click="confirmDelete({{ $q->id }})"
+                    wire:loading.attr="disabled"
+                    class="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-800 font-medium cursor-pointer transition-opacity disabled:opacity-50"
+                    title="Hapus">
+                    <x-icons.spinner wire:loading
+                      wire:target="confirmDelete({{ $q->id }})"
+                      class="h-3.5 w-3.5 text-current" />
+
+                    <span wire:loading.remove
+                      wire:target="confirmDelete({{ $q->id }})">
+                      <x-icons.delete />
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="7"
+                  class="px-5 py-8 text-center text-primary/50">
+                  Belum ada user</td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+      <div class="px-6 py-4">
+
+        {{ $users->links('partials.custom-paginator') }}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Manage Access Modal -->
+  <div x-data="{ show: @entangle('showManageModal') }" x-show="show"
+    x-transition.opacity.duration.300ms
+    style="display: none;"
+    class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+    x-effect="show ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden')">
+
+    <div x-show="show" x-trap="show"
+      x-transition:enter="transition ease-out duration-300"
+      x-transition:enter-start="opacity-0 translate-y-8"
+      x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 translate-y-8"
+      class="bg-white rounded-2xl p-6 w-full max-w-3xl flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between mb-4">
+        <h3
+          class="font-heading font-semibold text-lg text-primary">
+          Kelola Akses User
+        </h3>
+        <button type="button"
+          wire:click="$set('showManageModal', false)"
+          class="text-primary/60 hover:text-primary/80 cursor-pointer rounded-lg p-1 text-xl transition-colors">
+          &times;
+        </button>
+      </div>
+
+      <p class="text-xs text-primary/60 mt-1 mb-4">
+        {{ $selectedUser?->name }}
+        {{ $selectedUser ? '(' . $selectedUser->email . ')' : '' }}
+      </p>
+
+      <form wire:submit="saveAccess"
+        class="space-y-3 overflow-y-auto pr-2 flex-1 sidebar-scroll">
+        <div>
+          <label
+            class="block text-sm font-medium text-primary mb-1">
+            Role
+          </label>
+          <div x-data="tomSelect({ value: @entangle('selectedRole'), placeholder: 'Pilih Role', ref: 'selectManageRole' })" wire:ignore
+            class="w-full rounded-xl">
+            <select x-ref="selectManageRole"
+              x-on:change="$wire.set('selectedRole', $event.target.value)"
+              class="w-full">
+              <option value="" disabled>Pilih Role
+              </option>
+              @foreach ($allRoles as $role)
+                <option value="{{ $role->name }}">
+                  {{ $role->name }}</option>
+              @endforeach
+            </select>
+          </div>
+          @error('selectedRole')
+            <p class="mt-1 text-xs text-red-600">
+              {{ $message }}</p>
+          @enderror
+        </div>
+
+        <div>
+          <div
+            class="flex items-center justify-between mb-2">
+            <label
+              class="block text-sm font-medium text-primary">
+              Direct Permissions
+            </label>
+            <span class="text-xs text-primary/60">
+              {{ count($selectedPermissions) }} dipilih
+            </span>
+          </div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-y-auto rounded-xl border border-primary/10 p-3 max-h-80">
+            @forelse($allPermissions as $permission)
+              <label
+                class="flex items-center gap-3 rounded-xl border border-transparent px-3 py-2 hover:bg-primary/5 hover:border-primary/10 cursor-pointer transition-colors">
+                <input wire:model="selectedPermissions"
+                  type="checkbox"
+                  value="{{ $permission->name }}"
+                  class="rounded border-primary/20 text-primary focus:ring-primary shrink-0">
+
+                <span
+                  class="text-sm text-primary break-words leading-snug">
+                  {{ $permission->name }}
+                </span>
+              </label>
+            @empty
+              <p
+                class="text-sm text-primary/60 col-span-full">
+                Belum ada permission.
+              </p>
+            @endforelse
+          </div>
+          @error('selectedPermissions.*')
+            <p class="mt-1 text-xs text-red-600">
+              {{ $message }}
+            </p>
+          @enderror
+        </div>
+
+        <div class="flex gap-3 pt-1">
+          <button type="button"
+            wire:click="$set('showManageModal', false)"
+            class="flex-1 px-4 py-2.5 border border-primary/10 rounded-xl text-sm font-medium text-primary hover:bg-primary/5 cursor-pointer">
+            Batal
+          </button>
+          <button type="submit"
+            wire:loading.attr="disabled"
+            wire:target="saveAccess"
+            class="flex-1 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary/90 cursor-pointer disabled:opacity-50 inline-flex items-center justify-center gap-2">
+            <x-icons.spinner wire:loading
+              wire:target="saveAccess"
+              class="h-3.5 w-3.5 text-current" />
+            <span>Simpan</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Create User Modal -->
+  <div x-data="{ show: @entangle('showCreateModal') }" x-show="show"
+    x-transition.opacity.duration.300ms
+    style="display: none;"
+    class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+    x-effect="show ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden')">
+
+    <div x-show="show" x-trap="show"
+      x-transition:enter="transition ease-out duration-300"
+      x-transition:enter-start="opacity-0 translate-y-8"
+      x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 translate-y-8"
+      class="bg-white rounded-2xl p-6 w-full max-w-3xl flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between mb-4">
+        <h3
+          class="font-heading font-semibold text-lg text-primary">
+          {{ $isEditing ? 'Edit' : 'Tambah' }} User
+        </h3>
+        <button type="button"
+          wire:click="$set('showCreateModal', false)"
+          class="text-primary/60 hover:text-primary/80 cursor-pointer rounded-lg p-1 text-xl transition-colors">
+          &times;
+        </button>
+      </div>
+
+      <form wire:submit="save"
+        class="space-y-3 overflow-y-auto pr-2 flex-1 sidebar-scroll">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label
+              class="block text-sm font-medium text-primary mb-1">
+              Role
+            </label>
+            <div x-data="tomSelect({ value: @entangle('createRole'), placeholder: 'Pilih Role', ref: 'selectCreateRoleModal' })" wire:ignore
+              class="w-full rounded-xl">
+              <select x-ref="selectCreateRoleModal"
+                id="createRole" class="w-full">
+                <option value="" disabled>Pilih Role
+                </option>
+                @foreach ($allRoles as $role)
+                  <option value="{{ $role->name }}">
+                    {{ $role->name }}</option>
+                @endforeach
+              </select>
+            </div>
+            @error('createRole')
+              <p class="mt-1 text-xs text-red-600">
+                {{ $message }}</p>
+            @enderror
+          </div>
+
+          <div>
+            <label
+              class="block text-sm font-medium text-primary mb-1">
+              Nama User
+            </label>
+            <input wire:model="name" type="text"
+              placeholder="Masukkan nama user"
+              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+            @error('name')
+              <p class="mt-1 text-xs text-red-600">
+                {{ $message }}</p>
+            @enderror
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label
+              class="block text-sm font-medium text-primary mb-1">
+              Email
+            </label>
+            <input wire:model="email" type="text"
+              placeholder="Masukkan email"
+              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+            @error('email')
+              <p class="mt-1 text-xs text-red-600">
+                {{ $message }}</p>
+            @enderror
+          </div>
+
+          <div>
+            <label
+              class="block text-sm font-medium text-primary mb-1">
+              Whatsapp aktif
+            </label>
+            <input wire:model="whatsapp" type="text"
+              placeholder="Masukkan nomor whatsapp aktif"
+              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+            @error('whatsapp')
+              <p class="mt-1 text-xs text-red-600">
+                {{ $message }}</p>
+            @enderror
+          </div>
+        </div>
+
+        <div>
+          <label
+            class="block text-sm font-medium text-primary mb-1">
+            Alamat
+          </label>
+          <input wire:model="address" type="text"
+            placeholder="Masukkan alamat"
+            class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+          @error('address')
+            <p class="mt-1 text-xs text-red-600">
+              {{ $message }}</p>
+          @enderror
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label
+              class="block text-sm font-medium text-primary mb-1">
+              Password
+            </label>
+            <input wire:model="password" type="password"
+              placeholder="••••••••"
+              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+            @error('password')
+              <p class="mt-1 text-xs text-red-600">
+                {{ $message }}</p>
+            @enderror
+          </div>
+
+          <div>
+            <label
+              class="block text-sm font-medium text-primary mb-1">
+              Confirm Password
+            </label>
+            <input wire:model="password_confirmation"
+              type="password" placeholder="••••••••"
+              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+            @error('password_confirmation')
+              <p class="mt-1 text-xs text-red-600">
+                {{ $message }}</p>
+            @enderror
+          </div>
+        </div>
+
+        <div class="flex gap-3 pt-1">
+          <button type="button"
+            wire:click="$set('showCreateModal', false)"
+            class="flex-1 px-4 py-2.5 border border-primary/10 rounded-xl text-sm font-medium text-primary hover:bg-primary/5 cursor-pointer">
+            Batal
+          </button>
+          <button type="submit"
+            wire:loading.attr="disabled"
+            wire:target="save"
+            class="flex-1 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary/90 cursor-pointer disabled:opacity-50 inline-flex items-center justify-center gap-2">
+            <x-icons.spinner wire:loading
+              wire:target="save"
+              class="h-3.5 w-3.5 text-current" />
+            <span>Simpan</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <x-delete-confirmation-modal :show="'showDeleteModal'"
+    action="delete" title="Konfirmasi Hapus Role"
+    message="Yakin ingin menghapus role ini?"
+    text="Tindakan ini tidak dapat dibatalkan."
+    confirmText="Ya, Hapus" />
+
+</div>
