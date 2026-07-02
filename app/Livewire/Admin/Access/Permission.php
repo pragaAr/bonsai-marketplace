@@ -39,11 +39,23 @@ class Permission extends Component
                 'required',
                 'string',
                 'max:255',
+                'regex:/^[a-z0-9_-]+\.[a-z0-9_-]+$/',
                 Rule::unique('permissions', 'name')
                     ->where('guard_name', 'web')
                     ->ignore($this->editId),
             ],
             'label' => 'nullable|string|max:255',
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'name.required' => 'Nama permission wajib diisi.',
+            'name.unique' => 'Nama permission sudah digunakan.',
+            'name.max' => 'Nama permission maksimal 255 karakter.',
+            'name.regex' => 'Format nama permission harus berupa objek.aksi (contoh: users.view).',
+            'label.max' => 'Label maksimal 255 karakter.',
         ];
     }
 
