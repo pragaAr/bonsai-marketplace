@@ -43,7 +43,7 @@
 
     <div class="w-full mb-6">
       <input wire:model.live.debounce.300ms="search"
-        type="text" placeholder="Cari role..."
+        type="text" placeholder="Cari permission..."
         class="px-4 py-2 rounded-xl bg-white/50 border border-primary/20 text-sm focus:border-primary/40 outline-none w-full">
     </div>
 
@@ -56,78 +56,39 @@
             <tr>
               <th
                 class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
-                Nama Role</th>
+                Nama Permissions</th>
               <th
                 class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
-                Permissions</th>
-              <th
-                class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
-                User Count</th>
+                Label</th>
               <th
                 class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-primary/10">
                 Aksi</th>
             </tr>
           </thead>
           <tbody>
-            @forelse($roles as $role)
+            @forelse($permissions as $q)
               <tr class="border-b border-primary/10">
                 <td
                   class="px-5 py-3 font-medium text-primary border-r border-primary/10">
-                  {{ $role->name }}
+                  {{ $q->name }}
                 </td>
                 <td
                   class="px-5 py-3 text-primary/70 border-r border-primary/10">
-                  @if ($role->name === 'admin')
-                    <span
-                      class="inline-flex items-center rounded-full bg-accent/50 px-2.5 py-1 text-xs font-semibold text-primary"
-                      title="{{ $role->permissions->pluck('label')->filter()->join(', ') }}">
-                      All access
-                    </span>
-                  @else
-                    @php
-                      $permissionLabels = $role->permissions->map(
-                          fn(
-                              $permission,
-                          ) => $permission->label ?:
-                          $permission->name,
-                      );
-                    @endphp
-                    <div
-                      class="flex flex-wrap justify-center gap-1.5"
-                      title="{{ $permissionLabels->join(', ') }}">
-                      @forelse($permissionLabels->take(5) as $permissionLabel)
-                        <span
-                          class="inline-flex items-center rounded-full bg-accent/50 px-2.5 py-1 text-xs font-medium text-primary">
-                          {{ $permissionLabel }}
-                        </span>
-                      @empty
-                        <span
-                          class="text-secondary-400">-</span>
-                      @endforelse
-                      @if ($permissionLabels->count() > 5)
-                        <span
-                          class="inline-flex items-center rounded-full bg-accent/50 px-2.5 py-1 text-xs font-medium text-primary">...</span>
-                      @endif
-                    </div>
-                  @endif
-                </td>
-                <td
-                  class="px-5 py-3 text-primary border-r border-primary/10">
-                  {{ $role->users_count }}
+                  {{ $q->label }}
                 </td>
                 <td
                   class="px-5 py-3 text-center whitespace-nowrap space-x-3">
                   <button
-                    wire:click="openEdit({{ $role->id }})"
+                    wire:click="openEdit({{ $q->id }})"
                     wire:loading.attr="disabled"
                     class="inline-flex items-center gap-1 text-xs text-orange-600 hover:text-orange-800 font-medium cursor-pointer transition-opacity disabled:opacity-50"
                     title="Edit">
-                    <x-spinner wire:loading
-                      wire:target="openEdit({{ $role->id }})"
+                    <x-icons.spinner wire:loading
+                      wire:target="openEdit({{ $q->id }})"
                       class="h-3.5 w-3.5 text-current" />
 
                     <span wire:loading.remove
-                      wire:target="openEdit({{ $role->id }})">
+                      wire:target="openEdit({{ $q->id }})">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none" viewBox="0 0 24 24"
@@ -142,16 +103,16 @@
                   </button>
 
                   <button
-                    wire:click="confirmDelete({{ $role->id }})"
+                    wire:click="confirmDelete({{ $q->id }})"
                     wire:loading.attr="disabled"
                     class="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-800 font-medium cursor-pointer transition-opacity disabled:opacity-50"
                     title="Hapus">
-                    <x-spinner wire:loading
-                      wire:target="confirmDelete({{ $role->id }})"
+                    <x-icons.spinner wire:loading
+                      wire:target="confirmDelete({{ $q->id }})"
                       class="h-3.5 w-3.5 text-current" />
 
                     <span wire:loading.remove
-                      wire:target="confirmDelete({{ $role->id }})">
+                      wire:target="confirmDelete({{ $q->id }})">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none" viewBox="0 0 24 24"
@@ -168,9 +129,9 @@
               </tr>
             @empty
               <tr>
-                <td colspan="4"
+                <td colspan="3"
                   class="px-5 py-8 text-center text-primary/50">
-                  Belum ada role</td>
+                  Belum ada permission</td>
               </tr>
             @endforelse
           </tbody>
@@ -178,7 +139,7 @@
       </div>
       <div class="px-6 py-4">
 
-        {{ $roles->links('partials.custom-paginator') }}
+        {{ $permissions->links('partials.custom-paginator') }}
       </div>
     </div>
 
@@ -202,7 +163,7 @@
       <div class="flex items-center justify-between mb-4">
         <h3
           class="font-heading font-semibold text-lg text-primary">
-          {{ $isEditing ? 'Edit' : 'Tambah' }} Role
+          {{ $isEditing ? 'Edit' : 'Tambah' }} Permission
         </h3>
         <button type="button"
           wire:click="$set('showModal', false)"
@@ -215,10 +176,10 @@
         <div>
           <label
             class="block text-sm font-medium text-primary mb-1">
-            Nama Role
+            Nama Permission
           </label>
           <input wire:model="name" type="text"
-            placeholder="Masukkan nama role"
+            placeholder="contoh: access.roles.view"
             class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
           @error('name')
             <p class="mt-1 text-xs text-danger-600">
@@ -227,44 +188,16 @@
         </div>
 
         <div>
-          <div
-            class="flex items-center justify-between mb-2">
-            <label
-              class="block text-sm font-medium text-primary">
-              Permissions
-            </label>
-            <span class="text-xs text-primary/60">
-              {{ count($selectedPermissions) }} dipilih
-            </span>
-          </div>
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-y-auto rounded-xl border border-primary/10 p-3 max-h-80">
-            @forelse($allPermissions as $permission)
-              <label
-                class="flex items-center gap-3 rounded-xl border border-transparent px-3 py-2 hover:bg-primary/5 hover:border-primary/10 cursor-pointer transition-colors">
-
-                <input wire:model="selectedPermissions"
-                  type="checkbox"
-                  value="{{ $permission->name }}"
-                  class="rounded border-primary/20 text-primary focus:ring-primary shrink-0">
-
-                <span
-                  class="text-sm text-primary break-words leading-snug">
-                  {{ $permission->name }}
-                </span>
-
-              </label>
-            @empty
-              <p
-                class="text-sm text-primary/60 col-span-full">
-                Belum ada permission.
-              </p>
-            @endforelse
-          </div>
-          @error('selectedPermissions.*')
+          <label
+            class="block text-sm font-medium text-primary mb-1">
+            Label Permission
+          </label>
+          <input wire:model="label" type="text"
+            placeholder="contoh: Lihat Role"
+            class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+          @error('label')
             <p class="mt-1 text-xs text-danger-600">
-              {{ $message }}
-            </p>
+              {{ $message }}</p>
           @enderror
         </div>
 
@@ -277,18 +210,9 @@
           <button type="submit"
             wire:loading.attr="disabled"
             class="flex-1 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary/90 cursor-pointer disabled:opacity-50 inline-flex items-center justify-center gap-2">
-            <svg wire:loading wire:target="save"
-              class="h-4 w-4 animate-spin text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12"
-                cy="12" r="10"
-                stroke="currentColor" stroke-width="4">
-              </circle>
-              <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-              </path>
-            </svg>
+            <x-icons.spinner wire:loading
+              wire:target="save"
+              class="h-3.5 w-3.5 text-current" />
             <span>Simpan</span>
           </button>
         </div>
@@ -297,8 +221,8 @@
   </div>
 
   <x-delete-confirmation-modal :show="'showDeleteModal'"
-    action="delete" title="Konfirmasi Hapus Role"
-    message="Yakin ingin menghapus role ini?"
+    action="delete" title="Konfirmasi Hapus Permission"
+    message="Yakin ingin menghapus permission ini?"
     text="Tindakan ini tidak dapat dibatalkan."
     confirmText="Ya, Hapus" />
 
