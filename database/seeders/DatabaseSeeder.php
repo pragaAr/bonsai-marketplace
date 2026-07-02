@@ -25,26 +25,26 @@ class DatabaseSeeder extends Seeder
 
         // ── 2. Seed Permissions ──
         // Product permissions
-        $manageProducts = Permission::create(['name' => 'manage products',  'label' => 'Kelola Produk']);
-        $viewProducts = Permission::create(['name' => 'view products',    'label' => 'Lihat Produk']);
-        $createProducts = Permission::create(['name' => 'create products',  'label' => 'Buat Produk']);
-        $editProducts = Permission::create(['name' => 'edit products',    'label' => 'Edit Produk']);
-        $deleteProducts = Permission::create(['name' => 'delete products',  'label' => 'Hapus Produk']);
+        $manageProducts = Permission::create(['name' => 'products.manage',  'label' => 'Kelola Produk']);
+        $viewProducts = Permission::create(['name' => 'products.view',    'label' => 'Lihat Produk']);
+        $createProducts = Permission::create(['name' => 'products.create',  'label' => 'Buat Produk']);
+        $editProducts = Permission::create(['name' => 'products.edit',    'label' => 'Edit Produk']);
+        $deleteProducts = Permission::create(['name' => 'products.delete',  'label' => 'Hapus Produk']);
 
         // Order permissions
-        $manageOrders = Permission::create(['name' => 'manage orders',    'label' => 'Kelola Pesanan']);
-        $viewOrders = Permission::create(['name' => 'view orders',      'label' => 'Lihat Pesanan']);
-        $createOrders = Permission::create(['name' => 'create orders',    'label' => 'Buat Pesanan']);
+        $manageOrders = Permission::create(['name' => 'orders.manage',    'label' => 'Kelola Pesanan']);
+        $viewOrders = Permission::create(['name' => 'orders.view',      'label' => 'Lihat Pesanan']);
+        $createOrders = Permission::create(['name' => 'orders.create',    'label' => 'Buat Pesanan']);
 
         // User permissions
-        $manageUsers = Permission::create(['name' => 'manage users',     'label' => 'Kelola Pengguna']);
-        $viewUsers = Permission::create(['name' => 'view users',       'label' => 'Lihat Pengguna']);
+        $manageUsers = Permission::create(['name' => 'users.manage',     'label' => 'Kelola Pengguna']);
+        $viewUsers = Permission::create(['name' => 'users.view',       'label' => 'Lihat Pengguna']);
 
         // Role permissions
-        $manageRoles = Permission::create(['name' => 'manage roles',     'label' => 'Kelola Role']);
+        $manageRoles = Permission::create(['name' => 'roles.manage',     'label' => 'Kelola Role']);
 
         // Settings permissions
-        $manageSettings = Permission::create(['name' => 'manage settings',  'label' => 'Kelola Pengaturan']);
+        $manageSettings = Permission::create(['name' => 'settings.manage',  'label' => 'Kelola Pengaturan']);
 
         // ── 3. Assign Permissions to Roles ──
         // System Admin — akses penuh
