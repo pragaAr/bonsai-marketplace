@@ -140,10 +140,10 @@ class Role extends Component
         }
 
         return view('livewire.admin.access.role', [
-            'roles' => $query->orderBy('name')->paginate(2),
+            'roles' => $query->orderBy('name')->paginate(10),
             'allPermissions' => Permission::orderBy('name')->get(),
             'title' => 'Manajemen Role',
-            'subTitle' => 'Kelola role dan hak akses pengguna',
+            'subTitle' => 'Kelola role akses pengguna',
         ]);
     }
 }
