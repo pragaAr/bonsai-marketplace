@@ -243,7 +243,7 @@
           class="inline-flex items-center gap-2 mt-8 border-2 border-primary text-primary px-6 py-3 rounded-lg text-sm font-semibold hover:bg-primary hover:text-cream transition-colors duration-300 btn-lift">
 
           <!-- Spinner -->
-          <x-spinner x-show="loading" x-cloak
+          <x-icons.spinner x-show="loading" x-cloak
             class="h-4 w-4 text-current" />
 
           <span x-show="!loading">

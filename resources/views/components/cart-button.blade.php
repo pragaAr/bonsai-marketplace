@@ -15,7 +15,7 @@
     {{ $attributes }}>
 
     <!-- Spinner (loading) -->
-    <x-spinner x-show="loading" x-cloak
+    <x-icons.spinner x-show="loading" x-cloak
       class="h-4 w-4 text-current {{ $iconClass }}" />
 
     <!-- Plus icon (idle) -->

@@ -113,7 +113,7 @@
                 d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
 
-            <x-spinner x-show="loading" x-cloak
+            <x-icons.spinner x-show="loading" x-cloak
               class="h-4 w-4 text-current" />
 
             <span x-show="!loading">

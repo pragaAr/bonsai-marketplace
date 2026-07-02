@@ -182,7 +182,7 @@
               class="hidden md:inline-flex items-center justify-center gap-2 rounded px-4 py-1.5 text-sm font-semibold text-primary border border-primary/15 hover:bg-primary/5 transition-colors cursor-pointer">
 
               <!-- Spinner -->
-              <x-spinner x-show="loading" x-cloak
+              <x-icons.spinner x-show="loading" x-cloak
                 class="h-4 w-4 text-current" />
 
               <span x-text="loading ? 'Memuat...' : 'Masuk'">

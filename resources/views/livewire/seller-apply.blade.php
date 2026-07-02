@@ -219,7 +219,8 @@
             class="flex-1 inline-flex items-center gap-2 justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90 cursor-pointer"
             wire:loading.attr="disabled">
 
-            <x-spinner wire:loading wire:target="submit"
+            <x-icons.spinner wire:loading
+              wire:target="submit"
               class="h-4 w-4 text-current" />
 
             Kirim pengajuan
@@ -229,7 +230,7 @@
             @click="loading = true"
             class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5">
 
-            <x-spinner x-show="loading" x-cloak
+            <x-icons.spinner x-show="loading" x-cloak
               class="h-4
               w-4 text-current" />
 

@@ -20,7 +20,7 @@ href="{{ route('checkout.product', $product->slug) }}"
   {{ $attributes }}>
 
   <!-- Spinner (loading) -->
-  <x-spinner x-show="loading" x-cloak
+  <x-icons.spinner x-show="loading" x-cloak
     class="h-4 w-4 text-current {{ $iconClass }}" />
 
   <!-- Shopping Bag Icon (idle) -->

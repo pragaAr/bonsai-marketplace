@@ -61,7 +61,7 @@
                   @click="loading = true"
                   class="inline-flex items-center gap-1 text-sm text-accent hover:text-primary transition-colors mt-4 cursor-pointer">
 
-                  <x-spinner x-show="loading" x-cloak
+                  <x-icons.spinner x-show="loading" x-cloak
                     class="h-4 w-4 text-current" />
 
                   <span x-show="!loading">

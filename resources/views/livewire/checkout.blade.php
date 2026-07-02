@@ -265,7 +265,7 @@
             class="btn-lift inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-4 text-sm font-semibold text-cream transition-colors cursor-pointer hover:bg-primary/90 sm:w-auto"
             wire:loading.attr="disabled">
 
-            <x-spinner wire:loading
+            <x-icons.spinner wire:loading
               wire:target="submitOrder"
               class="h-4 w-4 text-current" />
 

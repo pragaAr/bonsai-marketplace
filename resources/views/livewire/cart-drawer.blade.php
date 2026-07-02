@@ -121,7 +121,8 @@
             class="w-full bg-primary text-cream py-3 rounded-lg text-sm font-semibold hover:bg-opacity-90 transition-colors cursor-pointer duration-200 btn-lift flex items-center justify-center gap-2">
 
             <!-- Spinner -->
-            <x-spinner wire:loading wire:target="checkout"
+            <x-icons.spinner wire:loading
+              wire:target="checkout"
               class="h-4 w-4 text-cream" />
 
             <span wire:loading.remove
@@ -136,7 +137,7 @@
             class="w-full border-2 border-accent text-primary py-3 rounded-lg text-sm font-semibold hover:bg-accent hover:text-cream transition-colors cursor-pointer duration-200 btn-lift flex items-center justify-center gap-2">
 
             <!-- Spinner -->
-            <x-spinner wire:loading
+            <x-icons.spinner wire:loading
               wire:target="downloadInvoice"
               class="h-4 w-4 text-current" />
 
@@ -162,7 +163,8 @@
             class="w-full text-xs text-primary/40 hover:text-primary transition-colors cursor-pointer py-2 flex items-center justify-center gap-1.5">
 
             <!-- Spinner -->
-            <x-spinner wire:loading wire:target="clearCart"
+            <x-icons.spinner wire:loading
+              wire:target="clearCart"
               class="h-4 w-4 text-current" />
 
             <span wire:loading.remove

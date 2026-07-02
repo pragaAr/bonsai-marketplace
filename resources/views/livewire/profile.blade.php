@@ -305,7 +305,7 @@
               wire:target="openEditor"
               class="inline-flex items-center gap-2 justify-center rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5 cursor-pointer">
 
-              <x-spinner wire:loading
+              <x-icons.spinner wire:loading
                 wire:target="openEditor"
                 class="h-4 w-4" />
               Ubah profil
@@ -369,7 +369,7 @@
                   @click="loading = true"
                   class="inline-flex items-center justify-center gap-2 rounded-full bg-cream px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-cream/90">
 
-                  <x-spinner x-show="loading" x-cloak
+                  <x-icons.spinner x-show="loading" x-cloak
                     class="h-4 w-4 text-current" />
 
                   <span x-show="!loading">
@@ -404,7 +404,7 @@
                 @click="loading = true"
                 class="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90">
 
-                <x-spinner x-show="loading" x-cloak
+                <x-icons.spinner x-show="loading" x-cloak
                   class="h-4 w-4 text-current" />
 
                 <span x-show="!loading">
