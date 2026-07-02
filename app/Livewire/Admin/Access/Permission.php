@@ -115,7 +115,7 @@ class Permission extends Component
         $this->resetPage();
     }
 
-    #[Layout('layouts.admin')]
+    #[Layout('layouts.dashboard')]
     #[Title('Manajemen Permission')]
     public function render()
     {
@@ -129,7 +129,9 @@ class Permission extends Component
         }
 
         return view('livewire.admin.access.permission', [
-            'permissions' => $query->orderBy('name')->paginate(15),
+            'permissions' => $query->orderBy('name')->paginate(10),
+            'title' => 'Manajemen Permission',
+            'subTitle' => 'Kelola permission akses pengguna',
         ]);
     }
 
