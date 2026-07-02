@@ -162,21 +162,22 @@
             </summary>
             <div
               class="flex flex-col px-4 py-2 space-y-1 text-cream/90">
-              <a href="{{ route('admin.role') }}"
+              <a href="{{ route('admin.roles') }}"
                 wire:navigate
-                class="{{ $linkBase }} {{ request()->routeIs('admin.role') ? $activeLink : '' }}">
+                class="{{ $linkBase }} {{ request()->routeIs('admin.roles') ? $activeLink : '' }}">
                 <x-icons.minus class="w-4 h-4" />
-                <span>Role</span>
+                <span>Roles</span>
               </a>
-              <a href="{{ route('admin.permission') }}"
+              <a href="{{ route('admin.permissions') }}"
                 wire:navigate
-                class="{{ $linkBase }} {{ request()->routeIs('admin.permission') ? $activeLink : '' }}">
+                class="{{ $linkBase }} {{ request()->routeIs('admin.permissions') ? $activeLink : '' }}">
                 <x-icons.minus class="w-4 h-4" />
 
-                <span>Permission</span>
+                <span>Permissions</span>
               </a>
-              <a href="#"
-                class="{{ $subLinkBase }}">
+              <a href="{{ route('admin.users') }}"
+                wire:navigate
+                class="{{ $linkBase }} {{ request()->routeIs('admin.users') ? $activeLink : '' }}">
                 <x-icons.minus class="w-4 h-4" />
 
                 <span>Users</span>
