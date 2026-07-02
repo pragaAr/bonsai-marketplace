@@ -198,7 +198,7 @@
             placeholder="Masukkan nama role"
             class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
           @error('name')
-            <p class="mt-1 text-xs text-danger-600">
+            <p class="mt-1 text-xs text-red-600">
               {{ $message }}</p>
           @enderror
         </div>
@@ -239,7 +239,7 @@
             @endforelse
           </div>
           @error('selectedPermissions.*')
-            <p class="mt-1 text-xs text-danger-600">
+            <p class="mt-1 text-xs text-red-600">
               {{ $message }}
             </p>
           @enderror
