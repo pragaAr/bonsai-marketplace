@@ -113,17 +113,10 @@
       x-transition:leave-start="opacity-100 translate-y-0"
       x-transition:leave-end="opacity-0 translate-y-8"
       class="bg-white rounded-2xl p-6 w-full max-w-lg flex flex-col">
-      <div class="flex items-center justify-between mb-4">
-        <h3
-          class="font-heading font-semibold text-lg text-primary">
-          {{ $isEditing ? 'Edit' : 'Tambah' }} Permission
-        </h3>
-        <button type="button"
-          wire:click="$set('showModal', false)"
-          class="text-primary/60 hover:text-primary/80 cursor-pointer rounded-lg p-1 text-xl transition-colors">
-          &times;
-        </button>
-      </div>
+
+      <x-modal.header wire:click="$set('showModal', false)">
+        {{ $isEditing ? 'Edit' : 'Tambah' }} Permission
+      </x-modal.header>
 
       <form wire:submit="save" class="space-y-3" novalidate>
         <div>
@@ -160,7 +153,7 @@
           @enderror
         </div>
 
-        <div class="flex gap-3 pt-1">
+        <div class="flex gap-3 pt-4">
           <x-forms.cancel-button
             wire:click="$set('showModal', false)">
             Batal

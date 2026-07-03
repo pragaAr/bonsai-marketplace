@@ -164,17 +164,11 @@
       x-transition:leave-start="opacity-100 translate-y-0"
       x-transition:leave-end="opacity-0 translate-y-8"
       class="bg-white rounded-2xl p-6 w-full max-w-3xl flex flex-col max-h-[85vh]">
-      <div class="flex items-center justify-between mb-4">
-        <h3
-          class="font-heading font-semibold text-lg text-primary">
-          Kelola Akses User
-        </h3>
-        <button type="button"
-          wire:click="$set('showManageModal', false)"
-          class="text-primary/60 hover:text-primary/80 cursor-pointer rounded-lg p-1 text-xl transition-colors">
-          &times;
-        </button>
-      </div>
+
+      <x-modal.header
+        wire:click="$set('showManageModal', false)">
+        Kelola Akses User
+      </x-modal.header>
 
       <p class="text-xs text-primary/60 mt-1 mb-4">
         {{ $selectedUser?->name }}
@@ -248,7 +242,7 @@
           @enderror
         </div>
 
-        <div class="flex gap-3 pt-1">
+        <div class="flex gap-3 pt-4">
           <x-forms.cancel-button
             wire:click="$set('showManageModal', false)">
             Batal
@@ -276,17 +270,11 @@
       x-transition:leave-start="opacity-100 translate-y-0"
       x-transition:leave-end="opacity-0 translate-y-8"
       class="bg-white rounded-2xl p-6 w-full max-w-3xl flex flex-col max-h-[85vh]">
-      <div class="flex items-center justify-between mb-4">
-        <h3
-          class="font-heading font-semibold text-lg text-primary">
-          {{ $isEditing ? 'Edit' : 'Tambah' }} User
-        </h3>
-        <button type="button"
-          wire:click="$set('showCreateModal', false)"
-          class="text-primary/60 hover:text-primary/80 cursor-pointer rounded-lg p-1 text-xl transition-colors">
-          &times;
-        </button>
-      </div>
+
+      <x-modal.header
+        wire:click="$set('showCreateModal', false)">
+        {{ $isEditing ? 'Edit' : 'Tambah' }} User
+      </x-modal.header>
 
       <form wire:submit="save"
         class="space-y-3 overflow-y-auto pr-2 flex-1 sidebar-scroll"
@@ -452,7 +440,7 @@
           </div>
         </div>
 
-        <div class="flex gap-3 pt-1">
+        <div class="flex gap-3 pt-4">
           <x-forms.cancel-button
             wire:click="$set('showCreateModal', false)">
             Batal
