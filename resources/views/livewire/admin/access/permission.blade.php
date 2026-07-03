@@ -135,7 +135,7 @@
       x-transition:leave="transition ease-in duration-200"
       x-transition:leave-start="opacity-100 translate-y-0"
       x-transition:leave-end="opacity-0 translate-y-8"
-      class="bg-white rounded-2xl p-6 w-full max-w-3xl flex flex-col">
+      class="bg-white rounded-2xl p-6 w-full max-w-lg flex flex-col">
       <div class="flex items-center justify-between mb-4">
         <h3
           class="font-heading font-semibold text-lg text-primary">
@@ -148,15 +148,18 @@
         </button>
       </div>
 
-      <form wire:submit="save" class="space-y-3">
+      <form wire:submit="save" class="space-y-3" novalidate>
         <div>
           <label
-            class="block text-sm font-medium text-primary mb-1">
+            class="block text-sm font-medium text-primary mb-1"
+            for="name">
             Nama Permission
           </label>
-          <input wire:model="name" type="text"
+          <input wire:model.defer="name" type="text"
+            name="name" id="name"
             placeholder="contoh: roles.manage"
-            class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+            class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none"
+            required>
           @error('name')
             <p class="mt-1 text-xs text-red-600">
               {{ $message }}</p>
@@ -165,12 +168,15 @@
 
         <div>
           <label
-            class="block text-sm font-medium text-primary mb-1">
+            class="block text-sm font-medium text-primary mb-1"
+            for="label">
             Label Permission
           </label>
-          <input wire:model="label" type="text"
+          <input wire:model.defer="label" type="text"
+            name="label" id="label"
             placeholder="contoh: Lihat Role"
-            class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+            class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none"
+            required>
           @error('label')
             <p class="mt-1 text-xs text-red-600">
               {{ $message }}</p>
@@ -186,7 +192,8 @@
           <button type="submit"
             wire:loading.attr="disabled"
             class="flex-1 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary/90 cursor-pointer disabled:opacity-50 inline-flex items-center justify-center gap-2">
-            <x-icons.spinner wire:loading wire:target="save"
+            <x-icons.spinner wire:loading
+              wire:target="save"
               class="h-3.5 w-3.5 text-current" />
             <span>Simpan</span>
           </button>

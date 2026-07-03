@@ -202,7 +202,8 @@
       </p>
 
       <form wire:submit="saveAccess"
-        class="space-y-3 overflow-y-auto pr-2 flex-1 sidebar-scroll">
+        class="space-y-3 overflow-y-auto pr-2 flex-1 sidebar-scroll"
+        novalidate>
         <div>
           <label
             class="block text-sm font-medium text-primary mb-1">
@@ -212,7 +213,7 @@
             class="w-full rounded-xl">
             <select x-ref="selectManageRole"
               x-on:change="$wire.set('selectedRole', $event.target.value)"
-              class="w-full">
+              class="w-full" required>
               <option value="" disabled>Pilih Role
               </option>
               @foreach ($allRoles as $role)
@@ -315,7 +316,8 @@
       </div>
 
       <form wire:submit="save"
-        class="space-y-3 overflow-y-auto pr-2 flex-1 sidebar-scroll">
+        class="space-y-3 overflow-y-auto pr-2 flex-1 sidebar-scroll"
+        novalidate>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label
@@ -325,7 +327,7 @@
             <div x-data="tomSelect({ value: @entangle('createRole'), placeholder: 'Pilih Role', ref: 'selectCreateRoleModal' })" wire:ignore
               class="w-full rounded-xl">
               <select x-ref="selectCreateRoleModal"
-                id="createRole" class="w-full">
+                id="createRole" class="w-full" required>
                 <option value="" disabled>Pilih Role
                 </option>
                 @foreach ($allRoles as $role)
@@ -342,12 +344,15 @@
 
           <div>
             <label
-              class="block text-sm font-medium text-primary mb-1">
+              class="block text-sm font-medium text-primary mb-1"
+              for="name">
               Nama User
             </label>
-            <input wire:model="name" type="text"
+            <input wire:model.defer="name" type="text"
+              name="name" id="name"
               placeholder="Masukkan nama user"
-              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none"
+              required>
             @error('name')
               <p class="mt-1 text-xs text-red-600">
                 {{ $message }}</p>
@@ -358,12 +363,15 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label
-              class="block text-sm font-medium text-primary mb-1">
+              class="block text-sm font-medium text-primary mb-1"
+              for="email">
               Email
             </label>
-            <input wire:model="email" type="text"
+            <input wire:model.defer="email" type="text"
+              name="email" id="email"
               placeholder="Masukkan email"
-              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none"
+              required>
             @error('email')
               <p class="mt-1 text-xs text-red-600">
                 {{ $message }}</p>
@@ -372,12 +380,16 @@
 
           <div>
             <label
-              class="block text-sm font-medium text-primary mb-1">
+              class="block text-sm font-medium text-primary mb-1"
+              for="whatsapp">
               Whatsapp aktif
             </label>
-            <input wire:model="whatsapp" type="text"
+            <input wire:model.defer="whatsapp"
+              type="text" name="whatsapp"
+              id="whatsapp"
               placeholder="Masukkan nomor whatsapp aktif"
-              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none"
+              required>
             @error('whatsapp')
               <p class="mt-1 text-xs text-red-600">
                 {{ $message }}</p>
@@ -387,12 +399,15 @@
 
         <div>
           <label
-            class="block text-sm font-medium text-primary mb-1">
+            class="block text-sm font-medium text-primary mb-1"
+            for="address">
             Alamat
           </label>
-          <input wire:model="address" type="text"
+          <input wire:model.defer="address" type="text"
+            name="address" id="address"
             placeholder="Masukkan alamat"
-            class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+            class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none"
+            required>
           @error('address')
             <p class="mt-1 text-xs text-red-600">
               {{ $message }}</p>
@@ -400,28 +415,63 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
+          <div x-data="{ showPassword: false }">
             <label
-              class="block text-sm font-medium text-primary mb-1">
+              class="block text-sm font-medium text-primary mb-1"
+              for="password">
               Password
             </label>
-            <input wire:model="password" type="password"
-              placeholder="••••••••"
-              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+            <div class="relative">
+              <input
+                :type="showPassword ? 'text' : 'password'"
+                wire:model.defer="password"
+                name="password" id="password"
+                placeholder="••••••••" required
+                class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+              <button type="button"
+                @click="showPassword = !showPassword"
+                class="absolute right-0 top-1/2 -translate-y-1/2 pr-3 flex items-center text-primary">
+                <span :class="{ 'hidden': showPassword }">
+                  <x-icons.eye />
+                </span>
+                <span class="hidden"
+                  :class="{ 'hidden': !showPassword }">
+                  <x-icons.eye-closed />
+                </span>
+              </button>
+            </div>
             @error('password')
               <p class="mt-1 text-xs text-red-600">
                 {{ $message }}</p>
             @enderror
           </div>
 
-          <div>
+          <div x-data="{ showPassword: false }">
             <label
-              class="block text-sm font-medium text-primary mb-1">
+              class="block text-sm font-medium text-primary mb-1"
+              for="password_confirmation">
               Confirm Password
             </label>
-            <input wire:model="password_confirmation"
-              type="password" placeholder="••••••••"
-              class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+            <div class="relative">
+              <input
+                :type="showPassword ? 'text' : 'password'"
+                wire:model.defer="password_confirmation"
+                name="password_confirmation"
+                id="password_confirmation"
+                placeholder="••••••••" required
+                class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
+              <button type="button"
+                @click="showPassword = !showPassword"
+                class="absolute right-0 top-1/2 -translate-y-1/2 pr-3 flex items-center text-primary">
+                <span :class="{ 'hidden': showPassword }">
+                  <x-icons.eye />
+                </span>
+                <span class="hidden"
+                  :class="{ 'hidden': !showPassword }">
+                  <x-icons.eye-closed />
+                </span>
+              </button>
+            </div>
             @error('password_confirmation')
               <p class="mt-1 text-xs text-red-600">
                 {{ $message }}</p>
