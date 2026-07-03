@@ -11,33 +11,15 @@
         </p>
       </div>
 
-      <button wire:click="openCreate"
-        wire:loading.attr="disabled" wire:target="openCreate"
-        class="w-full sm:w-auto px-5 py-2 bg-primary text-white text-sm font-semibold rounded-xl hover:shadow-lg transition-smooth cursor-pointer inline-flex items-center justify-center gap-2 disabled:opacity-50 self-start sm:self-center">
+      <div class="flex gap-3">
+        <x-filter-button />
+        <x-create-button />
+      </div>
 
-        <svg wire:loading.remove wire:target="openCreate"
-          xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-          viewBox="0 0 24 24" stroke-width="2"
-          stroke="currentColor" fill="none"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z"
-            fill="none" />
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
-        </svg>
-
-        <x-icons.spinner wire:loading
-          wire:target="openCreate"
-          class="h-3.5 w-3.5 text-current" />
-
-        <span>Tambah</span>
-      </button>
     </div>
 
     <div class="w-full mb-6">
-      <input wire:model.live.debounce.300ms="search"
-        type="text" placeholder="Cari user..."
-        class="px-4 py-2 rounded-xl bg-white/50 border border-primary/20 text-sm focus:border-primary/40 outline-none w-full">
+      <x-forms.search-input placeholder="Cari user..." />
     </div>
 
     <div
@@ -162,11 +144,9 @@
         </table>
       </div>
       <div class="px-6 py-4">
-
         {{ $users->links('partials.custom-paginator') }}
       </div>
     </div>
-
   </div>
 
   <!-- Manage Access Modal -->
@@ -269,20 +249,13 @@
         </div>
 
         <div class="flex gap-3 pt-1">
-          <button type="button"
-            wire:click="$set('showManageModal', false)"
-            class="flex-1 px-4 py-2.5 border border-primary/10 rounded-xl text-sm font-medium text-primary hover:bg-primary/5 cursor-pointer">
+          <x-forms.cancel-button
+            wire:click="$set('showManageModal', false)">
             Batal
-          </button>
-          <button type="submit"
-            wire:loading.attr="disabled"
-            wire:target="saveAccess"
-            class="flex-1 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary/90 cursor-pointer disabled:opacity-50 inline-flex items-center justify-center gap-2">
-            <x-icons.spinner wire:loading
-              wire:target="saveAccess"
-              class="h-3.5 w-3.5 text-current" />
-            <span>Simpan</span>
-          </button>
+          </x-forms.cancel-button>
+          <x-forms.submit-button target="saveAccess">
+            Simpan
+          </x-forms.submit-button>
         </div>
       </form>
     </div>
@@ -480,20 +453,13 @@
         </div>
 
         <div class="flex gap-3 pt-1">
-          <button type="button"
-            wire:click="$set('showCreateModal', false)"
-            class="flex-1 px-4 py-2.5 border border-primary/10 rounded-xl text-sm font-medium text-primary hover:bg-primary/5 cursor-pointer">
+          <x-forms.cancel-button
+            wire:click="$set('showCreateModal', false)">
             Batal
-          </button>
-          <button type="submit"
-            wire:loading.attr="disabled"
-            wire:target="save"
-            class="flex-1 px-4 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary/90 cursor-pointer disabled:opacity-50 inline-flex items-center justify-center gap-2">
-            <x-icons.spinner wire:loading
-              wire:target="save"
-              class="h-3.5 w-3.5 text-current" />
-            <span>Simpan</span>
-          </button>
+          </x-forms.cancel-button>
+          <x-forms.submit-button target="save">
+            Simpan
+          </x-forms.submit-button>
         </div>
       </form>
     </div>
