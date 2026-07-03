@@ -230,8 +230,8 @@
     </div>
   </div>
 
-  <x-delete-confirmation-modal :show="'showDeleteModal'"
-    action="delete" title="Konfirmasi Hapus Role"
+  <x-page.delete-modal :show="'showDeleteModal'" action="delete"
+    title="Konfirmasi Hapus Role"
     message="Yakin ingin menghapus role ini?"
     text="Tindakan ini tidak dapat dibatalkan."
     confirmText="Ya, Hapus" />

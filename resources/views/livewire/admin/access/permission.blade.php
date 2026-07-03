@@ -166,7 +166,7 @@
     </div>
   </div>
 
-  <x-delete-confirmation-modal :show="'showDeleteModal'"
+  <x-page.delete-modal :show="'showDeleteModal'"
     action="delete" title="Konfirmasi Hapus Permission"
     message="Yakin ingin menghapus permission ini?"
     text="Tindakan ini tidak dapat dibatalkan."
