@@ -104,13 +104,14 @@ class User extends Component
             'email.required' => 'Alamat email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email ini sudah terdaftar.',
-            'whatsapp.required' => 'Nomor WhatsApp wajib diisi.',
+            'whatsapp.required' => 'Nomor WhatsApp aktif wajib diisi.',
             'whatsapp.unique' => 'Nomor WhatsApp sudah digunakan.',
+            'address.required' => 'Alamat wajib diisi.',
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal harus :min karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
             'createRole.required' => 'Anda harus memilih role untuk user ini.',
-            'selectedRole.required' => 'Role wajib dipilih.',
+            'selectedRole.required' => 'Anda harus memilih role untuk user ini.',
         ];
     }
 
