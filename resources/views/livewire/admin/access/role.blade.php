@@ -11,7 +11,7 @@
         </p>
       </div>
 
-      <x-create-button />
+      <x-page.create-button />
     </div>
 
     <div class="w-full mb-6">

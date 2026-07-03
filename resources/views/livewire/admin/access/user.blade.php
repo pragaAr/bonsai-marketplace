@@ -13,7 +13,7 @@
 
       <div class="flex gap-3">
         <x-filter-button />
-        <x-create-button />
+        <x-page.create-button />
       </div>
 
     </div>
