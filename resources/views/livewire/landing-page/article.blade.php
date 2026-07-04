@@ -61,23 +61,15 @@
                   @click="loading = true"
                   class="inline-flex items-center gap-1 text-sm text-accent hover:text-primary transition-colors mt-4 cursor-pointer">
 
+                  <span>Baca artikel</span>
+
+                  <!-- Arrow Icon -->
+                  <x-icons.arrow-right x-show="!loading"
+                    class="w-4 h-4" />
+
+                  <!-- Spinner -->
                   <x-icons.spinner x-show="loading" x-cloak
                     class="h-4 w-4 text-current" />
-
-                  <span x-show="!loading">
-                    Baca artikel
-                  </span>
-
-                  <span x-show="loading" x-cloak>
-                    Memuat...
-                  </span>
-
-                  <svg x-show="!loading" class="w-4 h-4"
-                    fill="none" stroke="currentColor"
-                    stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
                 </a>
               </div>
             </div>

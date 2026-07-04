@@ -116,13 +116,7 @@
             <x-icons.spinner x-show="loading" x-cloak
               class="h-4 w-4 text-current" />
 
-            <span x-show="!loading">
-              Kembali ke Semua Artikel
-            </span>
-
-            <span x-show="loading" x-cloak>
-              Memuat...
-            </span>
+            <span>Kembali ke Semua Artikel</span>
           </a>
 
           <!-- Share Button with Toast -->

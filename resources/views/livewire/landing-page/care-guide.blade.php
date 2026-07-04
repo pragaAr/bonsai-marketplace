@@ -242,26 +242,15 @@
           :class="loading ? 'opacity-80 pointer-events-none' : ''"
           class="inline-flex items-center gap-2 mt-8 border-2 border-primary text-primary px-6 py-3 rounded-lg text-sm font-semibold hover:bg-primary hover:text-cream transition-colors duration-300 btn-lift">
 
+          <span>Lihat Koleksi Kami</span>
+
+          <!-- Arrow Icon -->
+          <x-icons.arrow-right x-show="!loading"
+            class="w-4 h-4" />
+
           <!-- Spinner -->
           <x-icons.spinner x-show="loading" x-cloak
             class="h-4 w-4 text-current" />
-
-          <span x-show="!loading">
-            Lihat Koleksi Kami
-          </span>
-
-          <span x-show="loading" x-cloak>
-            Memuat...
-          </span>
-
-          <!-- Arrow Icon -->
-          <svg x-show="!loading" class="w-4 h-4"
-            fill="none" stroke="currentColor"
-            stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
         </a>
       </div>
     </section>
