@@ -19,8 +19,10 @@ class User extends Component
     #[Url(as: 'q')]
     public string $search = '';
 
+    #[Url(as: 'role')]
     public string $filterRole = '';
 
+    #[Url(as: 'isGoogle')]
     public ?string $isGoogleUser = null;
 
     public bool $isEditing = false;
