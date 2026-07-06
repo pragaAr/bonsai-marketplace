@@ -78,7 +78,8 @@
                 placeholder="Password anda" required />
               <button type="button"
                 @click="showPassword = !showPassword"
-                class="absolute right-0 top-1/2 -translate-y-1/2 pr-3 flex items-center text-primary">
+                tabindex="-1"
+                class="absolute right-0 top-1/2 -translate-y-1/2 pr-3 flex items-center text-primary focus:outline-none cursor-pointer">
                 <span :class="{ 'hidden': showPassword }">
                   <x-icons.eye />
                 </span>
@@ -111,7 +112,8 @@
                 required />
               <button type="button"
                 @click="showPassword = !showPassword"
-                class="absolute right-0 top-1/2 -translate-y-1/2 pr-3 flex items-center text-primary">
+                tabindex="-1"
+                class="absolute right-0 top-1/2 -translate-y-1/2 pr-3 flex items-center text-primary focus:outline-none cursor-pointer">
                 <span :class="{ 'hidden': showPassword }">
                   <x-icons.eye />
                 </span>

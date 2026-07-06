@@ -9,7 +9,7 @@
       <!-- Flash Messages -->
       @if (session('success'))
         <div
-          class="bg-success-50 mb-6 flex items-center gap-2 rounded-xl border border-green-200 p-4 text-sm text-green-800">
+          class="bg-green-50 mb-6 flex items-center gap-2 rounded-xl border border-green-200 p-4 text-sm text-green-800">
           <svg class="h-4 w-4 shrink-0" fill="none"
             stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round"
@@ -21,7 +21,7 @@
       @endif
       @if (session('error'))
         <div
-          class="bg-danger-50 mb-6 flex items-center gap-2 rounded-xl border border-red-200 p-4 text-sm text-red-800">
+          class="bg-red-50 mb-6 flex items-center gap-2 rounded-xl border border-red-200 p-4 text-sm text-red-800">
           <svg class="h-4 w-4 shrink-0" fill="none"
             stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round"
@@ -65,7 +65,8 @@
                 autocomplete="current-password" required />
               <button type="button"
                 @click="showPassword = !showPassword"
-                class="text-secondary-400 hover:text-secondary-600 absolute inset-y-0 right-0 flex cursor-pointer items-center justify-center px-4 focus:outline-none">
+                tabindex="-1"
+                class="text-secondary-400 hover:text-secondary-600 absolute inset-y-0 right-0 flex cursor-pointer items-center justify-center px-4 focus:outline-none cursor-pointer">
                 <span :class="{ 'hidden': showPassword }">
                   <x-icons.eye />
                 </span>
