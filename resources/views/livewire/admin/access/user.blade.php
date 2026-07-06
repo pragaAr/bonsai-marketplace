@@ -12,7 +12,11 @@
       </div>
 
       <div class="flex gap-3">
-        <x-filter-button />
+        @if ($hasActiveFilter)
+          <x-page.reset-button />
+        @endif
+
+        <x-page.filter-button />
         <x-page.create-button />
       </div>
 
@@ -188,11 +192,13 @@
             <select x-ref="selectManageRole"
               x-on:change="$wire.set('selectedRole', $event.target.value)"
               class="w-full" required>
-              <option value="" disabled>Pilih Role
+              <option value="" disabled>
+                Pilih Role
               </option>
               @foreach ($allRoles as $role)
                 <option value="{{ $role->name }}">
-                  {{ $role->name }}</option>
+                  {{ $role->name }}
+                </option>
               @endforeach
             </select>
           </div>
@@ -447,6 +453,107 @@
           </x-forms.cancel-button>
           <x-forms.submit-button target="save">
             Simpan
+          </x-forms.submit-button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Filter Modal -->
+  <div x-data="{ show: @entangle('showFilterModal') }" x-show="show"
+    x-transition.opacity.duration.300ms
+    style="display: none;"
+    class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+    x-effect="show ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden')">
+
+    <div x-show="show" x-trap="show"
+      x-transition:enter="transition ease-out duration-300"
+      x-transition:enter-start="opacity-0 translate-y-8"
+      x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 translate-y-8"
+      class="bg-white rounded-2xl p-6 w-full max-w-lg flex flex-col max-h-[85vh]">
+
+      <x-modal.header
+        wire:click="$set('showFilterModal', false)">
+        Filter User
+      </x-modal.header>
+
+      <p class="text-xs text-primary/60 mt-1 mb-4">
+        Filter user yang tampil pada table.
+      </p>
+
+      <form wire:submit="filterList"
+        x-data="{ pendingFilterRole: '{{ $filterRole }}' }"
+        x-on:submit="$wire.set('filterRole', pendingFilterRole)"
+        x-on:filter-reset.window="pendingFilterRole = ''"
+        class="space-y-3 overflow-y-auto pr-2 flex-1 sidebar-scroll"
+        novalidate>
+        <div>
+          <label
+            class="block text-sm font-medium text-primary mb-1">
+            Role
+          </label>
+          <div x-data="tomSelect({ value: '{{ $filterRole }}', placeholder: 'Pilih Role', ref: 'selectFilterRole' })" wire:ignore
+            class="w-full rounded-xl"
+            x-on:change.stop="pendingFilterRole = $event.target.value"
+            x-on:filter-reset.window="value = ''; tomselect && tomselect.clear(true)">
+            <select x-ref="selectFilterRole"
+              class="w-full">
+              <option value="" disabled>
+                Pilih Role
+              </option>
+              @foreach ($allRoles as $role)
+                <option value="{{ $role->name }}">
+                  {{ $role->name }}
+                </option>
+              @endforeach
+            </select>
+          </div>
+          @error('filterRole')
+            <p class="mt-1 text-xs text-red-600">
+              {{ $message }}</p>
+          @enderror
+        </div>
+
+        <div>
+          <label
+            class="block text-sm font-medium text-primary mb-1">
+            Google User
+          </label>
+          <div class="flex items-center gap-3">
+            <label
+              class="inline-flex items-center gap-2 cursor-pointer">
+              <input wire:model.defer="isGoogleUser"
+                type="radio" name="isGoogleUser"
+                value="1"
+                class="rounded border-primary/20 text-primary focus:ring-primary shrink-0">
+              <span class="text-sm text-primary">Ya</span>
+            </label>
+            <label
+              class="inline-flex items-center gap-2 cursor-pointer">
+              <input wire:model.defer="isGoogleUser"
+                type="radio" name="isGoogleUser"
+                value="0"
+                class="rounded border-primary/20 text-primary focus:ring-primary shrink-0">
+              <span
+                class="text-sm text-primary">Tidak</span>
+            </label>
+          </div>
+          @error('isGoogleUser')
+            <p class="mt-1 text-xs text-red-600">
+              {{ $message }}</p>
+          @enderror
+        </div>
+
+        <div class="flex gap-3 pt-4">
+          <x-forms.cancel-button
+            wire:click="$set('showFilterModal', false)">
+            Batal
+          </x-forms.cancel-button>
+          <x-forms.submit-button target="filterList">
+            Filter
           </x-forms.submit-button>
         </div>
       </form>

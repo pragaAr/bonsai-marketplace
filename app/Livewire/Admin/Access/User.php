@@ -21,7 +21,11 @@ class User extends Component
 
     public string $filterRole = '';
 
+    public ?string $isGoogleUser = null;
+
     public bool $isEditing = false;
+
+    public bool $showFilterModal = false;
 
     public bool $showManageModal = false;
 
@@ -54,6 +58,12 @@ class User extends Component
     protected function rules(): array
     {
         return [
+            'filterRole' => [
+                'nullable',
+                'string',
+                Rule::exists('roles', 'name')->where('guard_name', 'web'),
+            ],
+            'isGoogleUser' => ['nullable', 'in:0,1'],
             'selectedRole' => [
                 'required',
                 'string',
@@ -63,6 +73,28 @@ class User extends Component
             'selectedPermissions' => 'array',
             'selectedPermissions.*' => ['string', Rule::exists('permissions', 'name')->where('guard_name', 'web')],
         ];
+    }
+
+    public function filterList(): void
+    {
+        $this->validate([
+            'filterRole' => ['nullable', 'string', Rule::exists('roles', 'name')->where('guard_name', 'web')],
+            'isGoogleUser' => ['nullable', 'in:0,1'],
+        ]);
+
+        $this->showFilterModal = false;
+    }
+
+    private function hasActiveFilter(): bool
+    {
+        return $this->filterRole !== '' || $this->isGoogleUser !== null;
+    }
+
+    public function resetFilters(): void
+    {
+        $this->reset(['filterRole', 'isGoogleUser']);
+        $this->resetPage();
+        $this->dispatch('filter-reset');
     }
 
     protected function getUserRules(?int $userId = null): array
@@ -113,6 +145,11 @@ class User extends Component
             'createRole.required' => 'Anda harus memilih role untuk user ini.',
             'selectedRole.required' => 'Anda harus memilih role untuk user ini.',
         ];
+    }
+
+    public function openFilter(): void
+    {
+        $this->showFilterModal = true;
     }
 
     public function openCreate(): void
@@ -248,6 +285,11 @@ class User extends Component
         $this->resetPage();
     }
 
+    public function updatingIsGoogleUser(): void
+    {
+        $this->resetPage();
+    }
+
     public function delete(): void
     {
         if (! $this->deleteId) {
@@ -282,6 +324,16 @@ class User extends Component
             $query->role($this->filterRole);
         }
 
+        if ($this->isGoogleUser !== null) {
+            if ($this->isGoogleUser === '1') {
+                $query->whereNotNull('google_id');
+            }
+
+            if ($this->isGoogleUser === '0') {
+                $query->whereNull('google_id');
+            }
+        }
+
         return view('livewire.admin.access.user', [
             'users' => $query->latest()->paginate(15),
             'allRoles' => Role::whereNotIn('name', ['system_admin'])->orderBy('name')->get(),
@@ -289,6 +341,7 @@ class User extends Component
             'selectedUser' => $this->selectedUserId ? UserModel::find($this->selectedUserId) : null,
             'title' => 'Manajemen User',
             'subTitle' => 'Kelola user dan hak akses',
+            'hasActiveFilter' => $this->hasActiveFilter(),
         ]);
     }
 
@@ -301,6 +354,15 @@ class User extends Component
             'password',
             'password_confirmation',
             'createRole',
+        ]);
+        $this->resetValidation();
+    }
+
+    private function resetFilterForm(): void
+    {
+        $this->reset([
+            'filterRole',
+            'isGoogleUser',
         ]);
         $this->resetValidation();
     }
