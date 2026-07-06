@@ -114,6 +114,13 @@
             </summary>
             <div
               class="flex flex-col px-4 py-2 space-y-1 text-cream/90">
+              <a href="{{ route('admin.seller.request') }}"
+                wire:navigate
+                class="{{ $subLinkBase }} {{ request()->routeIs('admin.seller.request') ? $activeLink : '' }}">
+                <x-icons.minus class="w-4 h-4" />
+
+                <span>Pengajuan Seller</span>
+              </a>
               <a href="#" class="{{ $subLinkBase }}">
                 <x-icons.minus class="w-4 h-4" />
 
