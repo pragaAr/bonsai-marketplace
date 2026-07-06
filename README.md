@@ -14,16 +14,14 @@ Proyek ini sudah berada di tahap marketplace inti. Fitur publik, autentikasi, pr
 - Profil user: edit data, foto profil, ganti password, dan banner isi data kontak.
 - Alur “Jadi Penjual”: form pengajuan via SellerRequest dan route /seller/apply.
 - Area user: halaman profil dan halaman history pembelian awal di /profile/orders.
-- Admin role management: halaman /admin/role untuk mengelola role dan permission.
+- Admin access & role management: halaman CRUD lengkap untuk /admin/roles, /admin/permissions, dan /admin/users.
 - Cart session, checkout mock, dan download invoice PDF.
 - Media produk/artikel/avatar user via Spatie Media Library.
 - Activity logging untuk beberapa event penting.
 
-### Yang masih dikerjakan
-
 - Order persistence dan purchase history yang benar-benar tersimpan.
 - Seller dashboard operasional.
-- Admin CRUD user, permission, dan access matrix.
+- Admin seller request approval (sedang dikerjakan / file diinisialisasi).
 - Approval produk seller.
 - Payment gateway dan shipping.
 
@@ -64,7 +62,10 @@ Proyek ini sudah berada di tahap marketplace inti. Fitur publik, autentikasi, pr
 - /seller/apply - form pengajuan menjadi seller
 - /seller/dashboard - dashboard seller
 - /admin/dashboard - dashboard admin
-- /admin/role - manajemen role dan permission
+- /admin/roles - manajemen role
+- /admin/permissions - manajemen permission
+- /admin/users - manajemen user
+- /admin/seller/request - approval pengajuan seller (inisialisasi / sedang dikerjakan)
 
 ## Setup Lokal
 
@@ -133,11 +134,12 @@ php artisan optimize:clear
 - Storefront sebaiknya hanya menampilkan produk approved ketika workflow approval dipakai penuh.
 - Admin CRUD role/permission harus hati-hati karena menyentuh akses aplikasi.
 
-5. Buat flow request menjadi seller.
-6. Buat admin product approval.
-7. Buat seller product CRUD.
-8. Lengkapi admin CRUD user, role, permission, dan access matrix.
-9. Integrasi payment dan shipping.
+5. Buat flow request menjadi seller (Selesai).
+6. Lengkapi admin CRUD user, role, dan permission (Selesai).
+7. Buat admin seller request approval (Inisialisasi / Sedang dikerjakan).
+8. Buat admin product approval.
+9. Buat seller product CRUD.
+10. Integrasi payment dan shipping.
 
 ## Lisensi
 
