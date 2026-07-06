@@ -133,6 +133,7 @@ class User extends Authenticatable implements HasMedia
             'pending' => 'Pengajuan sedang ditinjau',
             'approved' => 'Pengajuan disetujui',
             'rejected' => 'Pengajuan ditolak',
+            'banned' => 'Penjual dibekukan (Banned)',
             default => 'Belum menjadi penjual',
         };
     }

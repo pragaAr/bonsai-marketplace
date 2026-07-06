@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\Auth\GoogleController;
 use App\Livewire\About;
-use App\Livewire\Admin\Access\Role;
 use App\Livewire\Admin\Access\Permission;
+use App\Livewire\Admin\Access\Role;
 use App\Livewire\Admin\Access\User;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
+use App\Livewire\Admin\Selller\Request as AdminSellerRequest;
 use App\Livewire\Article;
 use App\Livewire\ArticleDetail;
 use App\Livewire\Auth\Login;
@@ -95,8 +96,14 @@ Route::prefix('admin')
     ->middleware(['auth', 'role:system_admin|admin'])
     ->name('admin.')
     ->group(function () {
+        // Dashboard Admin
         Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
+
+        // Kelola user, role, permission
         Route::get('/roles', Role::class)->name('roles');
         Route::get('/permissions', Permission::class)->name('permissions');
         Route::get('/users', User::class)->name('users');
+
+        // Route untuk kelola permintaan menjadi penjual
+        Route::get('/seller/request', AdminSellerRequest::class)->name('seller.request');
     });
