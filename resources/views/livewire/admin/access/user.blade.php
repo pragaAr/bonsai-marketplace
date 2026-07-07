@@ -70,11 +70,11 @@
                 </td>
                 <td
                   class="px-5 py-3 text-primary border-r border-primary/10">
-                  {{ $q->whatsapp }}
+                  {{ $q->whatsapp ?? '-' }}
                 </td>
                 <td
                   class="px-5 py-3 text-primary border-r border-primary/10">
-                  {{ $q->address }}
+                  {{ $q->address ?? '-' }}
                 </td>
                 <td
                   class="px-5 py-3 text-primary border-r border-primary/10">
@@ -397,6 +397,7 @@
                 class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
               <button type="button"
                 @click="showPassword = !showPassword"
+                tabindex="-1"
                 class="absolute right-0 top-1/2 -translate-y-1/2 pr-3 flex items-center text-primary">
                 <span :class="{ 'hidden': showPassword }">
                   <x-icons.eye />
@@ -429,6 +430,7 @@
                 class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none">
               <button type="button"
                 @click="showPassword = !showPassword"
+                tabindex="-1"
                 class="absolute right-0 top-1/2 -translate-y-1/2 pr-3 flex items-center text-primary">
                 <span :class="{ 'hidden': showPassword }">
                   <x-icons.eye />
