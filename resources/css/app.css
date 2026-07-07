@@ -131,6 +131,26 @@ input {
   z-index: 10000 !important;
 }
 
+/* ── Unified open state: control + dropdown appear as one element ── */
+/* When open: control loses bottom radius */
+.ts-wrapper.single.open .ts-control,
+.ts-wrapper.multi.open .ts-control {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom-color: rgba(45, 62, 47, 0.08) !important;
+}
+
+/* When open: dropdown loses top radius, top border, and margin gap */
+.ts-wrapper.single.open .ts-dropdown,
+.ts-wrapper.multi.open .ts-dropdown {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-top: none !important;
+  border-color: rgba(45, 62, 47, 0.2) !important;
+  margin-top: 0 !important;
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.08) !important;
+}
+
 /* Dropdown options */
 .ts-dropdown .option {
   padding: 0.625rem 1rem !important;
@@ -144,3 +164,4 @@ input {
   background-color: rgba(45, 62, 47, 0.05) !important;
   color: #2d3e2f !important;
 }
+
