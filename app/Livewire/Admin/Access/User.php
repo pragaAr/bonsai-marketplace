@@ -177,11 +177,11 @@ class User extends Component
             $this->validate($this->getUserRules($user->id), $this->messages());
 
             $this->service->updateUser($user, [
-                'name'     => $this->name,
-                'email'    => $this->email,
+                'name' => $this->name,
+                'email' => $this->email,
                 'whatsapp' => $this->whatsapp,
-                'address'  => $this->address,
-                'role'     => $this->createRole,
+                'address' => $this->address,
+                'role' => $this->createRole,
                 'password' => $this->password ?: null,
             ]);
 
@@ -192,12 +192,12 @@ class User extends Component
             $this->validate($this->getUserRules(), $this->messages());
 
             $this->service->createUser([
-                'name'     => $this->name,
-                'email'    => $this->email,
+                'name' => $this->name,
+                'email' => $this->email,
                 'whatsapp' => $this->whatsapp,
-                'address'  => $this->address,
+                'address' => $this->address,
                 'password' => $this->password,
-                'role'     => $this->createRole,
+                'role' => $this->createRole,
             ]);
 
             $this->showCreateModal = false;
