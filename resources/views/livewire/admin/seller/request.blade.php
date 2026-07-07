@@ -21,7 +21,8 @@
     </div>
 
     <div class="w-full mb-6">
-      <x-forms.search-input placeholder="Cari nama toko, pemilik, atau WhatsApp..." />
+      <x-forms.search-input
+        placeholder="Cari nama toko, pemilik, atau WhatsApp..." />
     </div>
 
     <!-- Table -->
@@ -43,7 +44,10 @@
                 User Pengaju</th>
               <th
                 class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
-                Provinsi / Kota</th>
+                Provinsi</th>
+              <th
+                class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
+                Kota</th>
               <th
                 class="px-5 py-3 text-xs font-medium text-primary/70 uppercase border-b border-r border-primary/10">
                 WhatsApp</th>
@@ -71,12 +75,17 @@
                   class="px-5 py-3 text-primary border-r border-primary/10">
                   <div class="text-left font-medium">
                     {{ $req->user?->name }}</div>
-                  <div class="text-left text-xs text-primary/60">
+                  <div
+                    class="text-left text-xs text-primary/60">
                     {{ $req->user?->email }}</div>
                 </td>
                 <td
                   class="px-5 py-3 text-primary border-r border-primary/10 text-xs">
-                  {{ $req->province_name }} / {{ $req->city_name }}
+                  {{ $req->province_name }}
+                </td>
+                <td
+                  class="px-5 py-3 text-primary border-r border-primary/10 text-xs">
+                  {{ $req->city_name }}
                 </td>
                 <td
                   class="px-5 py-3 text-primary border-r border-primary/10">
@@ -90,11 +99,16 @@
                   class="px-5 py-3 text-primary border-r border-primary/10">
                   @php
                     $statusColors = match ($req->status) {
-                        'pending' => 'bg-amber-400/10 text-amber-600 inset-ring-amber-400/30',
-                        'approved' => 'bg-green-400/10 text-green-600 inset-ring-green-400/30',
-                        'rejected' => 'bg-red-400/10 text-red-600 inset-ring-red-400/30',
-                        'banned' => 'bg-gray-400/10 text-gray-600 inset-ring-gray-400/30',
-                        default => 'bg-gray-400/10 text-gray-500',
+                        'pending'
+                            => 'bg-amber-400/10 text-amber-600 inset-ring-amber-400/30',
+                        'approved'
+                            => 'bg-green-400/10 text-green-600 inset-ring-green-400/30',
+                        'rejected'
+                            => 'bg-red-400/10 text-red-600 inset-ring-red-400/30',
+                        'banned'
+                            => 'bg-gray-400/10 text-gray-600 inset-ring-gray-400/30',
+                        default
+                            => 'bg-gray-400/10 text-gray-500',
                     };
                     $statusLabel = match ($req->status) {
                         'pending' => 'Menunggu',
@@ -112,7 +126,8 @@
                 <td
                   class="px-5 py-3 text-center whitespace-nowrap space-x-3">
                   <!-- Detail Button -->
-                  <button wire:click="openDetail({{ $req->id }})"
+                  <button
+                    wire:click="openDetail({{ $req->id }})"
                     wire:loading.attr="disabled"
                     class="inline-flex items-center gap-1 text-xs text-primary hover:text-accent font-medium cursor-pointer transition-opacity disabled:opacity-50"
                     title="Lihat Detail">
@@ -127,7 +142,8 @@
 
                   <!-- Ban Button (Only visible if status is approved) -->
                   @if ($req->status === 'approved')
-                    <button wire:click="confirmBan({{ $req->id }})"
+                    <button
+                      wire:click="confirmBan({{ $req->id }})"
                       wire:loading.attr="disabled"
                       class="inline-flex items-center gap-1 text-xs text-orange-600 hover:text-orange-800 font-medium cursor-pointer transition-opacity disabled:opacity-50"
                       title="Bekukan Seller (Ban)">
@@ -142,7 +158,8 @@
                   @endif
 
                   <!-- Delete Button -->
-                  <button wire:click="confirmDelete({{ $req->id }})"
+                  <button
+                    wire:click="confirmDelete({{ $req->id }})"
                     wire:loading.attr="disabled"
                     class="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-800 font-medium cursor-pointer transition-opacity disabled:opacity-50"
                     title="Hapus">
@@ -158,7 +175,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="7"
+                <td colspan="8"
                   class="px-5 py-8 text-center text-primary/50">
                   Belum ada permintaan seller</td>
               </tr>
@@ -186,7 +203,7 @@
       x-transition:leave="transition ease-in duration-200"
       x-transition:leave-start="opacity-100 translate-y-0"
       x-transition:leave-end="opacity-0 translate-y-8"
-      class="bg-white rounded-2xl p-6 w-full max-w-2xl flex flex-col max-h-[85vh]">
+      class="bg-white rounded-2xl p-6 w-full max-w-3xl flex flex-col max-h-[85vh]">
 
       <x-modal.header
         wire:click="$set('showDetailModal', false)">
@@ -196,23 +213,32 @@
       @if ($selectedRequest)
         <div
           class="space-y-4 overflow-y-auto pr-2 flex-1 sidebar-scroll my-4 text-left">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div
               class="bg-primary/[0.02] p-4 rounded-xl border border-primary/5">
               <h3
                 class="text-xs font-semibold text-accent uppercase tracking-wider mb-2">
                 Informasi Akun User</h3>
               <div class="space-y-1 text-sm text-primary">
-                <div><span class="text-primary/60 font-medium font-sans">Nama:</span>
+                <div><span
+                    class="text-primary/60 font-medium font-sans">Nama:</span>
                   {{ $selectedRequest->user?->name }}</div>
-                <div><span class="text-primary/60 font-medium font-sans">Email:</span>
-                  {{ $selectedRequest->user?->email }}</div>
-                <div><span class="text-primary/60 font-medium font-sans">No. HP
+                <div><span
+                    class="text-primary/60 font-medium font-sans">Email:</span>
+                  {{ $selectedRequest->user?->email }}
+                </div>
+                <div><span
+                    class="text-primary/60 font-medium font-sans">No.
+                    HP
                     (Akun):</span>
-                  {{ $selectedRequest->user?->whatsapp ?? '-' }}</div>
-                <div><span class="text-primary/60 font-medium font-sans">Alamat
+                  {{ $selectedRequest->user?->whatsapp ?? '-' }}
+                </div>
+                <div><span
+                    class="text-primary/60 font-medium font-sans">Alamat
                     (Akun):</span>
-                  {{ $selectedRequest->user?->address ?? '-' }}</div>
+                  {{ $selectedRequest->user?->address ?? '-' }}
+                </div>
               </div>
             </div>
 
@@ -222,18 +248,23 @@
                 class="text-xs font-semibold text-accent uppercase tracking-wider mb-2">
                 Informasi Toko Diajukan</h3>
               <div class="space-y-1 text-sm text-primary">
-                <div><span class="text-primary/60 font-medium font-sans">Nama
+                <div><span
+                    class="text-primary/60 font-medium font-sans">Nama
                     Toko:</span>
                   {{ $selectedRequest->store_name }}</div>
-                <div><span class="text-primary/60 font-medium font-sans">Pemilik:</span>
+                <div><span
+                    class="text-primary/60 font-medium font-sans">Pemilik:</span>
                   {{ $selectedRequest->owner_name }}</div>
-                <div><span class="text-primary/60 font-medium font-sans">No. HP
+                <div><span
+                    class="text-primary/60 font-medium font-sans">No.
+                    HP
                     Toko:</span>
                   {{ $selectedRequest->whatsapp }}</div>
                 <div><span
                     class="text-primary/60 font-medium font-sans">Lokasi:</span>
                   {{ $selectedRequest->city_name }},
-                  {{ $selectedRequest->province_name }}</div>
+                  {{ $selectedRequest->province_name }}
+                </div>
               </div>
             </div>
           </div>
@@ -251,12 +282,15 @@
 
           <div
             class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-primary/60">
-            <div><span class="font-semibold text-primary/70">Waktu
+            <div><span
+                class="font-semibold text-primary/70">Waktu
                 Pengajuan:</span>
               {{ $selectedRequest->created_at->isoFormat('D MMMM YYYY, HH:mm') }}
             </div>
             <div>
-              <span class="font-semibold text-primary/70">Status Saat
+              <span
+                class="font-semibold text-primary/70">Status
+                Saat
                 Ini:</span>
               <span
                 class="font-semibold uppercase {{ $selectedRequest->status === 'approved' ? 'text-green-600' : ($selectedRequest->status === 'rejected' ? 'text-red-600' : 'text-amber-500') }}">
@@ -264,30 +298,37 @@
               </span>
             </div>
             @if ($selectedRequest->reviewed_at)
-              <div><span class="font-semibold text-primary/70">Ditinjau
+              <div><span
+                  class="font-semibold text-primary/70">Ditinjau
                   Pada:</span>
                 {{ $selectedRequest->reviewed_at->isoFormat('D MMMM YYYY, HH:mm') }}
               </div>
-              <div><span class="font-semibold text-primary/70">Ditinjau
+              <div><span
+                  class="font-semibold text-primary/70">Ditinjau
                   Oleh:</span>
-                {{ $selectedRequest->reviewer?->name ?? 'System' }}</div>
+                {{ $selectedRequest->reviewer?->name ?? 'System' }}
+              </div>
             @endif
           </div>
 
-          @if ($selectedRequest->status === 'rejected' && $selectedRequest->rejection_reason)
+          @if (
+              $selectedRequest->status === 'rejected' &&
+                  $selectedRequest->rejection_reason)
             <div
               class="bg-red-50 border border-red-200/50 p-4 rounded-xl space-y-1">
               <h4
                 class="text-xs font-bold text-red-800 uppercase tracking-wider">
                 Alasan Penolakan Admin:</h4>
               <p class="text-sm text-red-700 italic">
-                "{{ $selectedRequest->rejection_reason }}"</p>
+                "{{ $selectedRequest->rejection_reason }}"
+              </p>
             </div>
           @endif
 
           <!-- Rejection Reason input section -->
           @if ($isRejecting)
-            <div class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-3">
+            <div
+              class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-3">
               <div>
                 <label for="rejectionReason"
                   class="block text-sm font-semibold text-red-800 mb-1">
@@ -303,7 +344,8 @@
                 @enderror
               </div>
               <div class="flex gap-2 justify-end">
-                <button type="button" wire:click="cancelReject"
+                <button type="button"
+                  wire:click="cancelReject"
                   class="px-3 py-1.5 bg-white border border-red-300 text-red-700 text-xs font-semibold rounded-lg hover:bg-red-50 cursor-pointer">
                   Batal
                 </button>
@@ -316,15 +358,16 @@
           @endif
         </div>
 
-        <div class="flex gap-3 pt-4 border-t border-primary/10">
+        <div class="flex gap-3 pt-4">
           <x-forms.cancel-button
             wire:click="$set('showDetailModal', false)">
             Tutup
           </x-forms.cancel-button>
 
           @if ($selectedRequest->status === 'pending' && !$isRejecting)
-            <button type="button" wire:click="startReject"
-              class="px-4 py-2 border border-red-600 text-red-600 font-semibold text-sm rounded-xl hover:bg-red-50 cursor-pointer transition-colors">
+            <button type="button"
+              wire:click="startReject"
+              class="flex-1 px-4 py-2 border border-red-600 text-red-600 font-semibold text-sm rounded-xl hover:bg-red-50 cursor-pointer transition-colors">
               Tolak Pengajuan
             </button>
             <button type="button" wire:click="approve"
@@ -358,7 +401,8 @@
         Filter Permintaan Penjual
       </x-modal.header>
 
-      <form wire:submit="filterList" class="space-y-4 my-4 flex-1 text-left">
+      <form wire:submit="filterList"
+        class="space-y-4 my-4 flex-1 text-left">
         <div>
           <label
             class="block text-sm font-medium text-primary mb-1">
@@ -367,15 +411,19 @@
           <select wire:model.defer="filterStatus"
             class="w-full px-3 py-2 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none bg-white">
             <option value="">Semua Status</option>
-            <option value="pending">Menunggu Ditinjau (Pending)
+            <option value="pending">Menunggu Ditinjau
+              (Pending)
             </option>
-            <option value="approved">Disetujui (Approved)</option>
-            <option value="rejected">Ditolak (Rejected)</option>
-            <option value="banned">Dibekukan (Banned)</option>
+            <option value="approved">Disetujui (Approved)
+            </option>
+            <option value="rejected">Ditolak (Rejected)
+            </option>
+            <option value="banned">Dibekukan (Banned)
+            </option>
           </select>
         </div>
 
-        <div class="flex gap-3 pt-4 border-t border-primary/10">
+        <div class="flex gap-3 pt-4">
           <x-forms.cancel-button
             wire:click="$set('showFilterModal', false)">
             Batal
@@ -393,15 +441,18 @@
   <div x-data="{ show: @entangle('showBanModal') }" x-show="show"
     style="display: none;"
     class="fixed inset-0 z-50 overflow-y-auto"
-    aria-labelledby="modal-title" role="dialog" aria-modal="true"
+    aria-labelledby="modal-title" role="dialog"
+    aria-modal="true"
     x-effect="show ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden')">
-    <div x-show="show" x-transition:enter="ease-out duration-300"
+    <div x-show="show"
+      x-transition:enter="ease-out duration-300"
       x-transition:enter-start="opacity-0"
       x-transition:enter-end="opacity-100"
       x-transition:leave="ease-in duration-200"
       x-transition:leave-start="opacity-100"
       x-transition:leave-end="opacity-0"
-      class="fixed inset-0 bg-black/50 transition-opacity"></div>
+      class="fixed inset-0 bg-black/50 transition-opacity">
+    </div>
     <div
       class="flex min-h-screen items-center justify-center p-4 text-center sm:p-0">
       <div x-show="show" x-trap="show"
@@ -416,8 +467,9 @@
           class="flex flex-col items-center justify-center text-center">
           <div
             class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-orange-50">
-            <svg class="h-6 w-6 text-orange-600" fill="none"
-              stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-6 w-6 text-orange-600"
+              fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
               <path stroke-linecap="round"
                 stroke-linejoin="round" stroke-width="2"
                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -431,8 +483,10 @@
             Yakin ingin membekukan (ban) toko seller ini?
           </p>
           <p class="mb-6 text-sm text-primary/60">
-            Setelah dibekukan, hak akses sebagai seller akan dicabut dan
-            seller ini tidak dapat mengelola toko mereka lagi.
+            Setelah dibekukan, hak akses sebagai seller akan
+            dicabut dan
+            seller ini tidak dapat mengelola toko mereka
+            lagi.
           </p>
         </div>
         <div class="flex items-center gap-3">
@@ -447,7 +501,8 @@
               class="h-4 w-4 animate-spin text-current" />
             <span wire:loading.remove wire:target="ban">Ya,
               Bekukan</span>
-            <span wire:loading wire:target="ban">Memproses…</span>
+            <span wire:loading
+              wire:target="ban">Memproses…</span>
           </button>
         </div>
       </div>
