@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Livewire\Profile;
+use App\Models\SellerRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -72,5 +73,32 @@ class ProfilePageTest extends TestCase
         $this->assertNotNull($media);
         $this->assertStringContainsString('user/profile', $media->getPath());
         $this->assertNotEmpty($user->fresh()->avatar);
+    }
+
+    public function test_user_sees_rejection_reason_when_rejected(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'Budi',
+            'email' => 'budi@example.com',
+            'password' => Hash::make('password123'),
+        ]);
+
+        SellerRequest::create([
+            'user_id' => $user->id,
+            'store_name' => 'Toko Budi',
+            'owner_name' => 'Budi',
+            'city_name' => 'Bandung',
+            'province_name' => 'Jawa Barat',
+            'agreement' => true,
+            'whatsapp' => '081234567890',
+            'status' => 'rejected',
+            'rejection_reason' => 'Dokumen tidak valid.',
+        ]);
+
+        $this->actingAs($user);
+
+        Livewire::test(Profile::class)
+            ->assertSee('Pengajuan ditolak')
+            ->assertSee('Alasan penolakan: Dokumen tidak valid.');
     }
 }
