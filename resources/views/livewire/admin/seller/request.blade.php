@@ -350,7 +350,11 @@
                   Batal
                 </button>
                 <button type="button" wire:click="reject"
-                  class="px-3 py-1.5 bg-red-600 text-white text-xs font-semibold rounded-lg hover:bg-red-700 cursor-pointer">
+                  class="px-3 py-1.5 bg-red-600 text-white text-xs font-semibold rounded-lg hover:bg-red-700 cursor-pointer gap-1"
+                  wire:loading.attr="disabled">
+                  <x-icons.spinner wire:loading
+                    wire:target="reject"
+                    class="h-3.5 w-3.5 text-current" />
                   Kirim & Tolak
                 </button>
               </div>
@@ -367,11 +371,19 @@
           @if ($selectedRequest->status === 'pending' && !$isRejecting)
             <button type="button"
               wire:click="startReject"
-              class="flex-1 px-4 py-2 border border-red-600 text-red-600 font-semibold text-sm rounded-xl hover:bg-red-50 cursor-pointer transition-colors">
+              class="flex-1 px-4 py-2 border border-red-600 text-red-600 font-semibold text-sm rounded-xl hover:bg-red-50 cursor-pointer transition-colors gap-1"
+              wire:loading.attr="disabled">
+              <x-icons.spinner wire:loading
+                wire:target="startReject"
+                class="h-3.5 w-3.5 text-current" />
               Tolak Pengajuan
             </button>
             <button type="button" wire:click="approve"
-              class="flex-1 px-4 py-2 bg-primary text-white font-semibold text-sm rounded-xl hover:shadow-lg transition-smooth cursor-pointer">
+              class="flex-1 px-4 py-2 bg-primary text-white font-semibold text-sm rounded-xl hover:shadow-lg transition-smooth cursor-pointer gap-1"
+              wire:loading.attr="disabled">
+              <x-icons.spinner wire:loading
+                wire:target="approve"
+                class="h-3.5 w-3.5 text-current" />
               Setujui Jadi Penjual
             </button>
           @endif
@@ -402,25 +414,33 @@
       </x-modal.header>
 
       <form wire:submit="filterList"
+        x-data="{ pendingFilterStatus: '{{ $filterStatus }}' }"
+        x-on:submit="$wire.set('filterStatus', pendingFilterStatus)"
+        x-on:filter-reset.window="pendingFilterStatus = ''"
         class="space-y-4 my-4 flex-1 text-left">
         <div>
           <label
             class="block text-sm font-medium text-primary mb-1">
             Status Pengajuan
           </label>
-          <select wire:model.defer="filterStatus"
-            class="w-full px-3 py-2 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none bg-white">
-            <option value="">Semua Status</option>
-            <option value="pending">Menunggu Ditinjau
-              (Pending)
-            </option>
-            <option value="approved">Disetujui (Approved)
-            </option>
-            <option value="rejected">Ditolak (Rejected)
-            </option>
-            <option value="banned">Dibekukan (Banned)
-            </option>
-          </select>
+          <div x-data="tomSelect({ value: '{{ $filterStatus }}', placeholder: 'Semua Status', ref: 'selectFilterStatus' })" wire:ignore
+            class="w-full"
+            x-on:change.stop="pendingFilterStatus = $event.target.value"
+            x-on:filter-reset.window="value = ''; tomselect && tomselect.clear(true)">
+            <select x-ref="selectFilterStatus"
+              class="w-full">
+              <option value="" disabled>Semua Status
+              </option>
+              <option value="pending">Menunggu Ditinjau
+                (Pending)</option>
+              <option value="approved">Disetujui (Approved)
+              </option>
+              <option value="rejected">Ditolak (Rejected)
+              </option>
+              <option value="banned">Dibekukan (Banned)
+              </option>
+            </select>
+          </div>
         </div>
 
         <div class="flex gap-3 pt-4">
@@ -428,8 +448,12 @@
             wire:click="$set('showFilterModal', false)">
             Batal
           </x-forms.cancel-button>
-          <button type="submit"
-            class="flex-1 px-4 py-2 bg-primary text-white font-semibold text-sm rounded-xl hover:shadow-lg transition-smooth cursor-pointer">
+          <button type="submit" wire:target="filterList"
+            wire:loading.attr="disabled"
+            class="flex-1 px-4 py-2 bg-primary text-white font-semibold text-sm rounded-xl hover:shadow-lg transition-smooth cursor-pointer gap-1">
+            <x-icons.spinner wire:loading
+              wire:target="filterList"
+              class="h-3.5 w-3.5 text-current" />
             Terapkan Filter
           </button>
         </div>
