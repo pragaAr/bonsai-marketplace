@@ -37,6 +37,8 @@ class Profile extends Component
 
     public string $sellerLabel = '';
 
+    public ?string $rejectionReason = null;
+
     public bool $isGoogleOnly = false;
 
     public bool $showEditor = false;
@@ -58,6 +60,7 @@ class Profile extends Component
         $this->isGoogleOnly = filled($user->google_id) && blank($user->password);
         $this->sellerStatus = $user->seller_status;
         $this->sellerLabel = $user->seller_label;
+        $this->rejectionReason = $user->sellerRequest?->rejection_reason;
 
         $rawAvatar = $user->getRawOriginal('avatar');
         $this->hasGoogleAvatar = filled($user->google_id) && filled($rawAvatar) && (str_starts_with($rawAvatar, 'http://') || str_starts_with($rawAvatar, 'https://'));
