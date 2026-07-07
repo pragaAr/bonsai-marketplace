@@ -333,6 +333,14 @@
                   {{ $sellerLabel }}
                 </h2>
 
+                @if ($sellerStatus === 'rejected' && $rejectionReason)
+                  <p
+                    class="mt-4 text-xs leading-5 text-red-600">
+                    Alasan penolakan:
+                    {{ $rejectionReason }}
+                  </p>
+                @endif
+
                 @if ($sellerStatus === 'pending')
                   <p class="mt-4 text-xs leading-5">
                     Pengajuan sedang ditinjau oleh admin,
