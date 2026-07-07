@@ -18,6 +18,8 @@ class SellerApply extends Component
 
     public string $province_name = '';
 
+    public string $address = '';
+
     public string $whatsapp = '';
 
     public string $notes = '';
@@ -102,6 +104,12 @@ class SellerApply extends Component
     #[Title('Jadi Penjual')]
     public function render()
     {
-        return view('livewire.seller-apply');
+        $user = Auth::user();
+
+        return view('livewire.seller-apply', [
+            'name' => $this->owner_name = $user->name ?? '',
+            'whatsapp' => $this->whatsapp = $user->whatsapp ?? '',
+            'address' => $this->address = $user->address ?? '',
+        ]);
     }
 }
