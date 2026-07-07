@@ -151,6 +151,7 @@
               Pemilik</label>
             <input id="owner_name" type="text"
               wire:model.defer="owner_name"
+              value="{{ $name }}"
               class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors placeholder:text-primary/35 focus:border-primary/35"
               placeholder="Contoh: Budi Sujana" />
             @error('owner_name')
@@ -164,6 +165,7 @@
               class="mb-2 block text-sm font-medium text-primary">WhatsApp</label>
             <input id="whatsapp" type="text"
               wire:model.defer="whatsapp"
+              value="{{ $whatsapp }}"
               class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors placeholder:text-primary/35 focus:border-primary/35"
               placeholder="08xxxxxxxxxx" />
             @error('whatsapp')
@@ -193,6 +195,19 @@
               class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors placeholder:text-primary/35 focus:border-primary/35"
               placeholder="Contoh: Semarang" />
             @error('city_name')
+              <p class="mt-1.5 text-xs text-red-600">
+                {{ $message }}</p>
+            @enderror
+          </div>
+
+          <div class="md:col-span-2">
+            <label for="address"
+              class="mb-2 block text-sm font-medium text-primary">Alamat</label>
+            <input id="address" type="text"
+              wire:model.defer="address"
+              class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors placeholder:text-primary/35 focus:border-primary/35"
+              placeholder="Contoh: Jl. Raya Semarang" />
+            @error('address')
               <p class="mt-1.5 text-xs text-red-600">
                 {{ $message }}</p>
             @enderror
