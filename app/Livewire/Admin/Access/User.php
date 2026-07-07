@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Access;
 
 use App\Models\User as UserModel;
+use App\Services\Admin\UserService;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -56,6 +57,13 @@ class User extends Component
     public ?int $deleteId = null;
 
     public bool $showDeleteModal = false;
+
+    public function boot(UserService $service): void
+    {
+        $this->service = $service;
+    }
+
+    protected UserService $service;
 
     protected function rules(): array
     {
@@ -161,26 +169,41 @@ class User extends Component
         $this->showCreateModal = true;
     }
 
-    public function createUser(): void
+    public function save(): void
     {
-        $this->validate($this->getUserRules(), $this->messages());
+        if ($this->isEditing) {
+            $user = UserModel::findOrFail($this->selectedUserId);
 
-        $user = UserModel::create([
-            'google_id' => null,
-            'name' => $this->name,
-            'email' => $this->email,
-            'whatsapp' => $this->whatsapp,
-            'address' => $this->address,
-            'email_verified_at' => now(),
-            'avatar' => null,
-            'password' => $this->password,
-        ]);
+            $this->validate($this->getUserRules($user->id), $this->messages());
 
-        $user->syncRoles([$this->createRole]);
+            $this->service->updateUser($user, [
+                'name'     => $this->name,
+                'email'    => $this->email,
+                'whatsapp' => $this->whatsapp,
+                'address'  => $this->address,
+                'role'     => $this->createRole,
+                'password' => $this->password ?: null,
+            ]);
 
-        $this->showCreateModal = false;
-        $this->resetCreateForm();
-        $this->dispatch('toast', message: 'User berhasil ditambahkan.', type: 'success');
+            $this->showCreateModal = false;
+            $this->resetCreateForm();
+            $this->dispatch('toast', message: 'User berhasil diperbarui.', type: 'success');
+        } else {
+            $this->validate($this->getUserRules(), $this->messages());
+
+            $this->service->createUser([
+                'name'     => $this->name,
+                'email'    => $this->email,
+                'whatsapp' => $this->whatsapp,
+                'address'  => $this->address,
+                'password' => $this->password,
+                'role'     => $this->createRole,
+            ]);
+
+            $this->showCreateModal = false;
+            $this->resetCreateForm();
+            $this->dispatch('toast', message: 'User berhasil ditambahkan.', type: 'success');
+        }
     }
 
     public function openEdit(int $id): void
@@ -197,36 +220,6 @@ class User extends Component
 
         $this->isEditing = true;
         $this->showCreateModal = true;
-    }
-
-    public function save(): void
-    {
-        if ($this->isEditing) {
-            $user = UserModel::findOrFail($this->selectedUserId);
-
-            $this->validate($this->getUserRules($user->id), $this->messages());
-
-            $user->update([
-                'name' => $this->name,
-                'email' => $this->email,
-                'whatsapp' => $this->whatsapp,
-                'address' => $this->address,
-            ]);
-
-            if ($this->password) {
-                $user->update([
-                    'password' => $this->password,
-                ]);
-            }
-
-            $user->syncRoles([$this->createRole]);
-
-            $this->showCreateModal = false;
-            $this->resetCreateForm();
-            $this->dispatch('toast', message: 'User berhasil diperbarui.', type: 'success');
-        } else {
-            $this->createUser();
-        }
     }
 
     public function openAccess(int $id): void
@@ -255,20 +248,18 @@ class User extends Component
 
         $user = UserModel::findOrFail($this->selectedUserId);
 
-        if ($user->hasRole('system_admin')) {
-            $this->dispatch('toast', message: 'Akun sistem tidak dapat diubah dari daftar user.', type: 'error');
+        try {
+            $this->service->saveAccess(
+                user: $user,
+                role: $this->selectedRole,
+                permissions: $this->selectedPermissions,
+                authId: auth()->id(),
+            );
+        } catch (\RuntimeException $e) {
+            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
 
             return;
         }
-
-        if (auth()->id() === $user->id && ! in_array($this->selectedRole, ['system_admin', 'admin'], true)) {
-            $this->dispatch('toast', message: 'Anda tidak dapat menghapus akses admin dari akun sendiri.', type: 'error');
-
-            return;
-        }
-
-        $user->syncRoles([$this->selectedRole]);
-        $user->syncPermissions($this->selectedPermissions);
 
         $this->showManageModal = false;
         $this->selectedUserId = null;
@@ -298,9 +289,8 @@ class User extends Component
             return;
         }
 
-        $users = UserModel::findOrFail($this->deleteId);
+        $this->service->deleteUser($this->deleteId);
 
-        $users->delete();
         $this->showDeleteModal = false;
         $this->deleteId = null;
         $this->dispatch('toast', message: 'User berhasil dihapus.', type: 'success');
@@ -310,34 +300,12 @@ class User extends Component
     #[Title('Manajemen User')]
     public function render()
     {
-        $query = UserModel::query()
-            ->with(['roles', 'permissions'])
-            ->whereDoesntHave('roles', fn ($roleQuery) => $roleQuery->where('name', 'system_admin'));
-
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('name', 'like', "%{$this->search}%")
-                    ->orWhere('email', 'like', "%{$this->search}%")
-                    ->orWhere('whatsapp', 'like', "%{$this->search}%");
-            });
-        }
-
-        if ($this->filterRole) {
-            $query->role($this->filterRole);
-        }
-
-        if ($this->isGoogleUser !== null) {
-            if ($this->isGoogleUser === '1') {
-                $query->whereNotNull('google_id');
-            }
-
-            if ($this->isGoogleUser === '0') {
-                $query->whereNull('google_id');
-            }
-        }
-
         return view('livewire.admin.access.user', [
-            'users' => $query->latest()->paginate(15),
+            'users' => $this->service->getUserList(
+                search: $this->search,
+                filterRole: $this->filterRole,
+                isGoogleUser: $this->isGoogleUser,
+            ),
             'allRoles' => Role::whereNotIn('name', ['system_admin'])->orderBy('name')->get(),
             'allPermissions' => Permission::orderBy('name')->get(),
             'selectedUser' => $this->selectedUserId ? UserModel::find($this->selectedUserId) : null,
