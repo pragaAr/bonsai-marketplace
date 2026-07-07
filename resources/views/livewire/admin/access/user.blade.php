@@ -482,10 +482,6 @@
         Filter User
       </x-modal.header>
 
-      <p class="text-xs text-primary/60 mt-1 mb-4">
-        Filter user yang tampil pada table.
-      </p>
-
       <form wire:submit="filterList"
         x-data="{ pendingFilterRole: '{{ $filterRole }}' }"
         x-on:submit="$wire.set('filterRole', pendingFilterRole)"
@@ -498,7 +494,7 @@
             Role
           </label>
           <div x-data="tomSelect({ value: '{{ $filterRole }}', placeholder: 'Pilih Role', ref: 'selectFilterRole' })" wire:ignore
-            class="w-full rounded-xl"
+            class="w-full"
             x-on:change.stop="pendingFilterRole = $event.target.value"
             x-on:filter-reset.window="value = ''; tomselect && tomselect.clear(true)">
             <select x-ref="selectFilterRole"
