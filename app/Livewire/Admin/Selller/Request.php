@@ -204,6 +204,7 @@ class Request extends Component
     {
         $this->reset(['search', 'filterStatus']);
         $this->resetPage();
+        $this->dispatch('filter-reset');
     }
 
     private function hasActiveFilter(): bool
@@ -239,6 +240,13 @@ class Request extends Component
             'title' => 'Permintaan Penjual',
             'subTitle' => 'Kelola pendaftaran dan status kemitraan penjual',
             'hasActiveFilter' => $this->hasActiveFilter(),
+        ]);
+    }
+
+    private function resetFilterForm(): void
+    {
+        $this->reset([
+            'filterStatus',
         ]);
     }
 }
