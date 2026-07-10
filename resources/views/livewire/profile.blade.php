@@ -349,6 +349,23 @@
                     progres pengajuan.
                   </p>
                 @endif
+
+                @if ($sellerStatus === 'banned')
+                  <p class="mt-4 text-xs leading-5">
+                    Akun penjual anda telah diblokir.
+                    Silahkan hubungi admin untuk informasi
+                    lebih lanjut.
+                  </p>
+                @endif
+
+                @if (!$sellerStatus === 'seller')
+                  <p
+                    class="mt-2 text-sm leading-6 text-cream/75">
+                    Ingin menjual produk anda? Ajukan
+                    permohonan untuk menjadi penjual.
+                  </p>
+                @endif
+
                 @if (!$sellerStatus === 'seller')
                   <p
                     class="mt-2 text-sm leading-6 text-cream/75">
@@ -370,6 +387,11 @@
                 <span
                   class="inline-flex items-center justify-center rounded-full bg-cream/60 px-5 py-3 text-sm font-semibold text-primary/75">
                   Sedang ditinjau
+                </span>
+              @elseif ($sellerStatus === 'banned')
+                <span
+                  class="inline-flex items-center justify-center rounded-full bg-cream/40 px-5 py-3 text-sm font-semibold text-primary/75">
+                  Akses penjual dibekukan
                 </span>
               @else
                 <a href="{{ route('seller.apply') }}"
