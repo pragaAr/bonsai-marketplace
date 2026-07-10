@@ -351,18 +351,11 @@
                 @endif
 
                 @if ($sellerStatus === 'banned')
-                  <p class="mt-4 text-xs leading-5">
+                  <p
+                    class="mt-4 text-xs leading-5 text-red-600">
                     Akun penjual anda telah diblokir.
                     Silahkan hubungi admin untuk informasi
                     lebih lanjut.
-                  </p>
-                @endif
-
-                @if (!$sellerStatus === 'seller')
-                  <p
-                    class="mt-2 text-sm leading-6 text-cream/75">
-                    Ingin menjual produk anda? Ajukan
-                    permohonan untuk menjadi penjual.
                   </p>
                 @endif
 
