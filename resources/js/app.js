@@ -32,6 +32,16 @@ const registerAlpinePlugins = () => {
     instanceId: null,
     tomselect: null,
     value: config.value !== undefined ? config.value : null,
+    show: config.show,
+
+    setTomValue(value) {
+      if (value === null || value === "" || value === undefined) {
+        this.tomselect.clear(true); // silent, tidak memicu onChange
+        return;
+      }
+
+      this.tomselect.setValue(String(value), true);
+    },
 
     init() {
       // Generate unique instance ID
@@ -74,7 +84,7 @@ const registerAlpinePlugins = () => {
             : true,
         maxItems: config.maxItems || 1,
         // Allow customized dropdown styling and parenting
-        dropdownParent: config.dropdownParent || "body",
+        // dropdownParent: config.dropdownParent || "body",
         plugins: config.plugins || [],
         onChange: (val) => {
           this.value = val;
@@ -133,15 +143,20 @@ const registerAlpinePlugins = () => {
       window.__plugins.tomSelect.register(this.instanceId, this.tomselect);
 
       // Set initial selection
-      if (this.value !== null && this.value !== undefined) {
-        this.tomselect.setValue(this.value, true);
-      }
+      this.setTomValue(this.value);
 
       // React to value updates from Alpine/Livewire (@entangle)
       this.$watch("value", (newValue) => {
-        if (newValue !== this.tomselect.getValue()) {
-          this.tomselect.setValue(newValue, true);
-        }
+        this.setTomValue(newValue);
+      });
+
+      this.$watch("show", (opened) => {
+        if (!opened || !this.tomselect) return;
+
+        this.$nextTick(() => {
+          this.tomselect.blur();
+          this.tomselect.clearActiveOption();
+        });
       });
     },
 
