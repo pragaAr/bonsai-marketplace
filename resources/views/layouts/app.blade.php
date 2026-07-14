@@ -527,24 +527,29 @@
             class="text-sm font-semibold text-cream mb-4 uppercase tracking-wider">
             Kategori</h4>
           <div class="flex flex-col gap-3">
-            <a href="/shop?category=bonsai" wire:navigate
+            <a href="/shop?category=tanaman" wire:navigate
               class="text-sm hover:text-cream transition-colors">
-              Bonsai
+              Tanaman
             </a>
-            <a href="/shop?category=pot-bonsai"
+            <a href="/shop?category=pot"
               wire:navigate
               class="text-sm hover:text-cream transition-colors">
-              Pot Bonsai
+              Pot
             </a>
-            <a href="/shop?category=peralatan"
+            <a href="/shop?category=alat"
               wire:navigate
               class="text-sm hover:text-cream transition-colors">
               Peralatan
             </a>
-            <a href="/shop?category=aksesoris"
+            <a href="/shop?category=media-tanam"
               wire:navigate
               class="text-sm hover:text-cream transition-colors">
-              Aksesoris
+              Media Tanam
+            </a>
+            <a href="/shop?category=pupuk"
+              wire:navigate
+              class="text-sm hover:text-cream transition-colors">
+              Pupuk
             </a>
           </div>
         </div>

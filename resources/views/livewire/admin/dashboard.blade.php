@@ -147,7 +147,7 @@
                 {{ $product->name }}
               </td>
               <td class="px-5 py-3 text-primary/70">
-                {{ $product->category }}
+                {{ $product->category->name ?? '-' }}
               </td>
               <td class="px-5 py-3 text-primary/70">
                 Rp

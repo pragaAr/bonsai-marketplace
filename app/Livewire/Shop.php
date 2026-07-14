@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Product;
+use App\Models\Category;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -36,29 +37,33 @@ class Shop extends Component
         $this->resetPage();
     }
 
-    public function selectCategory($catName)
+    public function selectCategory($catSlug)
     {
-        $this->category = $catName;
+        $this->category = $catSlug;
     }
 
     #[Title('Koleksi')]
     public function render()
     {
-        $query = Product::query();
+        $query = Product::with(['category', 'productable']);
 
-        // Search name & description
+        // Search name, description & species in plant details
         if (! empty(trim($this->search))) {
             $term = '%'.trim($this->search).'%';
             $query->where(function ($q) use ($term) {
                 $q->where('name', 'like', $term)
                     ->orWhere('description', 'like', $term)
-                    ->orWhere('species', 'like', $term);
+                    ->orWhereHasMorph('productable', [\App\Models\PlantDetail::class], function ($query) use ($term) {
+                        $query->where('species', 'like', $term);
+                    });
             });
         }
 
         // Category filter
         if ($this->category !== 'All') {
-            $query->where('category', $this->category);
+            $query->whereHas('category', function ($q) {
+                $q->where('slug', $this->category);
+            });
         }
 
         // Sorting
@@ -83,7 +88,13 @@ class Shop extends Component
 
         $products = $query->paginate(12);
 
-        $categories = ['All', 'Indoor', 'Outdoor', 'Tropical', 'Flowering', 'Miniature', 'Cascading', 'Bonsai Tools'];
+        $dbCategories = Category::all();
+        $categories = collect([
+            (object) ['name' => 'Semua', 'slug' => 'All']
+        ])->concat($dbCategories->map(fn($c) => (object)[
+            'name' => $c->name,
+            'slug' => $c->slug
+        ]));
 
         return view('livewire.shop', [
             'products' => $products,

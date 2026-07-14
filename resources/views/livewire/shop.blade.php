@@ -18,17 +18,17 @@
         :class="showAll ? 'md:!overflow-x-auto' : ''">
         @foreach ($categories as $cat)
           <button
-            wire:click="selectCategory('{{ $cat }}')"
+            wire:click="selectCategory('{{ $cat->slug }}')"
             wire:loading.attr="disabled"
-            wire:target="selectCategory('{{ $cat }}')"
-            class="filter-btn flex-shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-xs font-medium border border-primary/20 hover:border-primary transition-colors duration-200 cursor-pointer {{ $category === $cat ? 'active' : '' }} {{ $loop->index >= 5 ? 'md:hidden' : '' }}"
+            wire:target="selectCategory('{{ $cat->slug }}')"
+            class="filter-btn flex-shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-xs font-medium border border-primary/20 hover:border-primary transition-colors duration-200 cursor-pointer {{ $category === $cat->slug ? 'active' : '' }} {{ $loop->index >= 5 ? 'md:hidden' : '' }}"
             @if ($loop->index >= 5) :class="{ 'md:!flex': showAll }" @endif>
 
             <x-icons.spinner wire:loading
-              wire:target="selectCategory('{{ $cat }}')"
+              wire:target="selectCategory('{{ $cat->slug }}')"
               class="h-3 w-3 text-current" />
 
-            {{ $cat }}
+            {{ $cat->name }}
           </button>
         @endforeach
 

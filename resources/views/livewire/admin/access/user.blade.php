@@ -288,10 +288,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label
-              class="block text-sm font-medium text-primary mb-1">
+              class="block text-sm font-medium text-primary mb-1"
+              for="createRole">
               Role
             </label>
-            <div x-data="tomSelect({ value: @entangle('createRole'), placeholder: 'Pilih Role', ref: 'selectCreateRoleModal' })" wire:ignore
+            <div x-data="tomSelect({ value: @entangle('createRole'), show: @entangle('showCreateModal'), placeholder: 'Pilih Role', ref: 'selectCreateRoleModal' })" wire:ignore
               class="w-full rounded-xl">
               <select x-ref="selectCreateRoleModal"
                 id="createRole" class="w-full" required>

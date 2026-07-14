@@ -26,8 +26,8 @@ class ProductDetail extends Component
     #[Title('Detail Produk')]
     public function render()
     {
-        // Fetch 3 related specimens from the same category
-        $relatedProducts = Product::where('category', $this->product->category)
+        // Fetch 3 related products from the same category
+        $relatedProducts = Product::where('category_id', $this->product->category_id)
             ->where('id', '!=', $this->product->id)
             ->take(3)
             ->get();

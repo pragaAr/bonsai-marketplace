@@ -38,7 +38,7 @@ class CustomPathGenerator implements PathGenerator
     {
         $model = $media->model;
         $sellerId = $model->seller_id ?? 'unknown';
-        $category = $model->category ?? 'uncategorized';
+        $category = is_string($model->category) ? $model->category : ($model->category->name ?? 'uncategorized');
 
         // Ensure slug format for category
         $categorySlug = \Str::slug($category);

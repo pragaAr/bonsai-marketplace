@@ -68,10 +68,26 @@
             </summary>
             <div
               class="flex flex-col px-4 py-2 space-y-1 text-cream/90">
-              <a href="#" class="{{ $subLinkBase }}">
+              <a href="{{ route('admin.master.species') }}"
+                wire:navigate
+                class="{{ $subLinkBase }} {{ request()->routeIs('admin.master.species') ? $activeLink : '' }}">
+                <x-icons.minus class="w-4 h-4" />
+
+                <span>Spesies</span>
+              </a>
+              <a href="{{ route('admin.master.categories') }}"
+                wire:navigate
+                class="{{ $subLinkBase }} {{ request()->routeIs('admin.master.categories') ? $activeLink : '' }}">
                 <x-icons.minus class="w-4 h-4" />
 
                 <span>Kategori Produk</span>
+              </a>
+              <a href="{{ route('admin.master.tags') }}"
+                wire:navigate
+                class="{{ $subLinkBase }} {{ request()->routeIs('admin.master.tags') ? $activeLink : '' }}">
+                <x-icons.minus class="w-4 h-4" />
+
+                <span>Tags</span>
               </a>
               <a href="#" class="{{ $subLinkBase }}">
                 <x-icons.minus class="w-4 h-4" />

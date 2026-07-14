@@ -52,7 +52,7 @@
       <div class="space-y-6">
         <div>
           <span
-            class="text-accent text-xs font-semibold uppercase tracking-wider">{{ $product->category }}</span>
+            class="text-accent text-xs font-semibold uppercase tracking-wider">{{ $product->category->name }}</span>
           <h1
             class="text-3xl md:text-4xl font-semibold text-primary mt-2 leading-tight">
             {{ $product->name }}</h1>
@@ -69,43 +69,159 @@
           class="bg-white rounded-xl p-6 border border-primary/5 shadow-sm space-y-4">
           <h3
             class="text-xs font-semibold text-primary uppercase tracking-wider pb-2 border-b border-primary/5">
-            Detail koleksi</h3>
+            Detail produk</h3>
           <div
             class="grid grid-cols-2 gap-y-4 gap-x-6 text-sm">
-            <div>
-              <p class="text-xs text-primary/45 uppercase">
-                Jenis</p>
-              <p class="font-medium text-primary mt-0.5">
-                {{ $product->species }}</p>
-            </div>
-            <div>
-              <p class="text-xs text-primary/45 uppercase">
-                Tingkat Perawatan</p>
-              <p class="font-medium text-primary mt-0.5">
-                {{ $product->care_level }}</p>
-            </div>
-            <div>
-              <p class="text-xs text-primary/45 uppercase">
-                Pencahayaan</p>
-              <p class="font-medium text-primary mt-0.5">
-                {{ $product->light }}</p>
-            </div>
-            <div>
-              <p class="text-xs text-primary/45 uppercase">
-                Penyiraman</p>
-              <p class="font-medium text-primary mt-0.5">
-                {{ $product->watering }}</p>
-            </div>
-            <div>
-              <p class="text-xs text-primary/45 uppercase">
-                Ukuran Pot</p>
-              <p class="font-medium text-primary mt-0.5">
-                {{ $product->pot_size }}</p>
-            </div>
+            @if ($product->isPlant())
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Jenis</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ optional($product->productable->species)->scientific_name ?? '' }}
+                </p>
+              </div>
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Tingkat Perawatan</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->care_level }}
+                </p>
+              </div>
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Pencahayaan</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->light }}</p>
+              </div>
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Penyiraman</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->watering }}</p>
+              </div>
+              @if ($product->productable->pot_size)
+                <div>
+                  <p
+                    class="text-xs text-primary/45 uppercase">
+                    Ukuran Pot</p>
+                  <p
+                    class="font-medium text-primary mt-0.5">
+                    {{ $product->productable->pot_size }}
+                  </p>
+                </div>
+              @endif
+            @elseif ($product->isPot())
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Bahan</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->material }}</p>
+              </div>
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Bentuk</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->shape }}</p>
+              </div>
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Dimensi</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->dimensions }}
+                </p>
+              </div>
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Warna</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->color }}</p>
+              </div>
+            @elseif ($product->isMedia())
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Tipe</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->type }}</p>
+              </div>
+              @if ($product->productable->weight)
+                <div>
+                  <p
+                    class="text-xs text-primary/45 uppercase">
+                    Berat</p>
+                  <p
+                    class="font-medium text-primary mt-0.5">
+                    {{ $product->productable->weight }}</p>
+                </div>
+              @endif
+              @if ($product->productable->volume)
+                <div>
+                  <p
+                    class="text-xs text-primary/45 uppercase">
+                    Volume</p>
+                  <p
+                    class="font-medium text-primary mt-0.5">
+                    {{ $product->productable->volume }}</p>
+                </div>
+              @endif
+            @elseif ($product->isFertilizer())
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Tipe</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->type }}</p>
+              </div>
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Formulasi</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->form }}</p>
+              </div>
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Berat/Isi</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->weight }}</p>
+              </div>
+            @elseif ($product->isTool())
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Bahan</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->material }}</p>
+              </div>
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Merek</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->brand }}</p>
+              </div>
+              <div>
+                <p
+                  class="text-xs text-primary/45 uppercase">
+                  Berat</p>
+                <p class="font-medium text-primary mt-0.5">
+                  {{ $product->productable->weight }}</p>
+              </div>
+            @endif
             <div>
               <p class="text-xs text-primary/45 uppercase">
                 Stok</p>
-              <p class="font-medium text-primary mt-0.5">1
+              <p class="font-medium text-primary mt-0.5">
+                {{ $product->stockLabel() }}
               </p>
             </div>
           </div>

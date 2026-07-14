@@ -6,6 +6,9 @@ use App\Livewire\Admin\Access\Permission;
 use App\Livewire\Admin\Access\Role;
 use App\Livewire\Admin\Access\User;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
+use App\Livewire\Admin\Master\ProductCategories;
+use App\Livewire\Admin\Master\Species;
+use App\Livewire\Admin\Master\Tags;
 use App\Livewire\Admin\Selller\Request as AdminSellerRequest;
 use App\Livewire\Article;
 use App\Livewire\ArticleDetail;
@@ -103,6 +106,11 @@ Route::prefix('admin')
         Route::get('/roles', Role::class)->name('roles');
         Route::get('/permissions', Permission::class)->name('permissions');
         Route::get('/users', User::class)->name('users');
+
+        // Master Data
+        Route::get('/master/categories', ProductCategories::class)->name('master.categories');
+        Route::get('/master/tags', Tags::class)->name('master.tags');
+        Route::get('/master/species', Species::class)->name('master.species');
 
         // Route untuk kelola permintaan menjadi penjual
         Route::get('/seller/request', AdminSellerRequest::class)->name('seller.request');

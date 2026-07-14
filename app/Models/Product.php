@@ -16,14 +16,12 @@ class Product extends Model implements HasMedia
         'name',
         'slug',
         'price',
+        'stock',
         'short_description',
         'description',
-        'category',
-        'species',
-        'care_level',
-        'light',
-        'watering',
-        'pot_size',
+        'category_id',
+        'productable_id',
+        'productable_type',
         'featured',
         'seller_id',
         'status',
@@ -35,6 +33,7 @@ class Product extends Model implements HasMedia
     protected $casts = [
         'featured' => 'boolean',
         'price' => 'integer',
+        'stock' => 'integer',
         'seller_id' => 'integer',
         'status' => 'string',
         'approved_at' => 'datetime',
@@ -51,8 +50,70 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Get the product image URL with a fallback strategy.
+     * Relationship: product belongs to a category.
      */
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
+
+    /**
+     * Relationship: polymorphic detail table (e.g. PlantDetail, PotDetail, etc.).
+     */
+    public function productable()
+    {
+        return $this->morphTo();
+    }
+
+    public function isPlant(): bool
+    {
+        return $this->productable instanceof PlantDetail;
+    }
+
+    public function isPot(): bool
+    {
+        return $this->productable instanceof PotDetail;
+    }
+
+    public function isMedia(): bool
+    {
+        return $this->productable instanceof MediaDetail;
+    }
+
+    public function isFertilizer(): bool
+    {
+        return $this->productable instanceof FertilizerDetail;
+    }
+
+    public function isTool(): bool
+    {
+        return $this->productable instanceof ToolDetail;
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->stock > 0;
+    }
+
+    public function availableStock(): int
+    {
+        return max(0, $this->stock ?? 0);
+    }
+
+    public function stockLabel(): string
+    {
+        if ($this->isAvailable()) {
+            return 'Tersedia '.$this->availableStock();
+        }
+
+        return 'Habis';
+    }
+
     /**
      * Relationship: product belongs to a seller (User).
      */

@@ -15,7 +15,7 @@ class ProductsExport implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        return Product::all();
+        return Product::with(['category', 'productable'])->get();
     }
 
     public function headings(): array
@@ -39,16 +39,18 @@ class ProductsExport implements FromCollection, WithHeadings, WithMapping
      */
     public function map($product): array
     {
+        $plant = $product->productable_type === \App\Models\PlantDetail::class ? $product->productable : null;
+
         return [
             $product->id,
             $product->name,
-            $product->category,
-            $product->species,
+            $product->category->name ?? '',
+            $plant?->species ?? '',
             $product->price,
-            $product->care_level,
-            $product->light,
-            $product->watering,
-            $product->pot_size,
+            $plant?->care_level ?? '',
+            $plant?->light ?? '',
+            $plant?->watering ?? '',
+            $plant?->pot_size ?? '',
             $product->short_description,
         ];
     }

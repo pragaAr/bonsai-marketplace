@@ -2,13 +2,22 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\PlantDetail;
+use App\Models\Species;
+use App\Models\PotDetail;
+use App\Models\MediaDetail;
+use App\Models\FertilizerDetail;
+use App\Models\ToolDetail;
 use App\Models\JournalEntry;
 use App\Models\Permission;
 use App\Models\Product;
 use App\Models\Role;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -92,6 +101,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $admin->assignRole($adminRole);
 
+        // Seller 1
         $seller = User::create([
             'name' => 'Budi Santoso',
             'email' => 'seller@bonsaiku.com',
@@ -99,6 +109,15 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
         $seller->assignRole($sellerRole);
+
+        // Seller 2
+        $seller2 = User::create([
+            'name' => 'Ani Lestari',
+            'email' => 'seller2@bonsaiku.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+        ]);
+        $seller2->assignRole($sellerRole);
 
         $customer = User::create([
             'name' => 'Rian Wijaya',
@@ -108,14 +127,94 @@ class DatabaseSeeder extends Seeder
         ]);
         $customer->assignRole($userRole);
 
-        // ── 3. Seed Products ──
+        // ── 5. Seed Categories ──
+        $catTanaman = Category::create([
+            'name' => 'Tanaman',
+            'slug' => 'tanaman',
+            'description' => 'Bonsai, bibit, dan bahan bonsai'
+        ]);
+        $catMedia = Category::create([
+            'name' => 'Media Tanam',
+            'slug' => 'media-tanam',
+            'description' => 'Media tanam siap pakai, steril, dan subur'
+        ]);
+        $catPot = Category::create([
+            'name' => 'Pot',
+            'slug' => 'pot',
+            'description' => 'Pilihan pot keramik, semen, tanah liat, dan plastik'
+        ]);
+        $catPupuk = Category::create([
+            'name' => 'Pupuk',
+            'slug' => 'pupuk',
+            'description' => 'Pupuk penyubur daun, akar, dan bunga'
+        ]);
+        $catAlat = Category::create([
+            'name' => 'Alat',
+            'slug' => 'alat',
+            'description' => 'Gunting, gergaji, catut kawat, dan aksesoris perawatan'
+        ]);
+
+        // ── 6. Seed Tag Produk ──
+        $categoryTags = [
+            $catTanaman->id => [
+                ['name' => 'bonsai', 'slug' => 'bonsai', 'description' => 'Bonsai dan tanaman hias'],
+                ['name' => 'bibit', 'slug' => 'bibit', 'description' => 'Bibit tanaman dan benih berkualitas'],
+                ['name' => 'bahan-bonsai', 'slug' => 'bahan-bonsai', 'description' => 'Bahan dan perlengkapan bonsai'],
+                ['name' => 'indoor', 'slug' => 'indoor', 'description' => 'Produk bonsai untuk dalam ruangan'],
+                ['name' => 'outdoor', 'slug' => 'outdoor', 'description' => 'Produk bonsai untuk luar ruangan'],
+                ['name' => 'mudah', 'slug' => 'mudah', 'description' => 'Perawatan mudah bagi pemula'],
+                ['name' => 'sedang', 'slug' => 'sedang', 'description' => 'Tingkat perawatan sedang'],
+                ['name' => 'sulit', 'slug' => 'sulit', 'description' => 'Tingkat perawatan sulit'],
+                ['name' => 'tropis', 'slug' => 'tropis', 'description' => 'Tanaman tropis'],
+                ['name' => 'subtropis', 'slug' => 'subtropis', 'description' => 'Tanaman subtropis'],
+            ],
+            $catPot->id => [
+                ['name' => 'keramik', 'slug' => 'keramik', 'description' => 'Pot keramik berkualitas tinggi'],
+                ['name' => 'semen', 'slug' => 'semen', 'description' => 'Pot semen tahan lama'],
+                ['name' => 'tanah-liat', 'slug' => 'tanah-liat', 'description' => 'Pot tanah liat alami'],
+                ['name' => 'plastik', 'slug' => 'plastik', 'description' => 'Pot plastik ringan dan tahan banting'],
+                ['name' => 'oval', 'slug' => 'oval', 'description' => 'Bentuk pot oval'],
+                ['name' => 'persegi', 'slug' => 'persegi', 'description' => 'Bentuk pot persegi'],
+                ['name' => 'bulat', 'slug' => 'bulat', 'description' => 'Bentuk pot bulat'],
+                ['name' => 'heksagonal', 'slug' => 'heksagonal', 'description' => 'Bentuk pot heksagonal'],
+            ],
+            $catMedia->id => [
+                ['name' => 'pasir-malang', 'slug' => 'pasir-malang', 'description' => 'Pasir Malang bersih untuk media tanam'],
+                ['name' => 'coco-peat', 'slug' => 'coco-peat', 'description' => 'Media tanam coco peat berkualitas'],
+                ['name' => 'tanah-poros', 'slug' => 'tanah-poros', 'description' => 'Media tanam tanah poros'],
+                ['name' => 'sekam-bakar', 'slug' => 'sekam-bakar', 'description' => 'Sekam bakar untuk aerasi media tanam'],
+                ['name' => 'akar-pakis', 'slug' => 'akar-pakis', 'description' => 'Media akar pakis dan bahan organik'],
+            ],
+            $catPupuk->id => [
+                ['name' => 'organik', 'slug' => 'organik', 'description' => 'Pupuk organik alami'],
+                ['name' => 'kimia', 'slug' => 'kimia', 'description' => 'Pupuk kimia untuk pertumbuhan cepat'],
+                ['name' => 'cair', 'slug' => 'cair', 'description' => 'Pupuk cair nutrisi tinggi'],
+                ['name' => 'padat', 'slug' => 'padat', 'description' => 'Pupuk padat praktis digunakan'],
+                ['name' => 'slow-release', 'slug' => 'slow-release', 'description' => 'Pupuk slow release untuk nutrisi berkala'],
+            ],
+            $catAlat->id => [
+                ['name' => 'gunting', 'slug' => 'gunting', 'description' => 'Gunting untuk perawatan tanaman'],
+                ['name' => 'gergaji', 'slug' => 'gergaji', 'description' => 'Gergaji kecil untuk pekerjaan detail'],
+                ['name' => 'kawat', 'slug' => 'kawat', 'description' => 'Kawat bonsai untuk pembentukan cabang'],
+                ['name' => 'pisau', 'slug' => 'pisau', 'description' => 'Pisau tajam untuk pemangkasan dan pembersihan'],
+                ['name' => 'saleb-kambium', 'slug' => 'saleb-kambium', 'description' => 'Salep untuk menutup luka tanaman'],
+                ['name' => 'pelindung-luka', 'slug' => 'pelindung-luka', 'description' => 'Pelindung luka untuk perawatan pasca pangkas']
+            ],
+        ];
+
+        foreach ($categoryTags as $categoryId => $tags) {
+            foreach ($tags as $tagData) {
+                Tag::create(array_merge($tagData, ['category_id' => $categoryId]));
+            }
+        }
+
+        // ── 7. Seed Tanaman (Bonsai) Products ──
         $productsData = [
             [
                 'name' => 'Ficus Ginseng',
                 'slug' => 'ficus-ginseng-01',
                 'price' => 450000,
                 'short_description' => 'Compact root form',
-                'category' => 'Indoor',
                 'species' => 'Ficus microcarpa',
                 'care_level' => 'Easy',
                 'light' => 'Bright indirect light',
@@ -130,7 +229,6 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'japanese-maple-01',
                 'price' => 1250000,
                 'short_description' => 'Autumn leaf color',
-                'category' => 'Outdoor',
                 'species' => 'Acer palmatum',
                 'care_level' => 'Intermediate',
                 'light' => 'Partial sun',
@@ -145,7 +243,6 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'juniper-cascade-01',
                 'price' => 780000,
                 'short_description' => 'Classic cascade style',
-                'category' => 'Outdoor',
                 'species' => 'Juniperus procumbens',
                 'care_level' => 'Intermediate',
                 'light' => 'Full sun',
@@ -160,7 +257,6 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'chinese-elm-01',
                 'price' => 380000,
                 'short_description' => 'Fine leaf structure',
-                'category' => 'Indoor',
                 'species' => 'Ulmus parvifolia',
                 'care_level' => 'Easy',
                 'light' => 'Bright indirect light',
@@ -175,7 +271,6 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'bougainvillea-01',
                 'price' => 520000,
                 'short_description' => 'Vibrant blooms',
-                'category' => 'Flowering',
                 'species' => 'Bougainvillea glabra',
                 'care_level' => 'Intermediate',
                 'light' => 'Full sun',
@@ -190,7 +285,6 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'cherry-blossom-01',
                 'price' => 1450000,
                 'short_description' => 'Spring sakura bloom',
-                'category' => 'Flowering',
                 'species' => 'Prunus serrulata',
                 'care_level' => 'Advanced',
                 'light' => 'Full sun',
@@ -204,98 +298,91 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Jade Bonsai',
                 'slug' => 'jade-bonsai-01',
                 'price' => 320000,
-                'short_description' => 'Succulent trunk form',
-                'category' => 'Indoor',
-                'species' => 'Crassula ovata',
+                'short_description' => 'Thick succulent leaves',
+                'species' => 'Portulacaria afra',
                 'care_level' => 'Easy',
-                'light' => 'Bright direct light',
-                'watering' => 'Once per week',
+                'light' => 'Full sun',
+                'watering' => 'Once every 1-2 weeks',
                 'pot_size' => '14 cm',
-                'description' => 'A unique succulent bonsai with thick, fleshy leaves and a stout trunk that stores water. Extremely low maintenance and perfect for bright windowsills. Symbolizes prosperity and good fortune.',
+                'description' => 'A resilient succulent bonsai with a fleshy trunk and small, emerald-green leaves. It stores water in its trunk, making it incredibly drought-tolerant and easy to maintain indoor or outdoor.',
                 'image' => 'bonsai-1.png',
                 'featured' => false,
             ],
             [
                 'name' => 'Satsuki Azalea',
                 'slug' => 'satsuki-azalea-01',
-                'price' => 890000,
-                'short_description' => 'Abundant pink flowers',
-                'category' => 'Flowering',
+                'price' => 950000,
+                'short_description' => 'Spectacular summer flowers',
                 'species' => 'Rhododendron indicum',
                 'care_level' => 'Intermediate',
-                'light' => 'Partial shade',
-                'watering' => 'Keep soil consistently moist',
-                'pot_size' => '22 cm',
-                'description' => 'A breathtaking flowering bonsai that erupts in masses of delicate pink blooms. The Satsuki Azalea is a cornerstone of Japanese bonsai culture, treasured for centuries by master growers.',
+                'light' => 'Morning sun, afternoon shade',
+                'watering' => 'Daily, loves humidity',
+                'pot_size' => '18 cm',
+                'description' => 'A highly prized flowering bonsai known for its abundant blossoms that appear in late spring. This azalea cultivar prefers acidic soil and consistent moisture to thrive.',
                 'image' => 'bonsai-6.png',
                 'featured' => false,
             ],
             [
                 'name' => 'Japanese Black Pine',
                 'slug' => 'black-pine-01',
-                'price' => 1680000,
-                'short_description' => 'Classic pine form',
-                'category' => 'Outdoor',
+                'price' => 1800000,
+                'short_description' => 'Rugged bark & dark needles',
                 'species' => 'Pinus thunbergii',
                 'care_level' => 'Advanced',
                 'light' => 'Full sun',
-                'watering' => 'When soil is slightly dry',
+                'watering' => 'Allow to dry slightly',
                 'pot_size' => '26 cm',
-                'description' => 'The quintessential bonsai species. A powerful trunk with textured bark, paired with compact needle clusters, creates a miniature that perfectly mirrors an ancient coastal pine.',
+                'description' => 'The King of Bonsai. This Japanese Black Pine features thick, dark needles, rigid growth, and rough, fissured bark that exudes strength and maturity. Requires specialized pruning techniques.',
                 'image' => 'bonsai-3.png',
                 'featured' => false,
             ],
             [
-                'name' => 'Serissa Japonica',
+                'name' => 'Snowrose Serissa',
                 'slug' => 'serissa-01',
-                'price' => 410000,
-                'short_description' => 'Tiny star flowers',
-                'category' => 'Indoor',
+                'price' => 280000,
+                'short_description' => 'Tiny white star flowers',
                 'species' => 'Serissa foetida',
                 'care_level' => 'Intermediate',
                 'light' => 'Bright indirect light',
-                'watering' => 'Keep soil moist',
+                'watering' => 'Keep moist but not soggy',
                 'pot_size' => '14 cm',
-                'description' => 'Known as the Tree of a Thousand Stars, this elegant bonsai produces tiny white star-shaped flowers throughout the growing season. Its fine, dark green foliage creates a lush, detailed canopy.',
+                'description' => 'Commonly known as the "Tree of a Thousand Stars," this delicate bonsai produces white, star-shaped flowers throughout the summer. It features fine, small foliage and beautifully textured bark.',
                 'image' => 'bonsai-4.png',
                 'featured' => false,
             ],
             [
                 'name' => 'Hawaiian Umbrella',
                 'slug' => 'hawaiian-umbrella-01',
-                'price' => 350000,
-                'short_description' => 'Tropical umbrella top',
-                'category' => 'Tropical',
+                'price' => 340000,
+                'short_description' => 'Lush palmate canopy',
                 'species' => 'Schefflera arboricola',
                 'care_level' => 'Easy',
-                'light' => 'Low to bright indirect',
-                'watering' => 'When top soil is dry',
+                'light' => 'Medium to bright light',
+                'watering' => 'When top soil dries',
                 'pot_size' => '16 cm',
-                'description' => 'A resilient tropical bonsai with distinctive umbrella-shaped leaf clusters. One of the most tolerant indoor species, it thrives in varied light conditions and forgives occasional neglect.',
+                'description' => 'An easy-to-grow tropical bonsai with dark green leaves arranged in umbrella-like clusters. It develops attractive aerial roots under high humidity, giving it a mature banyan look.',
                 'image' => 'bonsai-1.png',
                 'featured' => false,
             ],
             [
                 'name' => 'Brazilian Rain Tree',
                 'slug' => 'brazilian-rain-01',
-                'price' => 680000,
-                'short_description' => 'Leaves fold at night',
-                'category' => 'Tropical',
-                'species' => 'Pithecellobium tortum',
+                'price' => 880000,
+                'short_description' => 'Compounded delicate leaves',
+                'species' => 'Chloroleucon tortum',
                 'care_level' => 'Intermediate',
-                'light' => 'Bright indirect light',
-                'watering' => '2–3 times per week',
-                'pot_size' => '20 cm',
-                'description' => 'A fascinating tropical bonsai whose delicate compound leaves fold closed at night, creating a living clock. Its zigzag branching pattern and tiny thorns add sculptural interest year-round.',
+                'light' => 'Full sun to partial shade',
+                'watering' => 'Regular watering',
+                'pot_size' => '22 cm',
+                'description' => 'An exotic tropical bonsai with a contorted trunk, light gray bark, and delicate bipinnate leaves that fold up at night. Branches have small thorns but form beautiful, layered clouds of foliage.',
                 'image' => 'bonsai-5.png',
                 'featured' => false,
             ],
             [
-                'name' => 'Fukien Tea Tree',
+                'name' => 'Fukien Tea',
                 'slug' => 'fukien-tea-01',
-                'price' => 490000,
-                'short_description' => 'Dark glossy foliage',
-                'category' => 'Indoor',
+                'price' => 420000,
+                'short_description' => 'Shiny leaves & white flowers',
                 'species' => 'Carmona retusa',
                 'care_level' => 'Intermediate',
                 'light' => 'Bright indirect light',
@@ -310,7 +397,6 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'pomegranate-01',
                 'price' => 560000,
                 'short_description' => 'Miniature fruit bearer',
-                'category' => 'Flowering',
                 'species' => 'Punica granatum',
                 'care_level' => 'Intermediate',
                 'light' => 'Full sun',
@@ -325,7 +411,6 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'trident-maple-01',
                 'price' => 920000,
                 'short_description' => 'Three-lobed leaves',
-                'category' => 'Outdoor',
                 'species' => 'Acer buergerianum',
                 'care_level' => 'Intermediate',
                 'light' => 'Full to partial sun',
@@ -340,7 +425,6 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'money-tree-01',
                 'price' => 290000,
                 'short_description' => 'Braided trunk style',
-                'category' => 'Indoor',
                 'species' => 'Pachira aquatica',
                 'care_level' => 'Easy',
                 'light' => 'Medium indirect light',
@@ -355,7 +439,6 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'tiger-bark-ficus-01',
                 'price' => 620000,
                 'short_description' => 'Striped bark pattern',
-                'category' => 'Indoor',
                 'species' => 'Ficus retusa',
                 'care_level' => 'Easy',
                 'light' => 'Bright indirect light',
@@ -370,7 +453,6 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'wisteria-01',
                 'price' => 1350000,
                 'short_description' => 'Cascading purple blooms',
-                'category' => 'Flowering',
                 'species' => 'Wisteria floribunda',
                 'care_level' => 'Advanced',
                 'light' => 'Full sun',
@@ -382,12 +464,39 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        foreach ($productsData as $data) {
-            $data['seller_id'] = $seller->id;
-            $imageName = $data['image'];
-            unset($data['image']);
+        foreach ($productsData as $index => $data) {
+            // Distribute products between seller 1 (Budi) and seller 2 (Ani)
+            $sellerId = ($index % 2 === 0) ? $seller->id : $seller2->id;
 
-            $product = Product::create($data);
+            $speciesModel = Species::firstOrCreate(
+                ['scientific_name' => $data['species']],
+                ['common_name' => $data['common_name'] ?? null, 'slug' => Str::slug($data['species'])]
+            );
+
+            $plantDetail = PlantDetail::create([
+                'species_id' => $speciesModel->id,
+                'care_level' => $data['care_level'],
+                'light' => $data['light'],
+                'watering' => $data['watering'],
+                'pot_size' => $data['pot_size'],
+            ]);
+
+            $imageName = $data['image'];
+
+            $product = Product::create([
+                'name' => $data['name'],
+                'slug' => $data['slug'],
+                'price' => $data['price'],
+                'stock' => 1,
+                'short_description' => $data['short_description'],
+                'description' => $data['description'],
+                'category_id' => $catTanaman->id,
+                'productable_id' => $plantDetail->id,
+                'productable_type' => PlantDetail::class,
+                'featured' => $data['featured'],
+                'seller_id' => $sellerId,
+                'status' => 'approved',
+            ]);
 
             // Seed Image via Spatie MediaLibrary
             $imagePath = base_path('images/'.$imageName);
@@ -398,7 +507,238 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // ── 4. Seed Journal Entries ──
+        // ── 7. Seed Pot Products ──
+        $potsData = [
+            [
+                'name' => 'Pot Keramik Oval Biru',
+                'slug' => 'pot-keramik-oval-biru',
+                'price' => 120000,
+                'short_description' => 'Impor, glasir biru mengkilap',
+                'description' => 'Pot keramik impor berkualitas tinggi dengan lapisan glasir biru berkilau. Sangat cocok untuk bonsai gaya cascade atau informal upright.',
+                'material' => 'Keramik',
+                'shape' => 'Oval',
+                'dimensions' => '24 x 18 x 6 cm',
+                'color' => 'Biru',
+                'image' => 'bonsai-2.png',
+                'featured' => false,
+            ],
+            [
+                'name' => 'Pot Semen Heksagonal',
+                'slug' => 'pot-semen-heksagonal',
+                'price' => 45000,
+                'short_description' => 'Semen tebal, buatan lokal',
+                'description' => 'Pot semen buatan pengrajin lokal dengan serat penguat. Memiliki lubang drainase lebar dan kaki pot yang kokoh untuk sirkulasi udara akar.',
+                'material' => 'Semen',
+                'shape' => 'Heksagonal',
+                'dimensions' => '20 x 20 x 10 cm',
+                'color' => 'Abu-abu',
+                'image' => 'bonsai-4.png',
+                'featured' => false,
+            ],
+        ];
+
+        foreach ($potsData as $index => $data) {
+            $sellerId = ($index % 2 === 0) ? $seller->id : $seller2->id;
+            $potDetail = PotDetail::create([
+                'material' => $data['material'],
+                'shape' => $data['shape'],
+                'dimensions' => $data['dimensions'],
+                'color' => $data['color'],
+            ]);
+
+            $product = Product::create([
+                'name' => $data['name'],
+                'slug' => $data['slug'],
+                'price' => $data['price'],
+                'stock' => 1,
+                'short_description' => $data['short_description'],
+                'description' => $data['description'],
+                'category_id' => $catPot->id,
+                'productable_id' => $potDetail->id,
+                'productable_type' => PotDetail::class,
+                'featured' => $data['featured'],
+                'seller_id' => $sellerId,
+                'status' => 'approved',
+            ]);
+
+            $imagePath = base_path('images/'.$data['image']);
+            if (file_exists($imagePath)) {
+                $product->addMedia($imagePath)->preservingOriginal()->toMediaCollection('images');
+            }
+        }
+
+        // ── 8. Seed Media Tanam Products ──
+        $mediasData = [
+            [
+                'name' => 'Pasir Malang Steril Mesh 3-5mm',
+                'slug' => 'pasir-malang-steril',
+                'price' => 25000,
+                'short_description' => 'Porositas tinggi, ukuran mesh 3-5mm',
+                'description' => 'Pasir malang murni pilihan yang telah diayak dan disterilkan. Sangat baik untuk meningkatkan porositas media tanam agar akar tidak mudah busuk.',
+                'type' => 'Pasir Malang',
+                'weight' => '5 kg',
+                'volume' => '6 Liter',
+                'image' => 'bonsai-1.png',
+                'featured' => false,
+            ],
+            [
+                'name' => 'Premium Coco Peat Fermentasi',
+                'slug' => 'coco-peat-premium',
+                'price' => 15000,
+                'short_description' => 'Bebas zat tanin berbahaya',
+                'description' => 'Coco peat halus yang telah didekomposisi dan dicuci bersih untuk menurunkan kadar tanin. Menjaga kelembapan optimal pada perakaran bonsai.',
+                'type' => 'Coco Peat',
+                'weight' => '2 kg',
+                'volume' => '4 Liter',
+                'image' => 'bonsai-3.png',
+                'featured' => false,
+            ],
+        ];
+
+        foreach ($mediasData as $index => $data) {
+            $sellerId = ($index % 2 === 0) ? $seller->id : $seller2->id;
+            $mediaDetail = MediaDetail::create([
+                'type' => $data['type'],
+                'weight' => $data['weight'],
+                'volume' => $data['volume'],
+            ]);
+
+            $product = Product::create([
+                'name' => $data['name'],
+                'slug' => $data['slug'],
+                'price' => $data['price'],
+                'stock' => 1,
+                'short_description' => $data['short_description'],
+                'description' => $data['description'],
+                'category_id' => $catMedia->id,
+                'productable_id' => $mediaDetail->id,
+                'productable_type' => MediaDetail::class,
+                'featured' => $data['featured'],
+                'seller_id' => $sellerId,
+                'status' => 'approved',
+            ]);
+
+            $imagePath = base_path('images/'.$data['image']);
+            if (file_exists($imagePath)) {
+                $product->addMedia($imagePath)->preservingOriginal()->toMediaCollection('images');
+            }
+        }
+
+        // ── 9. Seed Pupuk Products ──
+        $fertilizersData = [
+            [
+                'name' => 'Pupuk Dekastar Slow Release 17-11-10',
+                'slug' => 'pupuk-dekastar-slow-release',
+                'price' => 35000,
+                'short_description' => 'Nutrisi stabil selama 6 bulan',
+                'description' => 'Pupuk kimia terkendali (slow release) yang melepaskan nutrisi secara perlahan selama 6 bulan. Sangat praktis untuk pertumbuhan tunas dan daun baru.',
+                'type' => 'Kimia',
+                'form' => 'Slow Release',
+                'weight' => '250 gram',
+                'image' => 'bonsai-5.png',
+                'featured' => false,
+            ],
+            [
+                'name' => 'Pupuk Organik Cair Bio-Bonsai',
+                'slug' => 'pupuk-organik-cair-bio-bonsai',
+                'price' => 50000,
+                'short_description' => 'Meningkatkan daya tahan pohon',
+                'description' => 'Formula pupuk organik cair super pekat yang kaya akan unsur mikro dan hormon pertumbuhan. Mempercepat pertumbuhan kambium dan perakaran.',
+                'type' => 'Organik',
+                'form' => 'Cair',
+                'weight' => '500 ml',
+                'image' => 'bonsai-6.png',
+                'featured' => false,
+            ],
+        ];
+
+        foreach ($fertilizersData as $index => $data) {
+            $sellerId = ($index % 2 === 0) ? $seller->id : $seller2->id;
+            $fertilizerDetail = FertilizerDetail::create([
+                'type' => $data['type'],
+                'form' => $data['form'],
+                'weight' => $data['weight'],
+            ]);
+
+            $product = Product::create([
+                'name' => $data['name'],
+                'slug' => $data['slug'],
+                'price' => $data['price'],
+                'stock' => 1,
+                'short_description' => $data['short_description'],
+                'description' => $data['description'],
+                'category_id' => $catPupuk->id,
+                'productable_id' => $fertilizerDetail->id,
+                'productable_type' => FertilizerDetail::class,
+                'featured' => $data['featured'],
+                'seller_id' => $sellerId,
+                'status' => 'approved',
+            ]);
+
+            $imagePath = base_path('images/'.$data['image']);
+            if (file_exists($imagePath)) {
+                $product->addMedia($imagePath)->preservingOriginal()->toMediaCollection('images');
+            }
+        }
+
+        // ── 10. Seed Alat Products ──
+        $toolsData = [
+            [
+                'name' => 'Gunting Ranting Ryuga Stainless',
+                'slug' => 'gunting-ranting-ryuga-stainless',
+                'price' => 350000,
+                'short_description' => 'Original Ryuga Jepang, stainless',
+                'description' => 'Gunting ranting kualitas profesional merek Ryuga buatan Jepang. Bilah tajam berbahan stainless steel memberikan potongan bersih tanpa merusak dahan.',
+                'material' => 'Stainless Steel',
+                'brand' => 'Ryuga',
+                'weight' => '180 gram',
+                'image' => 'bonsai-3.png',
+                'featured' => false,
+            ],
+            [
+                'name' => 'Kawat Aluminium Bonsai Set 1-3mm',
+                'slug' => 'kawat-aluminium-bonsai-set',
+                'price' => 95000,
+                'short_description' => 'Lunak, kuat, paket bundling 3 ukuran',
+                'description' => 'Kawat aluminium lunak impor berkualitas tinggi yang mudah dibentuk namun kuat menahan dahan. Paket terdiri dari diameter 1mm, 2mm, dan 3mm.',
+                'material' => 'Aluminium',
+                'brand' => 'Impor',
+                'weight' => '500 gram',
+                'image' => 'bonsai-1.png',
+                'featured' => false,
+            ],
+        ];
+
+        foreach ($toolsData as $index => $data) {
+            $sellerId = ($index % 2 === 0) ? $seller->id : $seller2->id;
+            $toolDetail = ToolDetail::create([
+                'material' => $data['material'],
+                'brand' => $data['brand'],
+                'weight' => $data['weight'],
+            ]);
+
+            $product = Product::create([
+                'name' => $data['name'],
+                'slug' => $data['slug'],
+                'price' => $data['price'],
+                'stock' => 1,
+                'short_description' => $data['short_description'],
+                'description' => $data['description'],
+                'category_id' => $catAlat->id,
+                'productable_id' => $toolDetail->id,
+                'productable_type' => ToolDetail::class,
+                'featured' => $data['featured'],
+                'seller_id' => $sellerId,
+                'status' => 'approved',
+            ]);
+
+            $imagePath = base_path('images/'.$data['image']);
+            if (file_exists($imagePath)) {
+                $product->addMedia($imagePath)->preservingOriginal()->toMediaCollection('images');
+            }
+        }
+
+        // ── 11. Seed Journal Entries ──
         $journalsData = [
             [
                 'title' => 'Cara Menempatkan Bonsai di Dalam Ruangan',
@@ -416,7 +756,7 @@ class DatabaseSeeder extends Seeder
                 'excerpt' => 'Memahami waktu dan teknik memangkas berbagai spesies bonsai untuk pertumbuhan dan bentuk estetis yang optimal.',
                 'category' => 'Budi Daya',
                 'author_id' => $admin->id,
-                'content' => "Pemangkasan adalah inti dari seni bonsai. Melalui pemangkasan, kita tidak hanya mengontrol ukuran pohon tetapi juga mengarahkan energinya untuk membentuk estetika yang harmonis. Pemangkasan bonsai dibagi menjadi dua kategori utama: pemangkasan pemeliharaan dan pemangkasan struktural.\n\nPemangkasan pemeliharaan dilakukan sepanjang musim tumbuh untuk mempertahankan bentuk yang sudah ada. Ini melibatkan pemendekan tunas baru yang tumbuh terlalu panjang dan membuang daun-daun yang terlalu besar. Teknik ini merangsang pertumbuhan cabang yang lebih halus dan dedaunan yang lebih padat.\n\nPemangkasan struktural, di sisi lain, biasanya dilakukan pada akhir musim gugur atau awal musim semi saat pohon dalam keadaan dorman. Pemangkasan ini melibatkan pemotongan cabang besar yang tidak diinginkan untuk mendesain ulang siluet dasar pohon. Selalu gunakan gunting khusus bonsai yang tajam untuk meminimalkan kerusakan pada jaringan kayu dan membantu luka sembuh lebih cepat.",
+                'content' => "Pemangkasan adalah inti dari seni bonsai. Melalui pemangkasan, kita tidak hanya mengontrol ukuran pohon tetapi juga mengarahkan energinya untuk membentuk estetika yang harmonis. Pemangkasan bonsai dibagi menjadi dua kategori utama: pemangkasan pemeliharaan dan pemangkasan struktural.\n\nPemangkasan pemeliharaan dilakukan sepanjang musim tumbuh untuk mempertahankan bentuk yang sudah ada. Ini melibatkan pemendekan tunas baru yang tumbuh terlalu panjang dan membuang daun-daun yang terlalu besar. Teknik ini merangsang pertumbuhan cabang yang lebih halus dan dedaunan yang lebih padat.\n\nPemangkasan struktural, di sini lain, biasanya dilakukan pada akhir musim gugur atau awal musim semi saat pohon dalam keadaan dorman. Pemangkasan ini melibatkan pemotongan cabang besar yang tidak diinginkan untuk mendesain ulang siluet dasar pohon. Selalu gunakan gunting khusus bonsai yang tajam untuk meminimalkan kerusakan pada jaringan kayu dan membantu luka sembuh lebih cepat.",
                 'published_date' => '2026-02-28',
                 'image' => 'bonsai-3.png',
             ],
