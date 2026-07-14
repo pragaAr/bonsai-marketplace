@@ -8,6 +8,10 @@ Memberikan akses admin untuk memantau dan mengelola operasi marketplace.
 
 - Ringkasan aktivitas sistem.
 - Pengelolaan user dan akses.
+- Pengelolaan kategori produk.
+- Pengelolaan kategori artikel.
+- Pengelolaan tags produk.
+- Pengelolaan species produk khusus tanaman.
 - Peninjauan permintaan seller.
 - Pengaturan role dan permission.
 - Pemantauan produk yang masuk dan status approval.
