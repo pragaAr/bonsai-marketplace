@@ -157,7 +157,7 @@
             for="categoryId">Kategori
           </label>
 
-          <div x-data="tomSelect({ value: @entangle('categoryId'), show: @entangle('showModal'), placeholder: 'Pilih kategori', ref: 'selectCategoryModal' })" wire:ignore class="w-full rounded-xl">
+          <div x-data="tomSelect({ lazy: true, value: @entangle('categoryId'), show: @entangle('showModal'), placeholder: 'Pilih kategori', ref: 'selectCategoryModal' })" wire:ignore class="w-full rounded-xl">
             <select x-ref="selectCategoryModal"
               id="categoryId" class="w-full" required>
               <option value="" disabled>Pilih kategori

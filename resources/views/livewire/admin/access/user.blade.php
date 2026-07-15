@@ -187,7 +187,7 @@
             class="block text-sm font-medium text-primary mb-1">
             Role
           </label>
-          <div x-data="tomSelect({ value: @entangle('selectedRole'), placeholder: 'Pilih Role', ref: 'selectManageRole' })" wire:ignore
+          <div x-data="tomSelect({ lazy: true, show: @entangle('showManageModal'), value: @entangle('selectedRole'), placeholder: 'Pilih Role', ref: 'selectManageRole' })" wire:ignore
             class="w-full rounded-xl">
             <select x-ref="selectManageRole"
               x-on:change="$wire.set('selectedRole', $event.target.value)"
@@ -292,7 +292,7 @@
               for="createRole">
               Role
             </label>
-            <div x-data="tomSelect({ value: @entangle('createRole'), show: @entangle('showCreateModal'), placeholder: 'Pilih Role', ref: 'selectCreateRoleModal' })" wire:ignore
+            <div x-data="tomSelect({ lazy: true, value: @entangle('createRole'), show: @entangle('showCreateModal'), placeholder: 'Pilih Role', ref: 'selectCreateRoleModal' })" wire:ignore
               class="w-full rounded-xl">
               <select x-ref="selectCreateRoleModal"
                 id="createRole" class="w-full" required>
@@ -494,7 +494,7 @@
             class="block text-sm font-medium text-primary mb-1">
             Role
           </label>
-          <div x-data="tomSelect({ value: '{{ $filterRole }}', placeholder: 'Pilih Role', ref: 'selectFilterRole' })" wire:ignore
+          <div x-data="tomSelect({ lazy: true, show: @entangle('showFilterModal'), value: '{{ $filterRole }}', placeholder: 'Pilih Role', ref: 'selectFilterRole' })" wire:ignore
             class="w-full"
             x-on:change.stop="pendingFilterRole = $event.target.value"
             x-on:filter-reset.window="value = ''; tomselect && tomselect.clear(true)">

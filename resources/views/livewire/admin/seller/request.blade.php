@@ -423,7 +423,7 @@
             class="block text-sm font-medium text-primary mb-1">
             Status Pengajuan
           </label>
-          <div x-data="tomSelect({ value: '{{ $filterStatus }}', placeholder: 'Semua Status', ref: 'selectFilterStatus' })" wire:ignore
+          <div x-data="tomSelect({ lazy: true, show: @entangle('showFilterModal'), value: '{{ $filterStatus }}', placeholder: 'Semua Status', ref: 'selectFilterStatus' })" wire:ignore
             class="w-full"
             x-on:change.stop="pendingFilterStatus = $event.target.value"
             x-on:filter-reset.window="value = ''; tomselect && tomselect.clear(true)">
