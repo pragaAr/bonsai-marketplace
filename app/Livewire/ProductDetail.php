@@ -16,6 +16,12 @@ class ProductDetail extends Component
     {
         $this->product = Product::where('slug', $slug)->firstOrFail();
 
+        if ($this->product->status !== 'approved') {
+            if (!auth()->check() || (auth()->id() !== $this->product->seller_id && !auth()->user()->hasAnyRole(['admin', 'system_admin']))) {
+                abort(404);
+            }
+        }
+
         // Log product view activity
         activity()
             ->performedOn($this->product)
@@ -27,7 +33,8 @@ class ProductDetail extends Component
     public function render()
     {
         // Fetch 3 related products from the same category
-        $relatedProducts = Product::where('category_id', $this->product->category_id)
+        $relatedProducts = Product::where('status', 'approved')
+            ->where('category_id', $this->product->category_id)
             ->where('id', '!=', $this->product->id)
             ->take(3)
             ->get();

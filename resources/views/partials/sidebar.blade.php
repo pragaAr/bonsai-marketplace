@@ -137,6 +137,13 @@
 
                 <span>Pengajuan Seller</span>
               </a>
+              <a href="{{ route('admin.products.approval') }}"
+                wire:navigate
+                class="{{ $subLinkBase }} {{ request()->routeIs('admin.products.approval') ? $activeLink : '' }}">
+                <x-icons.minus class="w-4 h-4" />
+
+                <span>Persetujuan Produk</span>
+              </a>
               <a href="#" class="{{ $subLinkBase }}">
                 <x-icons.minus class="w-4 h-4" />
 
@@ -210,7 +217,8 @@
         </div>
       @elseif($user->hasRole('seller'))
         <div class="space-y-2">
-          <a href="#" class="{{ $linkBase }}">
+          <a href="{{ route('seller.dashboard') }}" wire:navigate
+            class="{{ $linkBase }} {{ request()->routeIs('seller.dashboard') ? $activeLink : '' }}">
             <svg class="w-4 h-4 text-cream"
               viewBox="0 0 20 20" fill="currentColor"
               aria-hidden="true">
@@ -246,8 +254,8 @@
             </summary>
             <div
               class="flex flex-col px-4 py-2 space-y-1 text-cream/90">
-              <a href="#"
-                class="{{ $subLinkBase }}">
+              <a href="{{ route('seller.products') }}" wire:navigate
+                class="{{ $subLinkBase }} {{ request()->routeIs('seller.products') || request()->routeIs('seller.products.*') ? $activeLink : '' }}">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 20 20"
                   fill="currentColor" aria-hidden="true">
                   <path

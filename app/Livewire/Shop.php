@@ -45,7 +45,7 @@ class Shop extends Component
     #[Title('Koleksi')]
     public function render()
     {
-        $query = Product::with(['category', 'productable']);
+        $query = Product::where('status', 'approved')->with(['category', 'productable']);
 
         // Search name, description & species in plant details
         if (! empty(trim($this->search))) {

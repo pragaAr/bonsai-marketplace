@@ -21,6 +21,9 @@ use App\Livewire\ProductDetail;
 use App\Livewire\Profile;
 use App\Livewire\ProfileOrders;
 use App\Livewire\Seller\Dashboard as SellerDashboard;
+use App\Livewire\Seller\Products as SellerProducts;
+use App\Livewire\Seller\ProductForm as SellerProductForm;
+use App\Livewire\Admin\ProductApproval as AdminProductApproval;
 use App\Livewire\SellerApply;
 use App\Livewire\Shop;
 use Illuminate\Support\Facades\Auth;
@@ -90,6 +93,9 @@ Route::prefix('seller')
     ->name('seller.')
     ->group(function () {
         Route::get('/dashboard', SellerDashboard::class)->name('dashboard');
+        Route::get('/products', SellerProducts::class)->name('products');
+        Route::get('/products/create', SellerProductForm::class)->name('products.create');
+        Route::get('/products/{id}/edit', SellerProductForm::class)->name('products.edit');
     });
 
 // ============================================================
@@ -114,4 +120,7 @@ Route::prefix('admin')
 
         // Route untuk kelola permintaan menjadi penjual
         Route::get('/seller/request', AdminSellerRequest::class)->name('seller.request');
+
+        // Route untuk kelola persetujuan produk
+        Route::get('/products/approval', AdminProductApproval::class)->name('products.approval');
     });

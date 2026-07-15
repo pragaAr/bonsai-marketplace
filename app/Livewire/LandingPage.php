@@ -13,7 +13,7 @@ class LandingPage extends Component
     #[Title('')]
     public function render()
     {
-        $featuredProducts = Product::where('featured', true)->take(6)->get();
+        $featuredProducts = Product::where('status', 'approved')->where('featured', true)->take(6)->get();
 
         return view('livewire.landing-page.index', compact('featuredProducts'));
     }
