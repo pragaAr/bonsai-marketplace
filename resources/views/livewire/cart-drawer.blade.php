@@ -1,6 +1,7 @@
-<div x-data x-init="$watch('$wire.isOpen', val => $dispatch(val ? 'cart-opened' : 'cart-closed'))">
+<div x-data x-init="$watch('$wire.isOpen', val => $dispatch(val ? 'cart-opened' : 'cart-closed'))"
+     x-on:livewire:navigated.document="$refs.backdrop.style.display = 'none'; $refs.panel.style.display = 'none'; $wire.isOpen = false;">
   <!-- Backdrop -->
-  <div x-show="$wire.isOpen"
+  <div x-ref="backdrop" x-show="$wire.isOpen"
     x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100"
@@ -13,7 +14,7 @@
   </div>
 
   <!-- Cart Panel -->
-  <aside x-show="$wire.isOpen"
+  <aside x-ref="panel" x-show="$wire.isOpen"
     x-transition:enter="transition ease-out duration-300"
     x-transition:enter-start="transform translate-x-full"
     x-transition:enter-end="transform translate-x-0"

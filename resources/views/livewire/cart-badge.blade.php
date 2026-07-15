@@ -8,7 +8,10 @@
   </svg>
   @if ($count > 0)
     <span wire:key="cart-badge-span-{{ $count }}"
-      class="absolute -top-0.5 -right-0.5 bg-accent text-primary text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-cart-pop">
+      x-data="{ pop: false }"
+      x-on:cart-updated.window="pop = true; setTimeout(() => pop = false, 600)"
+      :class="pop ? 'animate-cart-pop' : ''"
+      class="absolute -top-0.5 -right-0.5 bg-accent text-primary text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
       {{ $count > 99 ? '99+' : $count }}
     </span>
   @endif
