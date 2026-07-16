@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Selller;
+namespace App\Livewire\Admin\Seller;
 
 use App\Models\SellerRequest;
 use Livewire\Attributes\Layout;

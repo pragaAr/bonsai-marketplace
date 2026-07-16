@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\Admin\Seller;
 
 use App\Models\Product;
 use Livewire\Attributes\Layout;
@@ -17,7 +17,9 @@ class ProductApproval extends Component
     public string $search = '';
 
     #[Url(as: 'status')]
-    public string $filterStatus = 'pending'; // Default to pending queue
+    public string $filterStatus = 'pending';
+
+    public bool $showFilterModal = false;
 
     public bool $showDetailModal = false;
 
@@ -26,6 +28,16 @@ class ProductApproval extends Component
     public bool $isRejecting = false;
 
     public string $rejectionReason = '';
+
+    public function openFilter(): void
+    {
+        $this->showFilterModal = true;
+    }
+
+    public function filterList(): void
+    {
+        $this->showFilterModal = false;
+    }
 
     public function updatingSearch(): void
     {
@@ -159,10 +171,12 @@ class ProductApproval extends Component
         $products = $query->latest()->paginate(15);
         $selectedProduct = $this->selectedProductId ? Product::with(['category', 'productable', 'seller', 'tags'])->find($this->selectedProductId) : null;
 
-        return view('livewire.admin.product-approval', [
+        return view('livewire.admin.seller.product-approval', [
             'products' => $products,
             'selectedProduct' => $selectedProduct,
             'hasActiveFilter' => $this->hasActiveFilter(),
+            'title' => 'Persetujuan Produk',
+            'subTitle' => 'Tinjau produk yang diajukan oleh penjual',
         ]);
     }
 }

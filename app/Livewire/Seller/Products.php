@@ -19,9 +19,21 @@ class Products extends Component
     #[Url(as: 'status')]
     public string $filterStatus = '';
 
+    public bool $showFilterModal = false;
+
     public bool $showDeleteModal = false;
 
     public ?int $deleteId = null;
+
+    public function openFilter(): void
+    {
+        $this->showFilterModal = true;
+    }
+
+    public function filterList(): void
+    {
+        $this->showFilterModal = false;
+    }
 
     public function updatingSearch(): void
     {
@@ -105,6 +117,8 @@ class Products extends Component
         return view('livewire.seller.products', [
             'products' => $products,
             'hasActiveFilter' => $this->hasActiveFilter(),
+            'title' => 'Produk Saya',
+            'subTitle' => 'Kelola dan pantau semua produk yang Anda pasarkan',
         ]);
     }
 }
