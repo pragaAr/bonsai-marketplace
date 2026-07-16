@@ -217,31 +217,44 @@
         </div>
       @elseif($user->hasRole('seller'))
         <div class="space-y-2">
-          <a href="{{ route('seller.dashboard') }}" wire:navigate
+          <a href="{{ route('seller.dashboard') }}"
+            wire:navigate
             class="{{ $linkBase }} {{ request()->routeIs('seller.dashboard') ? $activeLink : '' }}">
-            <svg class="w-4 h-4 text-cream"
-              viewBox="0 0 20 20" fill="currentColor"
-              aria-hidden="true">
-              <path d="M4 4h12v12H4V4zm2 2v8h8V6H6z" />
+            <svg xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path
+                d="M19 21H5a2 2 0 0 1-2-2v-9a1 1 0 0 1 .4-.8l7-5.25a2 2 0 0 1 2.4 0l7 5.25a1 1 0 0 1 .4.8v9a2 2 0 0 1-2 2z" />
+              <path d="M12 21v-6" />
             </svg>
-            <span class="font-medium text-cream">Seller
-              Dashboard</span>
+
+            <span
+              class="font-medium text-cream">Dashboard</span>
           </a>
 
-          <div
-            class="px-3 pt-1 text-[11px] uppercase tracking-[0.2em] text-cream/60">
-            Toko</div>
+          <div class="h-px bg-cream/20 w-full my-3"></div>
+
           <details class="group rounded bg-white/5" open>
             <summary
               class="flex items-center justify-between border-l-2 border-transparent px-3 py-2 rounded-r cursor-pointer transition-colors duration-150 hover:border-accent hover:bg-accent/10 hover:text-white">
               <span class="flex items-center gap-3">
                 <svg class="w-4 h-4 text-cream"
-                  viewBox="0 0 20 20" fill="currentColor"
-                  aria-hidden="true">
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
                   <path
-                    d="M4 5h12v2H4V5zm0 4h12v2H4V9zm0 4h12v2H4v-2z" />
+                    d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z">
+                  </path>
+                  <line x1="3" y1="6"
+                    x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
                 </svg>
-                <span class="text-cream">Toko Bonsai</span>
+
+                <span class="text-cream">Toko Saya</span>
               </span>
               <svg
                 class="w-4 h-4 text-cream transition-transform duration-150 group-open:-rotate-180"
@@ -254,40 +267,32 @@
             </summary>
             <div
               class="flex flex-col px-4 py-2 space-y-1 text-cream/90">
-              <a href="{{ route('seller.products') }}" wire:navigate
+              <a href="{{ route('seller.products') }}"
+                wire:navigate
                 class="{{ $subLinkBase }} {{ request()->routeIs('seller.products') || request()->routeIs('seller.products.*') ? $activeLink : '' }}">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 20 20"
-                  fill="currentColor" aria-hidden="true">
-                  <path
-                    d="M10 3a1 1 0 011 1v12a1 1 0 01-2 0V4a1 1 0 011-1z" />
-                </svg>
+                <x-icons.minus class="w-4 h-4" />
+
                 <span>My Products</span>
               </a>
               <a href="#"
                 class="{{ $subLinkBase }}">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 20 20"
-                  fill="currentColor" aria-hidden="true">
-                  <path
-                    d="M7 4h6v2H7V4zm0 4h6v2H7V8zm0 4h6v2H7v-2z" />
-                </svg>
+                <x-icons.minus class="w-4 h-4" />
+
                 <span>Order Pesanan</span>
               </a>
               <a href="#"
                 class="{{ $subLinkBase }}">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 20 20"
-                  fill="currentColor" aria-hidden="true">
-                  <path
-                    d="M5 4h10v2H5V4zm0 4h10v2H5V8zm0 4h10v2H5v-2z" />
+                <x-icons.minus class="w-4 h-4" />
+
+                <path
+                  d="M5 4h10v2H5V4zm0 4h10v2H5V8zm0 4h10v2H5v-2z" />
                 </svg>
                 <span>Promosi & Diskon</span>
               </a>
               <a href="#"
                 class="{{ $subLinkBase }}">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 20 20"
-                  fill="currentColor" aria-hidden="true">
-                  <path
-                    d="M6 3h8l1 1v12l-1 1H6l-1-1V4l1-1zm1 2v10h6V5H7z" />
-                </svg>
+                <x-icons.minus class="w-4 h-4" />
+
                 <span>Stock Bonsai</span>
               </a>
             </div>
