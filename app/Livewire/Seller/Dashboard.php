@@ -2,13 +2,19 @@
 
 namespace App\Livewire\Seller;
 
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 class Dashboard extends Component
 {
-  public function render()
-  {
-    return view('livewire.seller.dashboard')
-      ->layout('layouts.dashboard', ['title' => 'Seller Dashboard - bonsaiku']);
-  }
+    #[Layout('layouts.dashboard')]
+    #[Title('Dashboard')]
+    public function render()
+    {
+        return view('livewire.seller.dashboard', [
+            'title' => 'Dashboard',
+            'subTitle' => 'Selamat datang, '.auth()->user()->name,
+        ]);
+    }
 }
