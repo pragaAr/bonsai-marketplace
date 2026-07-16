@@ -43,7 +43,7 @@ class Products extends Component
 
     public function delete(): void
     {
-        if (!$this->deleteId) {
+        if (! $this->deleteId) {
             return;
         }
 

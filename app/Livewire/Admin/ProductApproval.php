@@ -47,7 +47,7 @@ class ProductApproval extends Component
 
     public function approve(): void
     {
-        if (!$this->selectedProductId) {
+        if (! $this->selectedProductId) {
             return;
         }
 
@@ -55,6 +55,7 @@ class ProductApproval extends Component
 
         if ($product->status === 'approved') {
             $this->dispatch('toast', message: 'Produk sudah disetujui sebelumnya.', type: 'warning');
+
             return;
         }
 
@@ -96,7 +97,7 @@ class ProductApproval extends Component
             'rejectionReason.max' => 'Alasan penolakan maksimal 255 karakter.',
         ]);
 
-        if (!$this->selectedProductId) {
+        if (! $this->selectedProductId) {
             return;
         }
 

@@ -17,7 +17,7 @@ class ProductDetail extends Component
         $this->product = Product::where('slug', $slug)->firstOrFail();
 
         if ($this->product->status !== 'approved') {
-            if (!auth()->check() || (auth()->id() !== $this->product->seller_id && !auth()->user()->hasAnyRole(['admin', 'system_admin']))) {
+            if (! auth()->check() || (auth()->id() !== $this->product->seller_id && ! auth()->user()->hasAnyRole(['admin', 'system_admin']))) {
                 abort(404);
             }
         }

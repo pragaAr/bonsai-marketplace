@@ -27,10 +27,15 @@ class ProductForm extends Component
 
     // General Form Fields
     public string $name = '';
+
     public ?int $price = null;
+
     public ?int $stock = 1;
+
     public string $short_description = '';
+
     public string $description = '';
+
     public ?int $category_id = null;
 
     // Selected Tags
@@ -38,37 +43,54 @@ class ProductForm extends Component
 
     // Image Uploads
     public $images = []; // TemporaryUploadedFile array
+
     public array $existingImages = []; // Array of arrays: ['id' => x, 'url' => y]
+
     public array $imagesToDelete = []; // Array of media ids to delete
 
     // Polymorphic details - PlantDetail
     public ?int $species_id = null;
+
     public string $new_species_scientific = '';
+
     public string $new_species_common = '';
+
     public string $care_level = 'Easy';
+
     public string $light = '';
+
     public string $watering = '';
+
     public string $pot_size = '';
 
     // Polymorphic details - MediaDetail
     public string $media_type = '';
+
     public string $media_weight = '';
+
     public string $media_volume = '';
 
     // Polymorphic details - PotDetail
     public string $pot_material = '';
+
     public string $pot_shape = '';
+
     public string $pot_dimensions = '';
+
     public string $pot_color = '';
 
     // Polymorphic details - FertilizerDetail
     public string $fertilizer_type = '';
+
     public string $fertilizer_form = '';
+
     public string $fertilizer_weight = '';
 
     // Polymorphic details - ToolDetail
     public string $tool_material = '';
+
     public string $tool_brand = '';
+
     public string $tool_weight = '';
 
     public function mount(?int $id = null): void
@@ -91,9 +113,9 @@ class ProductForm extends Component
             $this->selectedTags = $this->product->tags->pluck('id')->toArray();
 
             // Load existing media
-            $this->existingImages = $this->product->getMedia('images')->map(fn($media) => [
+            $this->existingImages = $this->product->getMedia('images')->map(fn ($media) => [
                 'id' => $media->id,
-                'url' => $media->getUrl()
+                'url' => $media->getUrl(),
             ])->toArray();
 
             // Populate polymorphic fields
@@ -121,14 +143,14 @@ class ProductForm extends Component
             'media_type', 'media_weight', 'media_volume',
             'pot_material', 'pot_shape', 'pot_dimensions', 'pot_color',
             'fertilizer_type', 'fertilizer_form', 'fertilizer_weight',
-            'tool_material', 'tool_brand', 'tool_weight'
+            'tool_material', 'tool_brand', 'tool_weight',
         ]);
         $this->care_level = 'Easy';
     }
 
     private function loadPolymorphicDetails(): void
     {
-        if (!$this->product || !$this->product->productable) {
+        if (! $this->product || ! $this->product->productable) {
             return;
         }
 
@@ -164,7 +186,7 @@ class ProductForm extends Component
     {
         $this->imagesToDelete[] = $mediaId;
         $this->existingImages = collect($this->existingImages)
-            ->filter(fn($img) => $img['id'] !== $mediaId)
+            ->filter(fn ($img) => $img['id'] !== $mediaId)
             ->toArray();
     }
 
@@ -268,22 +290,24 @@ class ProductForm extends Component
         $totalImages = count($this->existingImages) + count($this->images);
         if ($totalImages < 1) {
             $this->addError('images', 'Minimal harus mengunggah 1 gambar produk.');
+
             return;
         }
         if ($totalImages > 4) {
             $this->addError('images', 'Maksimal hanya boleh mengunggah 4 gambar produk.');
+
             return;
         }
 
         $category = Category::findOrFail($this->category_id);
 
         // 1. Tangani Spesies Baru jika diinput
-        if ($category->slug === 'tanaman' && !empty($this->new_species_scientific)) {
+        if ($category->slug === 'tanaman' && ! empty($this->new_species_scientific)) {
             $species = Species::firstOrCreate(
                 ['scientific_name' => $this->new_species_scientific],
                 [
                     'common_name' => $this->new_species_common ?: null,
-                    'slug' => Str::slug($this->new_species_scientific)
+                    'slug' => Str::slug($this->new_species_scientific),
                 ]
             );
             $this->species_id = $species->id;
@@ -310,7 +334,7 @@ class ProductForm extends Component
                 'watering' => $this->watering,
                 'pot_size' => $this->pot_size ?: null,
             ];
-            if ($this->isEditing && !$categoryChanged && $this->product->isPlant()) {
+            if ($this->isEditing && ! $categoryChanged && $this->product->isPlant()) {
                 $this->product->productable->update($plantData);
                 $productable = $this->product->productable;
             } else {
@@ -322,7 +346,7 @@ class ProductForm extends Component
                 'weight' => $this->media_weight ?: null,
                 'volume' => $this->media_volume ?: null,
             ];
-            if ($this->isEditing && !$categoryChanged && $this->product->isMedia()) {
+            if ($this->isEditing && ! $categoryChanged && $this->product->isMedia()) {
                 $this->product->productable->update($mediaData);
                 $productable = $this->product->productable;
             } else {
@@ -335,7 +359,7 @@ class ProductForm extends Component
                 'dimensions' => $this->pot_dimensions,
                 'color' => $this->pot_color,
             ];
-            if ($this->isEditing && !$categoryChanged && $this->product->isPot()) {
+            if ($this->isEditing && ! $categoryChanged && $this->product->isPot()) {
                 $this->product->productable->update($potData);
                 $productable = $this->product->productable;
             } else {
@@ -347,7 +371,7 @@ class ProductForm extends Component
                 'form' => $this->fertilizer_form,
                 'weight' => $this->fertilizer_weight,
             ];
-            if ($this->isEditing && !$categoryChanged && $this->product->isFertilizer()) {
+            if ($this->isEditing && ! $categoryChanged && $this->product->isFertilizer()) {
                 $this->product->productable->update($fertilizerData);
                 $productable = $this->product->productable;
             } else {
@@ -359,7 +383,7 @@ class ProductForm extends Component
                 'brand' => $this->tool_brand,
                 'weight' => $this->tool_weight ?: null,
             ];
-            if ($this->isEditing && !$categoryChanged && $this->product->isTool()) {
+            if ($this->isEditing && ! $categoryChanged && $this->product->isTool()) {
                 $this->product->productable->update($toolData);
                 $productable = $this->product->productable;
             } else {
@@ -397,7 +421,7 @@ class ProductForm extends Component
                 ->log("Produk {$product->name} diperbarui oleh seller (Status: {$status})");
         } else {
             $productData['seller_id'] = auth()->id();
-            $productData['slug'] = Str::slug($this->name) . '-' . time();
+            $productData['slug'] = Str::slug($this->name).'-'.time();
             $product = Product::create($productData);
 
             // Log activity
@@ -441,9 +465,9 @@ class ProductForm extends Component
     {
         $categories = Category::all();
         $species = Species::orderBy('scientific_name')->get();
-        
-        $availableTags = $this->category_id 
-            ? Tag::where('category_id', $this->category_id)->get() 
+
+        $availableTags = $this->category_id
+            ? Tag::where('category_id', $this->category_id)->get()
             : collect();
 
         $selectedCategory = $this->category_id ? Category::find($this->category_id) : null;

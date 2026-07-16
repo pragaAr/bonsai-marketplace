@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FertilizerDetail extends Model
 {
     public $timestamps = false;
+
     protected $fillable = ['type', 'form', 'weight'];
 
     public function product()
