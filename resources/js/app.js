@@ -67,6 +67,13 @@ const registerAlpinePlugins = () => {
     show: config.show,
 
     // -----------------------------------------------------------------------
+    // Public getter: expose TomSelect instance for existing Alpine templates
+    // -----------------------------------------------------------------------
+    get tomselect() {
+      return this._selectEl()?.tomselect ?? null;
+    },
+
+    // -----------------------------------------------------------------------
     // Public: set value with guard — tidak memanggil setValue jika sama
     // -----------------------------------------------------------------------
     _syncValue(value) {
