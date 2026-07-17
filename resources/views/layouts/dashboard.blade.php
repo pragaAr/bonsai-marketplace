@@ -123,7 +123,7 @@
         class="flex h-14 flex-shrink-0 items-center justify-between bg-cream/95 backdrop-blur-sm px-4 border-b border-primary/10">
         <div class="flex items-center gap-3">
           <button @click="sidebarOpen = !sidebarOpen"
-            class="inline-flex p-2 rounded hover:bg-primary/5">
+            class="inline-flex p-2 rounded hover:bg-primary/5 cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5 text-primary"
               viewBox="0 0 24 24" fill="currentColor"
@@ -148,7 +148,7 @@
           <!-- User Menu Dropdown -->
           <div class="relative">
             <button @click="userMenuOpen = !userMenuOpen"
-              class="flex items-center space-x-2 p-2 rounded hover:bg-primary/5">
+              class="flex items-center space-x-2 p-2 rounded hover:bg-primary/5 cursor-pointer">
               @auth
                 @if (auth()->user()->avatar)
                   <img src="{{ auth()->user()->avatar }}"
@@ -203,7 +203,7 @@
                 @csrf
               </form>
               <button type="submit" form="logout-form"
-                class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-primary/10">
+                class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-primary/10 cursor-pointer">
                 <svg class="w-4 h-4 text-red-600"
                   viewBox="0 0 20 20" fill="currentColor"
                   aria-hidden="true">
