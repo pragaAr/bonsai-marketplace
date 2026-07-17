@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
 use App\Models\User;
+use App\Services\CustomPathGenerator;
 use App\Services\UserProfilePathGenerator;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,7 +26,10 @@ class AppServiceProvider extends ServiceProvider
         config([
             'media-library.custom_path_generators' => array_merge(
                 config('media-library.custom_path_generators', []),
-                [User::class => UserProfilePathGenerator::class]
+                [
+                    User::class => UserProfilePathGenerator::class,
+                    Product::class => CustomPathGenerator::class,
+                ]
             ),
         ]);
     }
