@@ -12,15 +12,16 @@
     </div>
     <div>
       <a href="{{ route('seller.products') }}" wire:navigate
-        class="inline-flex items-center justify-center px-4 py-2 bg-cream hover:bg-cream/80 text-primary border border-primary/10 font-medium rounded-lg text-sm transition duration-150">
-        <svg xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4 mr-2" fill="none"
-          viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round"
-            stroke-linejoin="round" stroke-width="2"
-            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-        Kembali ke Daftar
+        x-data="{ loading: false }" @click="loading = true"
+        :class="loading ? 'opacity-80 pointer-events-none' : ''"
+        class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-black/70 hover:bg-black/60 text-white border border-primary/10 font-medium rounded-lg text-sm transition duration-150">
+        <x-icons.arrow-left x-show="!loading"
+          class="w-4 h-4" />
+
+        <x-icons.spinner x-show="loading" x-cloak
+          class="h-4 w-4 text-current" />
+
+        <span>Kembali</span>
       </a>
     </div>
   </div>
@@ -183,7 +184,8 @@
                         <option
                           value="{{ $sp->id }}">
                           {{ $sp->scientific_name }}
-                          ({{ $sp->common_name }})</option>
+                          ({{ $sp->common_name }})
+                        </option>
                       @endforeach
                     </select>
                     <div
@@ -655,38 +657,54 @@
           <!-- Submit for approval button -->
           <button type="button"
             wire:click="save('pending')"
-            class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-accent hover:bg-accent/95 text-white font-medium rounded-lg text-sm shadow transition duration-150">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              class="h-4.5 w-4.5 mr-2" fill="none"
-              viewBox="0 0 24 24" stroke="currentColor"
-              stroke-width="2">
-              <path stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            wire:loading.attr="disabled"
+            class="w-full inline-flex gap-1 items-center justify-center px-4 py-2.5 bg-accent hover:bg-accent/95 text-white font-medium rounded-lg text-sm cursor-pointer transition-opacity disabled:opacity-50">
+            <x-icons.spinner wire:loading
+              wire:target="save('pending')"
+              class="h-3.5 w-3.5 text-current" />
+            <span wire:loading.remove
+              wire:target="save('pending')">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                class="h-4.5 w-4.5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </span>
+
             Ajukan Persetujuan
           </button>
 
           <!-- Save as draft button -->
           <button type="button"
             wire:click="save('draft')"
-            class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-white hover:bg-cream/40 text-primary border border-primary/20 font-medium rounded-lg text-sm transition duration-150">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              class="h-4.5 w-4.5 mr-2" fill="none"
-              viewBox="0 0 24 24" stroke="currentColor"
-              stroke-width="2">
-              <path stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-            </svg>
-            Simpan sebagai Draft
+            wire:loading.attr="disabled"
+            class="w-full inline-flex gap-1 items-center justify-center px-4 py-2.5 bg-white hover:bg-cream/40 text-primary border border-primary/20 font-medium rounded-lg text-sm cursor-pointer transition-opacity disabled:opacity-50">
+            <x-icons.spinner wire:loading
+              wire:target="save('draft')"
+              class="h-3.5 w-3.5 text-current" />
+            <span wire:loading.remove
+              wire:target="save('draft')">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                class="h-4.5 w-4.5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+              </svg>
+            </span>
+
+            Simpan Draft
           </button>
 
           <!-- Cancel button -->
           <a href="{{ route('seller.products') }}"
             wire:navigate
-            class="w-full inline-flex items-center justify-center px-4 py-2 text-primary/60 hover:text-primary text-xs font-semibold text-center mt-2 transition duration-150">
-            Batalkan Pengisian Form
+            class="w-full inline-flex items-center justify-center px-4 py-2 text-primary/60 hover:text-primary text-xs font-semibold text-center mt-2">
+            Batalkan
           </a>
         </div>
       </div>
