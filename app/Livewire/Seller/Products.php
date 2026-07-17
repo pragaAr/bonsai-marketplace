@@ -83,13 +83,14 @@ class Products extends Component
 
     public function resetFilters(): void
     {
-        $this->reset(['search', 'filterStatus']);
+        $this->reset(['filterStatus']);
         $this->resetPage();
+        $this->dispatch('filter-reset');
     }
 
     private function hasActiveFilter(): bool
     {
-        return $this->search !== '' || $this->filterStatus !== '';
+        return $this->filterStatus !== '';
     }
 
     #[Layout('layouts.dashboard')]
@@ -120,5 +121,13 @@ class Products extends Component
             'title' => 'Produk Saya',
             'subTitle' => 'Kelola dan pantau semua produk yang Anda pasarkan',
         ]);
+    }
+
+    private function resetFilterForm(): void
+    {
+        $this->reset([
+            'filterStatus',
+        ]);
+        $this->resetValidation();
     }
 }
