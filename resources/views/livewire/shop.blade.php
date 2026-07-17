@@ -36,7 +36,7 @@
           <button @click="showAll = !showAll"
             class="hidden md:inline-flex flex-shrink-0 items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border border-primary/20 hover:border-primary transition-colors duration-200 bg-white text-primary cursor-pointer">
             <span
-              x-text="showAll ? 'Show Less' : 'More Categories'"></span>
+              x-text="showAll ? 'Lebih sedikit' : 'Selengkapnya'"></span>
             <svg
               class="w-3.5 h-3.5 transition-transform duration-200"
               :class="showAll ? 'rotate-180' : ''"
