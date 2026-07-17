@@ -199,15 +199,16 @@
           Direkomendasikan langsung oleh komunitas</p>
       </div>
       <a href="/shop" wire:navigate
+        x-data="{ loading: false }" @click="loading = true"
+        :class="loading ? 'opacity-80 pointer-events-none' : ''"
         class="text-sm text-accent hover:text-primary transition-colors hidden sm:inline-flex items-center gap-1">
         Lihat Semua
-        <svg class="w-4 h-4" fill="none"
-          stroke="currentColor" stroke-width="2"
-          viewBox="0 0 24 24">
-          <path stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
+
+        <x-icons.arrow-right x-show="!loading"
+          class="w-4 h-4" />
+
+        <x-icons.spinner x-show="loading" x-cloak
+          class="h-4 w-4 text-current" />
       </a>
     </div>
 
@@ -245,8 +246,17 @@
 
     <div class="mt-8 text-center sm:hidden">
       <a href="/shop" wire:navigate
-        class="text-sm text-accent hover:text-primary transition-colors">Lihat
-        Semua →</a>
+        x-data="{ loading: false }" @click="loading = true"
+        :class="loading ? 'opacity-80 pointer-events-none' : ''"
+        class="text-sm text-accent hover:text-primary transition-colors inline-flex items-center gap-1">
+        Lihat Semua
+
+        <x-icons.arrow-right x-show="!loading"
+          class="w-4 h-4" />
+
+        <x-icons.spinner x-show="loading" x-cloak
+          class="h-4 w-4 text-current" />
+      </a>
     </div>
   </section>
 
