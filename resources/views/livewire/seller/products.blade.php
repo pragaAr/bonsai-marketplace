@@ -78,7 +78,7 @@
                         alt="{{ $product->name }}"
                         class="w-full h-full object-cover" />
                     </div>
-                    <div>
+                    <div class="text-left">
                       <h3 class="font-medium text-primary">
                         {{ $product->name }}</h3>
                       <p class="text-xs text-primary/60 line-clamp-1 mt-0.5"
@@ -195,15 +195,24 @@
                   class="px-6 py-8 text-center text-primary/50">
                   <svg xmlns="http://www.w3.org/2000/svg"
                     class="h-10 w-10 mx-auto text-primary/30 mb-3"
-                    fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path
+                      d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z">
+                    </path>
+                    <polyline points="14 2 14 8 20 8">
+                    </polyline>
+                    <line x1="8" y1="13"
+                      x2="16" y2="13"
+                      stroke-dasharray="2 2"></line>
+                    <line x1="8" y1="17"
+                      x2="12" y2="17"
+                      stroke-dasharray="2 2"></line>
                   </svg>
-                  Belum ada produk terdaftar. Mulai dengan
-                  menambahkan produk baru!
+
+                  Belum ada produk terdaftar.
                 </td>
               </tr>
             @endforelse

@@ -89,8 +89,28 @@
             @empty
               <tr>
                 <td colspan="5"
-                  class="px-5 py-8 text-center text-primary/50">
-                  Belum ada tag.</td>
+                  class="px-6 py-8 text-center text-primary/50">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-10 w-10 mx-auto text-primary/30 mb-3"
+                    viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path
+                      d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z">
+                    </path>
+                    <polyline points="14 2 14 8 20 8">
+                    </polyline>
+                    <line x1="8" y1="13"
+                      x2="16" y2="13"
+                      stroke-dasharray="2 2"></line>
+                    <line x1="8" y1="17"
+                      x2="12" y2="17"
+                      stroke-dasharray="2 2"></line>
+                  </svg>
+
+                  Belum ada tag terdaftar.
+                </td>
               </tr>
             @endforelse
           </tbody>
@@ -157,10 +177,12 @@
             for="categoryId">Kategori
           </label>
 
-          <div x-data="tomSelect({ lazy: true, value: @entangle('categoryId'), show: @entangle('showModal'), placeholder: 'Pilih kategori', ref: 'selectCategoryModal' })" wire:ignore class="w-full rounded-xl">
+          <div x-data="tomSelect({ lazy: true, value: @entangle('categoryId'), show: @entangle('showModal'), placeholder: 'Pilih kategori', ref: 'selectCategoryModal' })" wire:ignore
+            class="w-full rounded-xl">
             <select x-ref="selectCategoryModal"
               id="categoryId" class="w-full" required>
-              <option value="" disabled>Pilih kategori
+              <option value="" disabled>Pilih
+                kategori
               </option>
               @foreach ($categories as $category)
                 <option value="{{ $category->id }}">
@@ -178,8 +200,8 @@
           <label
             class="block text-sm font-medium text-primary mb-1"
             for="description">Deskripsi</label>
-          <textarea wire:model.defer="description" name="description"
-            id="description" rows="3"
+          <textarea wire:model.defer="description"
+            name="description" id="description" rows="3"
             class="w-full px-4 py-2.5 rounded-xl border border-primary/20 text-sm text-primary focus:border-primary/40 outline-none"
             placeholder="Deskripsi singkat tag"></textarea>
           @error('description')

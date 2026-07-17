@@ -140,16 +140,26 @@
             @empty
               <tr>
                 <td colspan="6"
-                  class="px-5 py-8 text-center text-primary/50">
+                  class="px-6 py-8 text-center text-primary/50">
                   <svg xmlns="http://www.w3.org/2000/svg"
                     class="h-10 w-10 mx-auto text-primary/30 mb-3"
-                    fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path
+                      d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z">
+                    </path>
+                    <polyline points="14 2 14 8 20 8">
+                    </polyline>
+                    <line x1="8" y1="13"
+                      x2="16" y2="13"
+                      stroke-dasharray="2 2"></line>
+                    <line x1="8" y1="17"
+                      x2="12" y2="17"
+                      stroke-dasharray="2 2"></line>
                   </svg>
+
                   Antrean produk kosong. Tidak ada produk
                   yang perlu ditinjau.
                 </td>
@@ -233,7 +243,8 @@
                         stroke-width="2"
                         d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span class="text-xs font-medium">Gambar
+                    <span
+                      class="text-xs font-medium">Gambar
                       Default</span>
                   </div>
                 @endforelse
@@ -247,7 +258,8 @@
                 class="text-xs font-semibold text-accent uppercase tracking-wider pb-1 border-b border-primary/5">
                 Detail Listing
               </p>
-              <div class="grid grid-cols-2 gap-y-3 gap-x-4">
+              <div
+                class="grid grid-cols-2 gap-y-3 gap-x-4">
                 <div>
                   <span
                     class="text-xs text-primary/60 block">Harga</span>
