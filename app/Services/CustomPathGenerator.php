@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\Support\PathGenerator\PathGenerator;
 
@@ -38,11 +39,13 @@ class CustomPathGenerator implements PathGenerator
     {
         $model = $media->model;
         $sellerId = $model->seller_id ?? 'unknown';
-        $category = is_string($model->category) ? $model->category : ($model->category->name ?? 'uncategorized');
+        $category = $model->category?->slug
+            ?? $model->category?->name
+            ?? 'uncategorized';
 
-        // Ensure slug format for category
-        $categorySlug = \Str::slug($category);
+        // Ensure slug format for category.
+        $categorySlug = Str::slug($category);
 
-        return "product/{$sellerId}/{$categorySlug}/";
+        return "products/{$sellerId}/{$categorySlug}/";
     }
 }
