@@ -3,17 +3,17 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
-use App\Models\PlantDetail;
-use App\Models\Species;
-use App\Models\PotDetail;
-use App\Models\MediaDetail;
 use App\Models\FertilizerDetail;
-use App\Models\ToolDetail;
 use App\Models\JournalEntry;
+use App\Models\MediaDetail;
 use App\Models\Permission;
+use App\Models\PlantDetail;
+use App\Models\PotDetail;
 use App\Models\Product;
 use App\Models\Role;
+use App\Models\Species;
 use App\Models\Tag;
+use App\Models\ToolDetail;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -131,27 +131,27 @@ class DatabaseSeeder extends Seeder
         $catTanaman = Category::create([
             'name' => 'Tanaman',
             'slug' => 'tanaman',
-            'description' => 'Bonsai, bibit, dan bahan bonsai'
+            'description' => 'Bonsai, bibit, dan bahan bonsai',
         ]);
         $catMedia = Category::create([
             'name' => 'Media Tanam',
             'slug' => 'media-tanam',
-            'description' => 'Media tanam siap pakai, steril, dan subur'
+            'description' => 'Media tanam siap pakai, steril, dan subur',
         ]);
         $catPot = Category::create([
             'name' => 'Pot',
             'slug' => 'pot',
-            'description' => 'Pilihan pot keramik, semen, tanah liat, dan plastik'
+            'description' => 'Pilihan pot keramik, semen, tanah liat, dan plastik',
         ]);
         $catPupuk = Category::create([
             'name' => 'Pupuk',
             'slug' => 'pupuk',
-            'description' => 'Pupuk penyubur daun, akar, dan bunga'
+            'description' => 'Pupuk penyubur daun, akar, dan bunga',
         ]);
         $catAlat = Category::create([
             'name' => 'Alat',
             'slug' => 'alat',
-            'description' => 'Gunting, gergaji, catut kawat, dan aksesoris perawatan'
+            'description' => 'Gunting, gergaji, catut kawat, dan aksesoris perawatan',
         ]);
 
         // ── 6. Seed Tag Produk ──
@@ -198,7 +198,7 @@ class DatabaseSeeder extends Seeder
                 ['name' => 'kawat', 'slug' => 'kawat', 'description' => 'Kawat bonsai untuk pembentukan cabang'],
                 ['name' => 'pisau', 'slug' => 'pisau', 'description' => 'Pisau tajam untuk pemangkasan dan pembersihan'],
                 ['name' => 'saleb-kambium', 'slug' => 'saleb-kambium', 'description' => 'Salep untuk menutup luka tanaman'],
-                ['name' => 'pelindung-luka', 'slug' => 'pelindung-luka', 'description' => 'Pelindung luka untuk perawatan pasca pangkas']
+                ['name' => 'pelindung-luka', 'slug' => 'pelindung-luka', 'description' => 'Pelindung luka untuk perawatan pasca pangkas'],
             ],
         ];
 
