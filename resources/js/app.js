@@ -309,3 +309,79 @@ if (window.Alpine) {
     once: true,
   });
 }
+
+const initHomeLoader = () => {
+  const loader = document.querySelector("[data-page-loader]");
+  const loaderSvg = loader?.querySelector("[data-page-loader-svg]");
+
+  if (
+    !loader ||
+    !loaderSvg ||
+    !document.documentElement.classList.contains("home-loader-active")
+  ) {
+    return;
+  }
+
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  const removeLoader = () => {
+    if (loader.isConnected) {
+      loader.remove();
+    }
+  };
+
+  const finalizeHide = () => {
+    if (loader.dataset.hidden === "true") {
+      return;
+    }
+
+    loader.dataset.hidden = "true";
+    loader.classList.add("page-loader--hidden");
+    document.documentElement.classList.remove("home-loader-active");
+    delete document.documentElement.dataset.homeLoaderActive;
+
+    try {
+      sessionStorage.setItem("home-loader-seen", "1");
+    } catch (error) {
+      // Session storage can be blocked in private contexts; ignore safely.
+    }
+
+    if (reducedMotion) {
+      removeLoader();
+    }
+  };
+
+  const handleTransitionEnd = (event) => {
+    if (event.target !== loader || event.propertyName !== "opacity") {
+      return;
+    }
+
+    removeLoader();
+  };
+
+  const hideLoader = () => {
+    finalizeHide();
+  };
+
+  loader.addEventListener("transitionend", handleTransitionEnd);
+
+  if (reducedMotion) {
+    hideLoader();
+    return;
+  }
+
+  if (
+    typeof loaderSvg.getAnimations === "function" &&
+    loaderSvg.getAnimations().some((animation) => animation.playState === "finished")
+  ) {
+    hideLoader();
+    return;
+  }
+
+  loaderSvg.addEventListener("animationend", hideLoader, { once: true });
+  loaderSvg.addEventListener("animationcancel", hideLoader, { once: true });
+};
+
+initHomeLoader();
