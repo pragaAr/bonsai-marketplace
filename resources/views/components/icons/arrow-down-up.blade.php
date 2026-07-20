@@ -2,8 +2,8 @@
   viewBox="0 0 24 24" fill="none" stroke="currentColor"
   stroke-width="2" stroke-linecap="round"
   stroke-linejoin="round">
+  <path d="m3 16 4 4 4-4"></path>
   <path d="M7 20V4"></path>
-  <path d="m3 8 4-4 4 4"></path>
+  <path d="m21 8-4-4-4 4"></path>
   <path d="M17 4v16"></path>
-  <path d="m13 16 4 4 4-4"></path>
 </svg>
