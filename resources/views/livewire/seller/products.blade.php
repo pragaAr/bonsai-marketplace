@@ -18,15 +18,17 @@
         <x-page.filter-button />
 
         <a href="{{ route('seller.products.create') }}"
-          wire:navigate
-          class="inline-flex items-center justify-center px-4 py-2 bg-primary text-cream hover:bg-primary/95 font-medium rounded-lg text-sm transition duration-150">
-          <svg xmlns="http://www.w3.org/2000/svg"
-            class="h-4.5 w-4.5 mr-2" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor"
-            stroke-width="2">
-            <path stroke-linecap="round"
-              stroke-linejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
+          wire:navigate x-data="{ loading: false }"
+          @click="loading = true"
+          :class="loading ? 'opacity-80 pointer-events-none' : ''"
+          class="inline-flex items-center gap-1 justify-center px-4 py-2 bg-primary text-cream hover:bg-primary/95 font-medium rounded-lg text-sm transition duration-150">
+          <!-- Arrow Icon -->
+          <x-icons.plus x-show="!loading" class="w-4 h-4" />
+
+          <!-- Spinner -->
+          <x-icons.spinner x-show="loading" x-cloak
+            class="h-4 w-4 text-current" />
+
           Tambah Produk Baru
         </a>
       </div>
@@ -125,7 +127,7 @@
                   @elseif($product->status === 'pending')
                     <span
                       class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
-                      Menunggu Review
+                      Menunggu Persetujuan
                     </span>
                   @elseif($product->status === 'approved')
                     <span
@@ -244,7 +246,7 @@
 
       <x-modal.header
         wire:click="$set('showFilterModal', false)">
-        Filter Permintaan Penjual
+        Filter Produk
       </x-modal.header>
 
       <form wire:submit="filterList"
