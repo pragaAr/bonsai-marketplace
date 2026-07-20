@@ -11,6 +11,29 @@
   <meta name="description"
     content="Curated bonsai collection for mindful living. Premium indoor and outdoor bonsai trees, care guides, and expert advice." />
 
+  @if (request()->routeIs('home'))
+    <script>
+      (function() {
+        try {
+          if (sessionStorage.getItem('home-loader-seen') !==
+            '1') {
+            document.documentElement.classList.add(
+              'home-loader-active');
+            document.documentElement.dataset
+              .homeLoaderActive = '1';
+          }
+        } catch (error) {
+          document.documentElement.classList.add(
+            'home-loader-active');
+          document.documentElement.dataset.homeLoaderActive =
+            '1';
+        }
+      })();
+    </script>
+    <link rel="stylesheet"
+      href="{{ asset('css/loading.css') }}" />
+  @endif
+
   <link rel="preconnect"
     href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com"
@@ -31,10 +54,14 @@
 </head>
 
 <body class="bg-cream text-primary font-sans antialiased"
-  x-data="{ mobileMenuOpen: false, searchOpen: false, cartOpen: false }"
+  x-data="{ mobileMenuOpen: false, cartOpen: false }"
   x-effect="document.body.style.overflow = (mobileMenuOpen || cartOpen) ? 'hidden' : ''"
   @cart-opened.window="cartOpen = true"
   @cart-closed.window="cartOpen = false">
+
+  @if (request()->routeIs('home'))
+    <x-page-loader />
+  @endif
 
   <!-- Header -->
   <header id="main-header"
@@ -70,18 +97,6 @@
           </a>
         </nav>
         <div class="flex items-center gap-2">
-          <!-- Search toggle -->
-          <button @click="searchOpen = !searchOpen"
-            aria-label="Cari Produk"
-            class="rounded-full hover:bg-primary/5 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer">
-            <svg class="w-5 h-5 text-primary" fill="none"
-              stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
-          </button>
-
           <!-- Livewire Cart Indicator/Badge -->
           @livewire('cart-badge')
 
@@ -176,7 +191,8 @@
             </div>
           @else
             <a href="{{ route('login') }}" wire:navigate
-              x-data="{ loading: false }" @click="loading = true"
+              x-data="{ loading: false }"
+              @click="loading = true"
               :class="loading ? 'opacity-85 pointer-events-none' :
                   ''"
               class="hidden md:inline-flex items-center justify-center gap-2 rounded px-4 py-1.5 text-sm font-semibold text-primary border border-primary/15 hover:bg-primary/5 transition-colors cursor-pointer">
@@ -207,35 +223,6 @@
       </div>
     </div>
 
-    <!-- Search Overlay -->
-    <div x-show="searchOpen"
-      x-transition:enter="transition ease-out duration-200"
-      x-transition:enter-start="opacity-0 -translate-y-2"
-      x-transition:enter-end="opacity-100 translate-y-0"
-      x-transition:leave="transition ease-in duration-150"
-      x-transition:leave-start="opacity-100 translate-y-0"
-      x-transition:leave-end="opacity-0 -translate-y-2"
-      @click.away="searchOpen = false"
-      class="absolute top-full left-0 right-0 bg-cream border-b border-primary/10 px-4 py-4"
-      style="display: none;">
-      <div class="max-w-xl mx-auto relative">
-        <form action="/shop" method="GET"
-          x-on:submit.prevent="Livewire.navigate('/shop?q=' + encodeURIComponent($el.querySelector('input[name=q]').value))">
-          <input type="search" name="q"
-            x-effect="if (searchOpen) $nextTick(() => $el.focus())"
-            placeholder="Search bonsai…"
-            class="w-full bg-white border border-primary/15 rounded-lg px-4 py-3 pl-11 text-sm text-primary focus:outline-none focus:border-primary/40"
-            value="{{ request('q') }}" />
-        </form>
-        <svg
-          class="w-5 h-5 text-primary/40 absolute left-3.5 top-1/2 -translate-y-1/2"
-          fill="none" stroke="currentColor"
-          stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.35-4.35" />
-        </svg>
-      </div>
-    </div>
   </header>
 
   <!-- Mobile Menu Panel -->
@@ -531,13 +518,11 @@
               class="text-sm hover:text-cream transition-colors">
               Tanaman
             </a>
-            <a href="/shop?category=pot"
-              wire:navigate
+            <a href="/shop?category=pot" wire:navigate
               class="text-sm hover:text-cream transition-colors">
               Pot
             </a>
-            <a href="/shop?category=alat"
-              wire:navigate
+            <a href="/shop?category=alat" wire:navigate
               class="text-sm hover:text-cream transition-colors">
               Peralatan
             </a>
@@ -546,8 +531,7 @@
               class="text-sm hover:text-cream transition-colors">
               Media Tanam
             </a>
-            <a href="/shop?category=pupuk"
-              wire:navigate
+            <a href="/shop?category=pupuk" wire:navigate
               class="text-sm hover:text-cream transition-colors">
               Pupuk
             </a>
