@@ -8,78 +8,159 @@
         dari komunitas untuk komunitas</p>
     </div>
 
-    <!-- Toolbar: Filters & Sort -->
-    <div
-      class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
+    <!-- Toolbar: Filters, Search & Sort -->
+    <div class="mb-5 space-y-4">
+      <div
+        class="flex flex-wrap gap-4 xl:flex-row xl:items-center xl:justify-between">
 
-      <!-- Category Pills (Overflow-scroll on mobile, toggleable inline scroll on desktop) -->
-      <div x-data="{ showAll: false }"
-        class="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide whitespace-nowrap md:overflow-x-hidden"
-        :class="showAll ? 'md:!overflow-x-auto' : ''">
-        @foreach ($categories as $cat)
-          <button
-            wire:click="selectCategory('{{ $cat->slug }}')"
-            wire:loading.attr="disabled"
-            wire:target="selectCategory('{{ $cat->slug }}')"
-            class="filter-btn flex-shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-xs font-medium border border-primary/20 hover:border-primary transition-colors duration-200 cursor-pointer {{ $category === $cat->slug ? 'active' : '' }} {{ $loop->index >= 5 ? 'md:hidden' : '' }}"
-            @if ($loop->index >= 5) :class="{ 'md:!flex': showAll }" @endif>
-
-            <x-icons.spinner wire:loading
+        <!-- Category Pills -->
+        <div x-data="{ showAll: false }"
+          class="flex w-full items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide whitespace-nowrap md:overflow-x-hidden xl:w-auto"
+          :class="showAll ? 'md:!overflow-x-auto' : ''">
+          @foreach ($categories as $cat)
+            <button
+              wire:click="selectCategory('{{ $cat->slug }}')"
+              wire:loading.attr="disabled"
               wire:target="selectCategory('{{ $cat->slug }}')"
-              class="h-3 w-3 text-current" />
+              class="filter-btn flex-shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-xs font-medium border border-primary/20 hover:border-primary transition-colors duration-200 cursor-pointer {{ $category === $cat->slug ? 'active' : '' }} {{ $loop->index >= 6 ? 'md:hidden' : '' }}"
+              @if ($loop->index >= 6) :class="{ 'md:!flex': showAll }" @endif>
 
-            {{ $cat->name }}
-          </button>
-        @endforeach
+              <x-icons.spinner wire:loading
+                wire:target="selectCategory('{{ $cat->slug }}')"
+                class="h-3 w-3 text-current" />
 
-        @if (count($categories) > 5)
-          <button @click="showAll = !showAll"
-            class="hidden md:inline-flex flex-shrink-0 items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border border-primary/20 hover:border-primary transition-colors duration-200 bg-white text-primary cursor-pointer">
-            <span
-              x-text="showAll ? 'Lebih sedikit' : 'Selengkapnya'"></span>
+              {{ $cat->name }}
+            </button>
+          @endforeach
+
+          @if (count($categories) > 6)
+            <button @click="showAll = !showAll"
+              class="hidden md:inline-flex flex-shrink-0 items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold border border-primary/20 hover:border-primary transition-colors duration-200 bg-white text-primary cursor-pointer">
+              <span
+                x-text="showAll ? 'Lebih sedikit' : 'Selengkapnya'"></span>
+              <svg
+                class="w-3.5 h-3.5 transition-transform duration-200"
+                :class="showAll ? 'rotate-180' : ''"
+                fill="none" stroke="currentColor"
+                stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          @endif
+        </div>
+
+        <!-- Bagian Search & Sort -->
+        <div
+          class="flex w-full gap-3 items-center xl:ml-auto xl:max-w-[560px] xl:justify-end">
+
+          <div class="relative flex-1">
             <svg
-              class="w-3.5 h-3.5 transition-transform duration-200"
-              :class="showAll ? 'rotate-180' : ''"
+              class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary/40"
               fill="none" stroke="currentColor"
               stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M19 9l-7 7-7-7" />
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
             </svg>
-          </button>
-        @endif
-      </div>
+            <input type="search"
+              wire:model.live.debounce.300ms="search"
+              placeholder="Cari produk.."
+              class="w-full rounded-lg border border-primary/15 bg-white py-2.5 pl-10 pr-3 text-xs text-primary placeholder:text-primary/35 focus:border-primary/40 focus:outline-none" />
+          </div>
 
-      <!-- Sort & Search Count -->
-      <div
-        class="flex items-center justify-between md:justify-end gap-4">
+          <div x-data="{ open: false }"
+            class="relative w-12 flex-none">
+            <button type="button" @click="open = !open"
+              :aria-expanded="open"
+              aria-label="Ubah urutan produk"
+              class="flex h-[42px] w-full items-center justify-center rounded-lg border border-primary/15 bg-white text-primary transition-colors hover:border-primary/30 hover:bg-primary/5 cursor-pointer">
+              <span
+                class="inline-flex items-center justify-center">
+                @if ($sort === 'price_asc')
+                  <x-icons.arrow-down-up
+                    class="h-4 w-4 text-primary" />
+                @elseif ($sort === 'price_desc')
+                  <x-icons.arrow-up-down
+                    class="h-4 w-4 text-primary" />
+                @elseif ($sort === 'name_asc')
+                  <x-icons.a-z
+                    class="h-5 w-5 text-primary" />
+                @elseif ($sort === 'name_desc')
+                  <x-icons.z-a
+                    class="h-5 w-5 text-primary" />
+                @else
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 text-primary"
+                    viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polygon
+                      points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3">
+                    </polygon>
+                  </svg>
+                @endif
+              </span>
+            </button>
 
-        <select wire:model.live="sort"
-          class="bg-white border border-primary/15 rounded-lg px-3 py-2 text-xs text-primary focus:outline-none focus:border-primary/40 cursor-pointer">
-          <option value="default">Default Sorting</option>
-          <option value="price_asc">Price: Low to High
-          </option>
-          <option value="price_desc">Price: High to Low
-          </option>
-          <option value="name_asc">Alphabetical: A-Z
-          </option>
-          <option value="name_desc">Alphabetical: Z-A
-          </option>
-        </select>
+            <!-- Dropdown menu -->
+            <div x-show="open"
+              x-transition:enter="transition ease-out duration-150"
+              x-transition:enter-start="opacity-0 translate-y-1"
+              x-transition:enter-end="opacity-100 translate-y-0"
+              x-transition:leave="transition ease-in duration-100"
+              x-transition:leave-start="opacity-100 translate-y-0"
+              x-transition:leave-end="opacity-0 translate-y-1"
+              @click.away="open = false"
+              class="absolute right-0 z-20 mt-2 w-12 overflow-hidden rounded-xl border border-primary/10 bg-white shadow-lg"
+              style="display: none;">
+
+              <!-- ... isi tombol dropdown sort Anda ... -->
+              <button type="button"
+                wire:click="$set('sort', 'default')"
+                @click="open = false"
+                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'default' ? 'bg-primary/5' : '' }}">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <polygon
+                    points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3">
+                  </polygon>
+                </svg>
+              </button>
+              <button type="button"
+                wire:click="$set('sort', 'price_asc')"
+                @click="open = false"
+                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_asc' ? 'bg-primary/5' : '' }}">
+                <x-icons.arrow-down-up class="h-4 w-4" />
+              </button>
+              <button type="button"
+                wire:click="$set('sort', 'price_desc')"
+                @click="open = false"
+                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_desc' ? 'bg-primary/5' : '' }}">
+                <x-icons.arrow-up-down class="h-4 w-4" />
+              </button>
+              <button type="button"
+                wire:click="$set('sort', 'name_asc')"
+                @click="open = false"
+                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_asc' ? 'bg-primary/5' : '' }}">
+                <x-icons.a-z class="h-5 w-5" />
+              </button>
+              <button type="button"
+                wire:click="$set('sort', 'name_desc')"
+                @click="open = false"
+                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_desc' ? 'bg-primary/5' : '' }}">
+                <x-icons.z-a class="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
-
-    <!-- Active Search Info (if any) -->
-    @if (!empty(trim($search)))
-      <div class="mb-6 flex items-center gap-2">
-        <span
-          class="text-xs bg-primary/5 text-primary/60 px-3 py-1 rounded-full flex items-center gap-1.5">
-          Search: "{{ $search }}"
-          <button wire:click="$set('search', '')"
-            class="hover:text-red-500 font-bold">x</button>
-        </span>
-      </div>
-    @endif
 
     <!-- Product Grid -->
     @if ($products->isEmpty())
