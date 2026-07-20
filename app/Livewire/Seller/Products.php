@@ -99,7 +99,8 @@ class Products extends Component
     {
         $query = Product::query()
             ->where('seller_id', auth()->id())
-            ->with(['category', 'productable']);
+            ->with(['category', 'productable'])
+            ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END");
 
         if ($this->search) {
             $query->where(function ($q) {
