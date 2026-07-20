@@ -57,18 +57,90 @@
           <!-- Price -->
           <div class="space-y-1">
             <label for="price"
-              class="block text-xs font-semibold text-primary/80 uppercase">Harga
-              (Rp) <span
-                class="text-red-500">*</span></label>
-            <input type="number" id="price"
-              wire:model="price"
-              placeholder="Contoh: 1500000"
+              class="block text-xs font-semibold text-primary/80 uppercase">
+              Harga (Rp)
+              <span class="text-red-500">*</span>
+            </label>
+            <input type="text" id="price"
+              x-data="priceFormatter()"
+              x-init="initPrice()" x-model="displayPrice"
+              @input="formatPrice()" @blur="cleanupPrice()"
+              @keydown="onKeyDown($event)"
+              placeholder="Contoh: 1500000" maxlength="16"
               class="w-full px-4 py-2 border border-primary/20 rounded-lg text-sm text-primary focus:outline-none focus:border-accent bg-cream/10" />
             @error('price')
-              <span
-                class="text-xs text-red-500 font-medium">{{ $message }}</span>
+              <span class="text-xs text-red-500 font-medium">
+                {{ $message }}
+              </span>
             @enderror
           </div>
+
+          <script>
+            function priceFormatter() {
+              return {
+                displayPrice: '{{ $price ?? '' }}',
+
+                initPrice() {
+                  if (this.displayPrice) {
+                    this.displayPrice = this.formatNumber(parseInt(
+                      this.displayPrice) || 0);
+                  }
+                },
+
+                formatPrice() {
+                  // Remove all non-numeric characters
+                  let numericValue = this.displayPrice.replace(/\D/g,
+                    '');
+
+                  // Limit to 12 digits
+                  if (numericValue.length > 12) {
+                    numericValue = numericValue.slice(0, 12);
+                  }
+
+                  // Prevent negative (already handled by removing non-numeric)
+                  // Format with dots
+                  this.displayPrice = this.formatNumber(numericValue);
+
+                  // Update Livewire model with clean value
+                  @this.set('price', numericValue ? parseInt(
+                    numericValue) : null);
+                },
+
+                formatNumber(num) {
+                  if (!num && num !== 0) return '';
+                  return num.toString().replace(
+                    /\B(?=(\d{3})+(?!\d))/g, '.');
+                },
+
+                onKeyDown(event) {
+                  // Allow: backspace, delete, tab, escape, enter
+                  if ([8, 9, 27, 13, 46].includes(event.keyCode)) {
+                    return;
+                  }
+
+                  // Allow: Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+A
+                  if ((event.ctrlKey || event.metaKey) && [65, 67, 86,
+                      88
+                    ].includes(event.keyCode)) {
+                    return;
+                  }
+
+                  // Ensure that it is a number and stop the keypress
+                  if ((event.shiftKey || (event.keyCode < 48 || event
+                      .keyCode > 57)) && (event.keyCode < 96 || event
+                      .keyCode > 105)) {
+                    event.preventDefault();
+                  }
+                },
+
+                cleanupPrice() {
+                  if (!this.displayPrice) {
+                    @this.set('price', null);
+                  }
+                }
+              }
+            }
+          </script>
 
           <!-- Stock -->
           <div class="space-y-1">
@@ -534,23 +606,41 @@
         <div class="space-y-3">
           <div
             class="relative flex flex-col items-center justify-center border-2 border-dashed border-primary/20 hover:border-accent rounded-xl p-4 bg-cream/5 cursor-pointer transition duration-150">
+
             <input type="file" wire:model="images"
               multiple accept="image/*"
-              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-            <svg xmlns="http://www.w3.org/2000/svg"
-              class="h-8 w-8 text-primary/40 mb-2"
-              fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round"
-                stroke-linejoin="round" stroke-width="2"
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <p
-              class="text-xs font-semibold text-primary/75">
-              Klik atau Seret Gambar</p>
-            <p class="text-[10px] text-primary/50 mt-1">
-              PNG, JPG, JPEG, WEBP maksimal 2MB per file</p>
+              wire:loading.attr="disabled"
+              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed" />
+
+            <div wire:loading.remove wire:target="images"
+              class="w-full flex flex-col items-center justify-center text-center">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-primary/40 mb-2 mx-auto"
+                fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="2"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <p
+                class="text-xs font-semibold text-primary/75">
+                Klik atau Seret Gambar</p>
+              <p class="text-[10px] text-primary/50 mt-1">
+                PNG, JPG, JPEG, WEBP maksimal 2MB per file
+              </p>
+            </div>
+
+            <div wire:loading.flex wire:target="images"
+              class="w-full flex flex-col items-center justify-center text-center">
+              <x-icons.spinner
+                class="h-8 w-8 text-accent mb-2" />
+
+              <p
+                class="text-xs font-semibold text-accent animate-pulse">
+                Sedang mengupload gambar...</p>
+            </div>
           </div>
+
           @error('images')
             <span
               class="text-xs text-red-500 font-medium block">{{ $message }}</span>
