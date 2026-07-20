@@ -47,14 +47,17 @@ class Shop extends Component
     {
         $query = Product::where('status', 'approved')->with(['category', 'productable']);
 
-        // Search name, description & species in plant details
+        // Search name, description & species details for plant products
         if (! empty(trim($this->search))) {
             $term = '%'.trim($this->search).'%';
             $query->where(function ($q) use ($term) {
                 $q->where('name', 'like', $term)
                     ->orWhere('description', 'like', $term)
                     ->orWhereHasMorph('productable', [\App\Models\PlantDetail::class], function ($query) use ($term) {
-                        $query->where('species', 'like', $term);
+                        $query->whereHas('species', function ($speciesQuery) use ($term) {
+                            $speciesQuery->where('scientific_name', 'like', $term)
+                                ->orWhere('common_name', 'like', $term);
+                        });
                     });
             });
         }
