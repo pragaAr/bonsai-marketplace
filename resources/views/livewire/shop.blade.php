@@ -251,7 +251,7 @@
           <button wire:click="previousPage"
             @if ($products->onFirstPage()) disabled @endif
             aria-label="Previous page"
-            class="p-2.5 rounded-lg border border-primary/15 hover:bg-primary/5 transition-colors disabled:opacity-30 disabled:pointer-events-none min-w-[44px] min-h-[44px] flex items-center justify-center">
+            class="p-2.5 rounded-lg border border-primary/15 hover:bg-primary/5 transition-colors disabled:opacity-30 disabled:pointer-events-none min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer">
             <svg class="w-4 h-4" fill="none"
               stroke="currentColor" stroke-width="2"
               viewBox="0 0 24 24">
@@ -265,7 +265,7 @@
             <button
               wire:click="gotoPage({{ $i }})"
               aria-label="Page {{ $i }}"
-              class="page-btn min-w-[44px] min-h-[44px] rounded-lg border border-primary/15 text-sm font-medium transition-colors hover:bg-primary/5 flex items-center justify-center {{ $i === $products->currentPage() ? 'active' : '' }}">
+              class="page-btn min-w-[44px] min-h-[44px] rounded-lg border border-primary/15 text-sm font-medium transition-colors hover:bg-primary/5 flex items-center justify-center cursor-pointer {{ $i === $products->currentPage() ? 'active' : '' }}">
               {{ $i }}
             </button>
           @endfor
@@ -274,7 +274,7 @@
           <button wire:click="nextPage"
             @if (!$products->hasMorePages()) disabled @endif
             aria-label="Next page"
-            class="p-2.5 rounded-lg border border-primary/15 hover:bg-primary/5 transition-colors disabled:opacity-30 disabled:pointer-events-none min-w-[44px] min-h-[44px] flex items-center justify-center">
+            class="p-2.5 rounded-lg border border-primary/15 hover:bg-primary/5 transition-colors disabled:opacity-30 disabled:pointer-events-none min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer">
             <svg class="w-4 h-4" fill="none"
               stroke="currentColor" stroke-width="2"
               viewBox="0 0 24 24">
