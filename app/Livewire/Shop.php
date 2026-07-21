@@ -2,8 +2,9 @@
 
 namespace App\Livewire;
 
-use App\Models\Product;
 use App\Models\Category;
+use App\Models\PlantDetail;
+use App\Models\Product;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -53,7 +54,7 @@ class Shop extends Component
             $query->where(function ($q) use ($term) {
                 $q->where('name', 'like', $term)
                     ->orWhere('description', 'like', $term)
-                    ->orWhereHasMorph('productable', [\App\Models\PlantDetail::class], function ($query) use ($term) {
+                    ->orWhereHasMorph('productable', [PlantDetail::class], function ($query) use ($term) {
                         $query->whereHas('species', function ($speciesQuery) use ($term) {
                             $speciesQuery->where('scientific_name', 'like', $term)
                                 ->orWhere('common_name', 'like', $term);
@@ -85,7 +86,7 @@ class Shop extends Component
                 break;
             default:
                 // Default featured or id order
-                $query->orderBy('featured', 'desc')->orderBy('id', 'asc');
+                $query->orderBy('featured', 'desc')->orderBy('id', 'desc');
                 break;
         }
 
@@ -93,10 +94,10 @@ class Shop extends Component
 
         $dbCategories = Category::all();
         $categories = collect([
-            (object) ['name' => 'Semua', 'slug' => 'All']
-        ])->concat($dbCategories->map(fn($c) => (object)[
+            (object) ['name' => 'Semua', 'slug' => 'All'],
+        ])->concat($dbCategories->map(fn ($c) => (object) [
             'name' => $c->name,
-            'slug' => $c->slug
+            'slug' => $c->slug,
         ]));
 
         return view('livewire.shop', [
