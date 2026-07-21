@@ -17,7 +17,7 @@ class Request extends Component
     public string $search = '';
 
     #[Url(as: 'status')]
-    public string $filterStatus = '';
+    public string $filterStatus = 'pending';
 
     public bool $showFilterModal = false;
 
@@ -44,6 +44,10 @@ class Request extends Component
 
     public function filterList(): void
     {
+        if (! in_array($this->filterStatus, ['pending', 'rejected'], true)) {
+            $this->filterStatus = 'pending';
+        }
+
         $this->showFilterModal = false;
     }
 
@@ -54,6 +58,10 @@ class Request extends Component
 
     public function updatingFilterStatus(): void
     {
+        if (! in_array($this->filterStatus, ['pending', 'rejected'], true)) {
+            $this->filterStatus = 'pending';
+        }
+
         $this->resetPage();
     }
 
@@ -203,20 +211,27 @@ class Request extends Component
     public function resetFilters(): void
     {
         $this->reset(['search', 'filterStatus']);
+        $this->filterStatus = 'pending';
         $this->resetPage();
         $this->dispatch('filter-reset');
     }
 
     private function hasActiveFilter(): bool
     {
-        return $this->search !== '' || $this->filterStatus !== '';
+        return $this->search !== '' || $this->filterStatus !== 'pending';
     }
 
     #[Layout('layouts.dashboard')]
     #[Title('Permintaan Penjual')]
     public function render()
     {
-        $query = SellerRequest::query()->with(['user', 'reviewer']);
+        $status = in_array($this->filterStatus, ['pending', 'rejected'], true)
+            ? $this->filterStatus
+            : 'pending';
+
+        $query = SellerRequest::query()
+            ->where('status', $status)
+            ->with(['user', 'reviewer']);
 
         if ($this->search) {
             $query->where(function ($q) {
@@ -228,10 +243,6 @@ class Request extends Component
                             ->orWhere('email', 'like', "%{$this->search}%");
                     });
             });
-        }
-
-        if ($this->filterStatus) {
-            $query->where('status', $this->filterStatus);
         }
 
         return view('livewire.admin.seller.request', [
@@ -248,5 +259,6 @@ class Request extends Component
         $this->reset([
             'filterStatus',
         ]);
+        $this->filterStatus = 'pending';
     }
 }

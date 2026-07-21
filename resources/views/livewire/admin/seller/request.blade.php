@@ -436,7 +436,7 @@
       <form wire:submit="filterList"
         x-data="{ pendingFilterStatus: '{{ $filterStatus }}' }"
         x-on:submit="$wire.set('filterStatus', pendingFilterStatus)"
-        x-on:filter-reset.window="pendingFilterStatus = ''"
+        x-on:filter-reset.window="pendingFilterStatus = 'pending'"
         class="space-y-4 my-4 flex-1 text-left">
         <div>
           <label
@@ -449,15 +449,9 @@
             x-on:filter-reset.window="value = ''; tomselect && tomselect.clear(true)">
             <select x-ref="selectFilterStatus"
               class="w-full">
-              <option value="" disabled>Semua Status
-              </option>
               <option value="pending">Menunggu Ditinjau
                 (Pending)</option>
-              <option value="approved">Disetujui (Approved)
-              </option>
               <option value="rejected">Ditolak (Rejected)
-              </option>
-              <option value="banned">Dibekukan (Banned)
               </option>
             </select>
           </div>
