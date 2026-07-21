@@ -21,6 +21,13 @@
               'home-loader-active');
             document.documentElement.dataset
               .homeLoaderActive = '1';
+          } else {
+            // Bersihkan state lama yang mungkin tertinggal setelah
+            // navigasi Livewire SPA sebelum animasi loader selesai.
+            document.documentElement.classList.remove(
+              'home-loader-active');
+            delete document.documentElement.dataset
+              .homeLoaderActive;
           }
         } catch (error) {
           document.documentElement.classList.add(
@@ -191,8 +198,7 @@
             </div>
           @else
             <a href="{{ route('login') }}" wire:navigate
-              x-data="{ loading: false }"
-              @click="loading = true"
+              x-data="{ loading: false }" @click="loading = true"
               :class="loading ? 'opacity-85 pointer-events-none' :
                   ''"
               class="hidden md:inline-flex items-center justify-center gap-2 rounded px-4 py-1.5 text-sm font-semibold text-primary border border-primary/15 hover:bg-primary/5 transition-colors cursor-pointer">

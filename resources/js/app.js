@@ -314,6 +314,22 @@ const initHomeLoader = () => {
   const loader = document.querySelector("[data-page-loader]");
   const loaderSvg = loader?.querySelector("[data-page-loader-svg]");
 
+  let loaderSeen = false;
+
+  try {
+    loaderSeen = sessionStorage.getItem("home-loader-seen") === "1";
+  } catch (error) {
+    // Session storage can be blocked in private contexts; keep the
+    // existing first-visit behavior in that case.
+  }
+
+  if (loaderSeen) {
+    document.documentElement.classList.remove("home-loader-active");
+    delete document.documentElement.dataset.homeLoaderActive;
+    loader?.remove();
+    return;
+  }
+
   if (
     !loader ||
     !loaderSvg ||
@@ -385,3 +401,17 @@ const initHomeLoader = () => {
 };
 
 initHomeLoader();
+
+// Livewire SPA navigation replaces the page DOM without reloading this
+// bundle. Re-run the loader lifecycle for a newly rendered home page and
+// clear stale state when leaving the home page.
+if (!window.__homeLoaderNavigationRegistered) {
+  window.__homeLoaderNavigationRegistered = true;
+
+  document.addEventListener("livewire:navigating", () => {
+    document.documentElement.classList.remove("home-loader-active");
+    delete document.documentElement.dataset.homeLoaderActive;
+  });
+
+  document.addEventListener("livewire:navigated", initHomeLoader);
+}
