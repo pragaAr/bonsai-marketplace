@@ -9,7 +9,9 @@ use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Admin\Master\ProductCategories;
 use App\Livewire\Admin\Master\Species;
 use App\Livewire\Admin\Master\Tags;
-use App\Livewire\Admin\Seller\ProductApproval as AdminProductApproval;
+use App\Livewire\Admin\Product\Approval as AdminProductApproval;
+use App\Livewire\Admin\Product\Index as AdminProducts;
+use App\Livewire\Admin\Seller\Index as AdminSellerIndex;
 use App\Livewire\Admin\Seller\Request as AdminSellerRequest;
 use App\Livewire\Article;
 use App\Livewire\ArticleDetail;
@@ -121,6 +123,11 @@ Route::prefix('admin')
         // Route untuk kelola permintaan menjadi penjual
         Route::get('/seller/request', AdminSellerRequest::class)->name('seller.request');
 
+        Route::get('/seller', AdminSellerIndex::class)->name('seller.index');
+
         // Route untuk kelola persetujuan produk
         Route::get('/products/approval', AdminProductApproval::class)->name('products.approval');
+
+        // Produk yang telah disetujui
+        Route::get('/products', AdminProducts::class)->name('products');
     });

@@ -94,6 +94,11 @@
 
                 <span>Kategori Artikel</span>
               </a>
+              <a href="#" class="{{ $subLinkBase }}">
+                <x-icons.minus class="w-4 h-4" />
+
+                <span>Artikel</span>
+              </a>
             </div>
           </details>
 
@@ -130,24 +135,18 @@
             </summary>
             <div
               class="flex flex-col px-4 py-2 space-y-1 text-cream/90">
+              <a href="{{ route('admin.seller.index') }}" wire:navigate
+                class="{{ $subLinkBase }} {{ request()->routeIs('admin.seller.index') ? $activeLink : '' }}">
+                <x-icons.minus class="w-4 h-4" />
+
+                <span>Daftar Seller</span>
+              </a>
               <a href="{{ route('admin.seller.request') }}"
                 wire:navigate
                 class="{{ $subLinkBase }} {{ request()->routeIs('admin.seller.request') ? $activeLink : '' }}">
                 <x-icons.minus class="w-4 h-4" />
 
                 <span>Pengajuan Seller</span>
-              </a>
-              <a href="{{ route('admin.products.approval') }}"
-                wire:navigate
-                class="{{ $subLinkBase }} {{ request()->routeIs('admin.products.approval') ? $activeLink : '' }}">
-                <x-icons.minus class="w-4 h-4" />
-
-                <span>Persetujuan Produk</span>
-              </a>
-              <a href="#" class="{{ $subLinkBase }}">
-                <x-icons.minus class="w-4 h-4" />
-
-                <span>Daftar Seller</span>
               </a>
               <a href="#" class="{{ $subLinkBase }}">
                 <x-icons.minus class="w-4 h-4" />
@@ -158,6 +157,54 @@
                 <x-icons.minus class="w-4 h-4" />
 
                 <span>Seller Reviews</span>
+              </a>
+            </div>
+          </details>
+
+          <div class="h-px bg-cream/20 w-full my-3"></div>
+
+          <details class="group rounded bg-white/5" open>
+            <summary
+              class="flex items-center justify-between border-l-2 border-transparent px-3 py-2 rounded-r cursor-pointer transition-colors duration-150 hover:border-accent hover:bg-accent/10 hover:text-white">
+              <span class="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path
+                    d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                  <path d="m3.3 7 8.7 5 8.7-5" />
+                  <path d="M12 22V12" />
+                </svg>
+
+                <span class="text-cream">Manage
+                  Products</span>
+              </span>
+              <svg
+                class="w-4 h-4 text-cream transition-transform duration-150 group-open:-rotate-180"
+                viewBox="0 0 20 20" fill="currentColor"
+                aria-hidden="true">
+                <path fill-rule="evenodd"
+                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.188l3.71-3.957a.75.75 0 111.08 1.04l-4.25 4.535a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z"
+                  clip-rule="evenodd" />
+              </svg>
+            </summary>
+            <div
+              class="flex flex-col px-4 py-2 space-y-1 text-cream/90">
+              <a href="{{ route('admin.products') }}"
+                wire:navigate
+                class="{{ $subLinkBase }} {{ request()->routeIs('admin.products') ? $activeLink : '' }}">
+                <x-icons.minus class="w-4 h-4" />
+
+                <span>Daftar Produk</span>
+              </a>
+              <a href="{{ route('admin.products.approval') }}"
+                wire:navigate
+                class="{{ $subLinkBase }} {{ request()->routeIs('admin.products.approval') ? $activeLink : '' }}">
+                <x-icons.minus class="w-4 h-4" />
+
+                <span>Persetujuan Produk</span>
               </a>
             </div>
           </details>
