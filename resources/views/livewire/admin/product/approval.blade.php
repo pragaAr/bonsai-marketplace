@@ -203,27 +203,28 @@
 
           <div
             class="flex items-center justify-between py-2 border-b border-primary/5">
-            <div>
-              <span
-                class="text-accent text-[10px] font-bold uppercase tracking-wider bg-accent/5 px-2.5 py-1 rounded-md border border-accent/10">
-                {{ $selectedProduct->category->name }}
-              </span>
-              <h3
-                class="text-lg font-bold text-primary mt-1.5">
-                {{ $selectedProduct->name }}
-              </h3>
-            </div>
+            <h3
+              class="text-lg font-bold text-primary mt-1.5">
+              {{ $selectedProduct->name }}
+            </h3>
+            <span
+              class="text-accent text-[10px] font-bold uppercase tracking-wider bg-accent/5 px-2.5 py-1 rounded-md border border-accent/10">
+              {{ $selectedProduct->category->name }}
+            </span>
           </div>
+
+          @php
+            $imageCount = $selectedProduct
+                ->getMedia('images')
+                ->count();
+          @endphp
 
           <div
             class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
             <!-- Images Gallery -->
             <div class="space-y-3">
-              <p
-                class="text-xs font-semibold text-accent uppercase tracking-wider">
-                Gambar Produk
-              </p>
-              <div class="grid grid-cols-2 gap-3">
+              <div
+                class="grid {{ $imageCount >= 2 ? 'grid-cols-2' : 'grid-cols-1' }} gap-3">
                 @forelse($selectedProduct->getMedia('images') as $media)
                   <a href="{{ $media->getUrl() }}"
                     target="_blank"
@@ -233,7 +234,7 @@
                   </a>
                 @empty
                   <div
-                    class="col-span-2 aspect-square rounded-xl border border-dashed border-primary/20 bg-primary/[0.01] flex flex-col items-center justify-center text-primary/40">
+                    class="col-span-full aspect-square rounded-xl border border-dashed border-primary/20 bg-primary/[0.01] flex flex-col items-center justify-center text-primary/40">
                     <svg xmlns="http://www.w3.org/2000/svg"
                       class="h-8 w-8 mb-2" fill="none"
                       viewBox="0 0 24 24"
@@ -342,7 +343,7 @@
           <div class="space-y-2">
             <p
               class="text-xs font-semibold text-accent uppercase tracking-wider">
-              Spesifikasi Tambahan (Polymorphic)
+              Spesifikasi Tambahan
             </p>
             <div
               class="bg-primary/[0.02] border border-primary/5 rounded-xl p-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -615,29 +616,65 @@
       </x-modal.header>
 
       <form wire:submit="filterList"
-        x-data="{ pendingFilterStatus: '{{ $filterStatus }}' }"
-        x-on:submit="$wire.set('filterStatus', pendingFilterStatus)"
-        x-on:filter-reset.window="pendingFilterStatus = ''"
+        x-data="{ pendingFilterStatus: '{{ $filterStatus }}', pendingFilterSeller: '{{ $filterSeller }}', pendingFilterCategory: '{{ $filterCategory }}' }"
+        x-on:submit="$wire.set('filterStatus', pendingFilterStatus); $wire.set('filterSeller', pendingFilterSeller); $wire.set('filterCategory', pendingFilterCategory)"
+        x-on:filter-reset.window="pendingFilterStatus = 'pending'; pendingFilterSeller = ''; pendingFilterCategory = ''"
         class="space-y-4 my-4 flex-1 text-left">
         <div>
           <label
             class="block text-sm font-medium text-primary mb-1">
             Status Pengajuan
           </label>
-          <div x-data="tomSelect({ lazy: true, show: @entangle('showFilterModal'), value: '{{ $filterStatus }}', placeholder: 'Semua Status', ref: 'selectFilterStatus' })" wire:ignore
+          <div x-data="tomSelect({ lazy: true, show: @entangle('showFilterModal'), value: '{{ $filterStatus }}', placeholder: 'Status Pengajuan', ref: 'selectFilterStatus' })" wire:ignore
             class="w-full"
             x-on:change.stop="pendingFilterStatus = $event.target.value"
-            x-on:filter-reset.window="value = ''; tomselect && tomselect.clear(true)">
+            x-on:filter-reset.window="pendingFilterStatus = 'pending'; value = 'pending'; tomselect && tomselect.setValue('pending', true)">
             <select x-ref="selectFilterStatus"
               class="w-full">
-              <option value=""disabled>Semua Status
-              </option>
               <option value="pending">Menunggu Persetujuan
               </option>
-              <option value="approved">Disetujui</option>
               <option value="rejected">Ditolak</option>
-              <option value="draft">Draft (Seller)
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label
+            class="block text-sm font-medium text-primary mb-1">
+            Penjual
+          </label>
+          <div x-data="tomSelect({ lazy: true, show: @entangle('showFilterModal'), value: '{{ $filterSeller }}', placeholder: 'Semua Penjual', ref: 'selectFilterSeller' })" wire:ignore
+            class="w-full"
+            x-on:change.stop="pendingFilterSeller = $event.target.value"
+            x-on:filter-reset.window="pendingFilterSeller = ''; value = ''; tomselect && tomselect.clear(true)">
+            <select x-ref="selectFilterSeller"
+              class="w-full">
+              <option value="">Semua Penjual</option>
+              @foreach ($sellers as $seller)
+                <option value="{{ $seller->id }}">
+                  {{ $seller->name }}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label
+            class="block text-sm font-medium text-primary mb-1">
+            Kategori
+          </label>
+          <div x-data="tomSelect({ lazy: true, show: @entangle('showFilterModal'), value: '{{ $filterCategory }}', placeholder: 'Semua Kategori', ref: 'selectFilterCategory' })" wire:ignore
+            class="w-full"
+            x-on:change.stop="pendingFilterCategory = $event.target.value"
+            x-on:filter-reset.window="pendingFilterCategory = ''; value = ''; tomselect && tomselect.clear(true)">
+            <select x-ref="selectFilterCategory"
+              class="w-full">
+              <option value="">Semua Kategori
               </option>
+              @foreach ($categories as $category)
+                <option value="{{ $category->id }}">
+                  {{ $category->name }}</option>
+              @endforeach
             </select>
           </div>
         </div>

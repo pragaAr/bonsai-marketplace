@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Livewire\Admin\Seller;
+namespace App\Livewire\Admin\Product;
 
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ProductApproval extends Component
+class Approval extends Component
 {
     use WithPagination;
 
@@ -18,6 +20,12 @@ class ProductApproval extends Component
 
     #[Url(as: 'status')]
     public string $filterStatus = 'pending';
+
+    #[Url(as: 'seller')]
+    public string $filterSeller = '';
+
+    #[Url(as: 'category')]
+    public string $filterCategory = '';
 
     public bool $showFilterModal = false;
 
@@ -36,6 +44,10 @@ class ProductApproval extends Component
 
     public function filterList(): void
     {
+        if (! in_array($this->filterStatus, ['pending', 'rejected'], true)) {
+            $this->filterStatus = 'pending';
+        }
+
         $this->showFilterModal = false;
     }
 
@@ -45,6 +57,20 @@ class ProductApproval extends Component
     }
 
     public function updatingFilterStatus(): void
+    {
+        if (! in_array($this->filterStatus, ['pending', 'rejected'], true)) {
+            $this->filterStatus = 'pending';
+        }
+
+        $this->resetPage();
+    }
+
+    public function updatingFilterSeller(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingFilterCategory(): void
     {
         $this->resetPage();
     }
@@ -137,20 +163,27 @@ class ProductApproval extends Component
 
     public function resetFilters(): void
     {
-        $this->reset(['search', 'filterStatus']);
+        $this->reset(['search', 'filterStatus', 'filterSeller', 'filterCategory']);
         $this->filterStatus = 'pending';
         $this->resetPage();
     }
 
     private function hasActiveFilter(): bool
     {
-        return $this->search !== '' || $this->filterStatus !== 'pending';
+        return $this->search !== ''
+            || $this->filterStatus !== 'pending'
+            || $this->filterSeller !== ''
+            || $this->filterCategory !== '';
     }
 
     #[Layout('layouts.dashboard')]
     #[Title('Persetujuan Produk')]
     public function render()
     {
+        $status = in_array($this->filterStatus, ['pending', 'rejected'], true)
+            ? $this->filterStatus
+            : 'pending';
+
         $query = Product::query()
             ->with(['category', 'productable', 'seller', 'approvedBy']);
 
@@ -164,15 +197,35 @@ class ProductApproval extends Component
             });
         }
 
-        if ($this->filterStatus) {
-            $query->where('status', $this->filterStatus);
+        $query->where('status', $status);
+
+        if ($this->filterSeller) {
+            $query->where('seller_id', $this->filterSeller);
+        }
+
+        if ($this->filterCategory) {
+            $query->where('category_id', $this->filterCategory);
         }
 
         $products = $query->latest()->paginate(15);
+        $sellers = User::query()
+            ->whereIn('id', Product::query()
+                ->whereIn('status', ['pending', 'rejected'])
+                ->whereNotNull('seller_id')
+                ->select('seller_id')
+                ->distinct())
+            ->orderBy('name')
+            ->get(['id', 'name']);
+        $categories = Category::query()
+            ->whereHas('products', fn ($q) => $q->whereIn('status', ['pending', 'rejected']))
+            ->orderBy('name')
+            ->get(['id', 'name']);
         $selectedProduct = $this->selectedProductId ? Product::with(['category', 'productable', 'seller', 'tags'])->find($this->selectedProductId) : null;
 
-        return view('livewire.admin.seller.product-approval', [
+        return view('livewire.admin.product.approval', [
             'products' => $products,
+            'sellers' => $sellers,
+            'categories' => $categories,
             'selectedProduct' => $selectedProduct,
             'hasActiveFilter' => $this->hasActiveFilter(),
             'title' => 'Persetujuan Produk',
