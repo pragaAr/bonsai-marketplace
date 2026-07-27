@@ -180,9 +180,18 @@
                       class="h-3.5 w-3.5 text-current" />
                     <span wire:loading.remove
                       wire:target="showDetail({{ $product->id }})">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4" fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
                     </span>
                   </button>
@@ -326,7 +335,7 @@
       x-transition:leave="transition ease-in duration-200"
       x-transition:leave-start="opacity-100 translate-y-0"
       x-transition:leave-end="opacity-0 translate-y-8"
-      class="bg-white rounded-2xl p-6 w-full max-w-3xl flex flex-col max-h-[85vh]">
+      class="bg-white rounded-2xl p-6 w-full max-w-4xl flex flex-col max-h-[85vh]">
 
       <x-modal.header
         wire:click="$set('showDetailModal', false)">
@@ -335,165 +344,323 @@
 
       @if ($selectedProduct)
         <div
-          class="space-y-4 overflow-y-auto pr-2 flex-1 sidebar-scroll my-4 text-left">
+          class="space-y-6 overflow-y-auto pr-2 flex-1 sidebar-scroll my-4 text-left text-sm text-primary">
 
-          {{-- Foto Produk --}}
+          {{-- Nama + Badge Kategori --}}
+          <div
+            class="flex items-center justify-between py-2 border-b border-primary/5">
+            <h3
+              class="text-lg font-bold text-primary mt-1.5">
+              {{ $selectedProduct->name }}
+            </h3>
+            <span
+              class="text-accent text-[10px] font-bold uppercase tracking-wider bg-accent/5 px-2.5 py-1 rounded-md border border-accent/10">
+              {{ $selectedProduct->category->name }}
+            </span>
+          </div>
+
           @php
-            $images = $selectedProduct->getMedia('images');
+            $imageCount = $selectedProduct->getMedia('images')->count();
           @endphp
-          @if ($images->isNotEmpty())
-            <div class="flex gap-3 overflow-x-auto pb-1">
-              @foreach ($images as $media)
-                <img src="{{ $media->getUrl() }}"
-                  alt="{{ $selectedProduct->name }}"
-                  class="h-28 w-28 object-cover rounded-xl border border-primary/10 flex-shrink-0" />
-              @endforeach
-            </div>
-          @else
-            <div class="flex gap-3">
-              <img src="{{ $selectedProduct->image_url }}"
-                alt="{{ $selectedProduct->name }}"
-                class="h-28 w-28 object-cover rounded-xl border border-primary/10 flex-shrink-0" />
-            </div>
-          @endif
 
-          {{-- Info Utama --}}
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div
-              class="bg-primary/[0.02] p-4 rounded-xl border border-primary/5">
-              <h3
-                class="text-xs font-semibold text-accent uppercase tracking-wider mb-2">
-                Informasi Produk</h3>
-              <div class="space-y-1 text-sm text-primary">
-                <div><span
-                    class="text-primary/60 font-medium font-sans">Nama:</span>
-                  {{ $selectedProduct->name }}</div>
-                <div><span
-                    class="text-primary/60 font-medium font-sans">Kategori:</span>
-                  {{ $selectedProduct->category->name }}</div>
-                <div><span
-                    class="text-primary/60 font-medium font-sans">Harga:</span>
-                  Rp {{ number_format($selectedProduct->price, 0, ',', '.') }}</div>
-                <div><span
-                    class="text-primary/60 font-medium font-sans">Stok:</span>
-                  {{ $selectedProduct->stockLabel() }}</div>
-                <div><span
-                    class="text-primary/60 font-medium font-sans">Unggulan:</span>
-                  {{ $selectedProduct->featured ? 'Ya' : 'Tidak' }}</div>
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+
+            {{-- Galeri Gambar --}}
+            <div class="space-y-3">
+              <div
+                class="grid {{ $imageCount >= 2 ? 'grid-cols-2' : 'grid-cols-1' }} gap-3">
+                @forelse($selectedProduct->getMedia('images') as $media)
+                  <a href="{{ $media->getUrl() }}"
+                    target="_blank"
+                    class="block aspect-square rounded-xl border border-primary/10 overflow-hidden bg-primary/[0.02] hover:opacity-90 transition duration-150">
+                    <img src="{{ $media->getUrl() }}"
+                      class="w-full h-full object-cover" />
+                  </a>
+                @empty
+                  <div
+                    class="col-span-full aspect-square rounded-xl border border-dashed border-primary/20 bg-primary/[0.01] flex flex-col items-center justify-center text-primary/40">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      class="h-8 w-8 mb-2" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span class="text-xs font-medium">Gambar
+                      Default</span>
+                  </div>
+                @endforelse
               </div>
             </div>
 
+            {{-- Detail Listing --}}
             <div
-              class="bg-primary/[0.02] p-4 rounded-xl border border-primary/5">
-              <h3
-                class="text-xs font-semibold text-accent uppercase tracking-wider mb-2">
-                Status & Waktu</h3>
-              <div class="space-y-1 text-sm text-primary">
+              class="space-y-4 bg-primary/[0.02] border border-primary/5 rounded-xl p-4">
+              <p
+                class="text-xs font-semibold text-accent uppercase tracking-wider pb-1 border-b border-primary/5">
+                Detail Listing
+              </p>
+              <div
+                class="grid grid-cols-2 gap-y-3 gap-x-4">
                 <div>
-                  <span class="text-primary/60 font-medium font-sans">Status:</span>
+                  <span
+                    class="text-xs text-primary/60 block">Harga</span>
+                  <span
+                    class="font-bold text-base text-primary">Rp
+                    {{ number_format($selectedProduct->price, 0, ',', '.') }}</span>
+                </div>
+                <div>
+                  <span
+                    class="text-xs text-primary/60 block">Stok</span>
+                  <span
+                    class="font-bold text-base text-primary">{{ $selectedProduct->stockLabel() }}</span>
+                </div>
+                <div>
+                  <span
+                    class="text-xs text-primary/60 block">Status</span>
                   @if ($selectedProduct->status === 'draft')
-                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">Draft</span>
+                    <span
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">Draft</span>
                   @elseif ($selectedProduct->status === 'pending')
-                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">Menunggu Persetujuan</span>
+                    <span
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">Menunggu
+                      Persetujuan</span>
                   @elseif ($selectedProduct->status === 'approved')
-                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">Disetujui</span>
+                    <span
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">Disetujui</span>
                   @elseif ($selectedProduct->status === 'rejected')
-                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">Ditolak</span>
+                    <span
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">Ditolak</span>
                   @endif
                 </div>
-                <div><span
-                    class="text-primary/60 font-medium font-sans">Dibuat:</span>
-                  {{ $selectedProduct->created_at->isoFormat('D MMMM YYYY, HH:mm') }}</div>
+                <div>
+                  <span
+                    class="text-xs text-primary/60 block">Unggulan</span>
+                  <span
+                    class="font-medium text-primary">{{ $selectedProduct->featured ? 'Ya' : 'Tidak' }}</span>
+                </div>
+                <div>
+                  <span
+                    class="text-xs text-primary/60 block">Dibuat Pada</span>
+                  <span
+                    class="text-xs text-primary/80 block">{{ $selectedProduct->created_at->isoFormat('D MMMM YYYY, HH:mm') }}</span>
+                </div>
                 @if ($selectedProduct->approved_at)
-                  <div><span
-                      class="text-primary/60 font-medium font-sans">Disetujui:</span>
-                    {{ $selectedProduct->approved_at->isoFormat('D MMMM YYYY, HH:mm') }}</div>
-                  <div><span
-                      class="text-primary/60 font-medium font-sans">Oleh:</span>
-                    {{ $selectedProduct->approvedBy?->name ?? 'System' }}</div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Disetujui Pada</span>
+                    <span
+                      class="text-xs text-primary/80 block">{{ $selectedProduct->approved_at->isoFormat('D MMMM YYYY, HH:mm') }}</span>
+                  </div>
                 @endif
               </div>
+
+              {{-- Tags tersemat di dalam panel --}}
+              @if ($selectedProduct->tags->isNotEmpty())
+                <div
+                  class="mt-4 border-t border-primary/5 pt-3">
+                  <span
+                    class="text-xs text-primary/60 block mb-1.5">Tags
+                    Produk</span>
+                  <div class="flex flex-wrap gap-1.5">
+                    @foreach ($selectedProduct->tags as $tag)
+                      <span
+                        class="px-2 py-0.5 rounded bg-primary text-cream text-[10px]">#{{ $tag->name }}</span>
+                    @endforeach
+                  </div>
+                </div>
+              @endif
             </div>
           </div>
 
-          {{-- Deskripsi Singkat --}}
-          @if ($selectedProduct->short_description)
-            <div
-              class="bg-primary/[0.02] p-4 rounded-xl border border-primary/5 space-y-2">
-              <h3
-                class="text-xs font-semibold text-accent uppercase tracking-wider">
-                Deskripsi Singkat</h3>
-              <p class="text-sm text-primary/80">{{ $selectedProduct->short_description }}</p>
-            </div>
-          @endif
-
           {{-- Deskripsi --}}
-          @if ($selectedProduct->description)
+          <div class="space-y-2">
+            <p
+              class="text-xs font-semibold text-accent uppercase tracking-wider">
+              Deskripsi Produk
+            </p>
             <div
-              class="bg-primary/[0.02] p-4 rounded-xl border border-primary/5 space-y-2">
-              <h3
-                class="text-xs font-semibold text-accent uppercase tracking-wider">
-                Deskripsi</h3>
-              <p class="text-sm text-primary/80 leading-relaxed">{{ $selectedProduct->description }}</p>
+              class="bg-primary/[0.02] border border-primary/5 rounded-xl p-4 leading-relaxed">
+              <p class="font-medium text-primary text-sm">
+                {{ $selectedProduct->short_description }}
+              </p>
+              <div class="h-px bg-primary/5 my-2.5"></div>
+              <p
+                class="text-primary/80 text-xs whitespace-pre-line">
+                {{ $selectedProduct->description }}
+              </p>
             </div>
-          @endif
+          </div>
 
-          {{-- Detail Spesifik Kategori --}}
+          {{-- Spesifikasi Tambahan (Polimorfik) --}}
           @if ($selectedProduct->productable)
-            <div
-              class="bg-primary/[0.02] p-4 rounded-xl border border-primary/5">
-              <h3
-                class="text-xs font-semibold text-accent uppercase tracking-wider mb-2">
-                Detail Spesifik</h3>
-              <div class="space-y-1 text-sm text-primary">
+            <div class="space-y-2">
+              <p
+                class="text-xs font-semibold text-accent uppercase tracking-wider">
+                Spesifikasi Tambahan
+              </p>
+              <div
+                class="bg-primary/[0.02] border border-primary/5 rounded-xl p-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
                 @if ($selectedProduct->isPlant())
                   @php $detail = $selectedProduct->productable; @endphp
-                  <div><span class="text-primary/60 font-medium font-sans">Spesies:</span> {{ $detail->species?->name ?? '-' }}</div>
-                  <div><span class="text-primary/60 font-medium font-sans">Tingkat Perawatan:</span> {{ $detail->care_level ?? '-' }}</div>
-                  <div><span class="text-primary/60 font-medium font-sans">Cahaya:</span> {{ $detail->light ?? '-' }}</div>
-                  <div><span class="text-primary/60 font-medium font-sans">Penyiraman:</span> {{ $detail->watering ?? '-' }}</div>
-                  <div><span class="text-primary/60 font-medium font-sans">Ukuran Pot:</span> {{ $detail->pot_size ?? '-' }}</div>
-                @elseif ($selectedProduct->isPot())
-                  @php $detail = $selectedProduct->productable; @endphp
-                  <div><span class="text-primary/60 font-medium font-sans">Material:</span> {{ $detail->material ?? '-' }}</div>
-                  <div><span class="text-primary/60 font-medium font-sans">Bentuk:</span> {{ $detail->shape ?? '-' }}</div>
-                  <div><span class="text-primary/60 font-medium font-sans">Dimensi:</span> {{ $detail->dimensions ?? '-' }}</div>
-                  <div><span class="text-primary/60 font-medium font-sans">Warna:</span> {{ $detail->color ?? '-' }}</div>
-                @elseif ($selectedProduct->isFertilizer())
-                  @php $detail = $selectedProduct->productable; @endphp
-                  <div><span class="text-primary/60 font-medium font-sans">Tipe:</span> {{ $detail->type ?? '-' }}</div>
-                  <div><span class="text-primary/60 font-medium font-sans">Berat:</span> {{ $detail->weight ?? '-' }}</div>
-                @elseif ($selectedProduct->isTool())
-                  @php $detail = $selectedProduct->productable; @endphp
-                  <div><span class="text-primary/60 font-medium font-sans">Material:</span> {{ $detail->material ?? '-' }}</div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Spesies / Scientific Name</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block italic">{{ optional($detail->species)->scientific_name ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Nama Umum / Common Name</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ optional($detail->species)->common_name ?: '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Tingkat Perawatan</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->care_level ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Pencahayaan</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->light ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Penyiraman</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->watering ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Ukuran Pot</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->pot_size ?: '-' }}</span>
+                  </div>
                 @elseif ($selectedProduct->isMedia())
                   @php $detail = $selectedProduct->productable; @endphp
-                  <div><span class="text-primary/60 font-medium font-sans">Tipe Media:</span> {{ $detail->type ?? '-' }}</div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Tipe Media Tanam</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->type ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Berat Bersih</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->weight ?: '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Volume</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->volume ?: '-' }}</span>
+                  </div>
+                @elseif ($selectedProduct->isPot())
+                  @php $detail = $selectedProduct->productable; @endphp
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Bahan Pot</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->material ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Bentuk Pot</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->shape ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Dimensi Pot</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->dimensions ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Warna Pot</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->color ?? '-' }}</span>
+                  </div>
+                @elseif ($selectedProduct->isFertilizer())
+                  @php $detail = $selectedProduct->productable; @endphp
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Tipe Pupuk</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->type ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Formulasi</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->form ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Berat / Kemasan</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->weight ?? '-' }}</span>
+                  </div>
+                @elseif ($selectedProduct->isTool())
+                  @php $detail = $selectedProduct->productable; @endphp
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Bahan Alat</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->material ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Merek</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->brand ?? '-' }}</span>
+                  </div>
+                  <div>
+                    <span
+                      class="text-xs text-primary/60 block">Berat Alat</span>
+                    <span
+                      class="font-medium text-primary mt-0.5 block">{{ $detail->weight ?: '-' }}</span>
+                  </div>
                 @endif
               </div>
             </div>
           @endif
 
-          {{-- Tags --}}
-          @if ($selectedProduct->tags->isNotEmpty())
+          {{-- Info Disetujui --}}
+          @if ($selectedProduct->status === 'approved' && $selectedProduct->approved_at)
             <div
-              class="bg-primary/[0.02] p-4 rounded-xl border border-primary/5 space-y-2">
-              <h3
-                class="text-xs font-semibold text-accent uppercase tracking-wider">
-                Tag</h3>
-              <div class="flex flex-wrap gap-2">
-                @foreach ($selectedProduct->tags as $tag)
-                  <span
-                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary/80">
-                    {{ $tag->name }}
-                  </span>
-                @endforeach
+              class="bg-green-50 border border-green-200/50 p-4 rounded-xl flex items-center justify-between">
+              <div>
+                <span
+                  class="text-xs text-green-600 block uppercase font-bold tracking-wider">Info
+                  Disetujui</span>
+                <p
+                  class="text-green-900 font-medium text-sm">
+                  Disetujui oleh:
+                  {{ optional($selectedProduct->approvedBy)->name ?? 'System' }}
+                </p>
+              </div>
+              <div class="text-right">
+                <span
+                  class="text-xs text-primary/55 block">Tanggal
+                  Approval</span>
+                <span
+                  class="text-xs text-green-950 font-bold block">
+                  {{ $selectedProduct->approved_at->isoFormat('D MMMM YYYY, HH:mm') }}
+                </span>
               </div>
             </div>
           @endif
 
           {{-- Alasan Penolakan --}}
-          @if ($selectedProduct->status === 'rejected' && $selectedProduct->rejection_reason)
+          @if (
+              $selectedProduct->status === 'rejected' &&
+                  $selectedProduct->rejection_reason)
             <div
               class="bg-red-50 border border-red-200/50 p-4 rounded-xl space-y-1">
               <h4
@@ -506,7 +673,8 @@
           @endif
         </div>
 
-        <div class="flex gap-3 pt-4">
+        <div
+          class="flex gap-3 pt-4 border-t border-primary/5">
           <x-forms.cancel-button
             wire:click="$set('showDetailModal', false)">
             Tutup
@@ -520,6 +688,7 @@
       @endif
     </div>
   </div>
+
   <x-page.delete-modal :show="'showDeleteModal'" action="delete"
     title="Konfirmasi Hapus Produk"
     message="Yakin ingin menghapus produk ini?"
