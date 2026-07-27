@@ -135,7 +135,8 @@
             </summary>
             <div
               class="flex flex-col px-4 py-2 space-y-1 text-cream/90">
-              <a href="{{ route('admin.seller.index') }}" wire:navigate
+              <a href="{{ route('admin.seller.index') }}"
+                wire:navigate
                 class="{{ $subLinkBase }} {{ request()->routeIs('admin.seller.index') ? $activeLink : '' }}">
                 <x-icons.minus class="w-4 h-4" />
 
@@ -301,7 +302,7 @@
                   <path d="M16 10a4 4 0 0 1-8 0"></path>
                 </svg>
 
-                <span class="text-cream">Toko Saya</span>
+                <span class="text-cream">Toko</span>
               </span>
               <svg
                 class="w-4 h-4 text-cream transition-transform duration-150 group-open:-rotate-180"
@@ -319,13 +320,13 @@
                 class="{{ $subLinkBase }} {{ request()->routeIs('seller.products') || request()->routeIs('seller.products.*') ? $activeLink : '' }}">
                 <x-icons.minus class="w-4 h-4" />
 
-                <span>My Products</span>
+                <span>Produk</span>
               </a>
               <a href="#"
                 class="{{ $subLinkBase }}">
                 <x-icons.minus class="w-4 h-4" />
 
-                <span>Order Pesanan</span>
+                <span>Order</span>
               </a>
               <a href="#"
                 class="{{ $subLinkBase }}">
@@ -335,12 +336,6 @@
                   d="M5 4h10v2H5V4zm0 4h10v2H5V8zm0 4h10v2H5v-2z" />
                 </svg>
                 <span>Promosi & Diskon</span>
-              </a>
-              <a href="#"
-                class="{{ $subLinkBase }}">
-                <x-icons.minus class="w-4 h-4" />
-
-                <span>Stock Bonsai</span>
               </a>
             </div>
           </details>
