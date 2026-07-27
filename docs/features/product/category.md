@@ -2,15 +2,31 @@
 
 ## Tujuan
 
-Mengelompokkan produk berdasarkan jenis, kebutuhan, atau karakteristik bonsai.
+Mengelompokkan produk berdasarkan jenis untuk memudahkan browsing dan pengelolaan spesifikasi.
+
+## Status Implementasi
+
+Sudah diimplementasikan. Kategori dikelola oleh admin dan digunakan pada form produk seller.
+
+## Kategori yang Tersedia
+
+| Slug | Nama | Detail Model |
+|---|---|---|
+| `tanaman` | Tanaman Bonsai | `PlantDetail` |
+| `pot` | Pot | `PotDetail` |
+| `media-tanam` | Media Tanam | `MediaDetail` |
+| `pupuk` | Pupuk | `FertilizerDetail` |
+| `alat` | Alat | `ToolDetail` |
 
 ## Fitur yang Tersedia
 
-- Menampilkan daftar kategori produk.
-- Memudahkan pengguna menemukan produk yang sesuai.
-- Mendukung navigasi publik dan filter pencarian.
+- Menampilkan daftar kategori produk di halaman shop sebagai filter.
+- Setiap kategori menentukan atribut detail spesifik yang harus diisi seller saat membuat produk.
+- Admin dapat mengelola kategori dari `/admin/master/categories`.
 
 ## Catatan Implementasi
 
-- Kategori bisa dipakai untuk mengorganisasi katalog marketplace.
-- Struktur kategori dapat dikembangkan menjadi hirarki yang lebih kompleks.
+- Model: `App\Models\Category`.
+- Komponen admin: `App\Livewire\Admin\Master\ProductCategories`.
+- Kategori terhubung ke model `Product` melalui relasi `belongsTo`.
+- Slug kategori digunakan sebagai kunci untuk menentukan validasi dan model polimorfik yang digunakan (lihat ADR-006).

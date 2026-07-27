@@ -9,7 +9,7 @@ Dokumen ini berfungsi sebagai acuan prioritas pengembangan dan pelengkapan fitur
 - [x] Menyusun dokumentasi deployment
 - [x] Menyusun ADR untuk keputusan penting
 - [x] Menyusun dokumentasi fitur utama
-- [ ] Menjaga dokumen tetap sinkron dengan perubahan kode
+- [x] Menjaga dokumen tetap sinkron dengan perubahan kode
 - [ ] Menambahkan diagram alur inti jika dibutuhkan
 
 ## Prioritas 2 — Autentikasi dan Pengguna
@@ -19,39 +19,43 @@ Dokumen ini berfungsi sebagai acuan prioritas pengembangan dan pelengkapan fitur
 - [x] Register pengguna
 - [ ] Verifikasi email pengguna
 - [ ] Reset password
-- [ ] Perbaikan alur profil pengguna dan upload avatar
+- [x] Upload dan ganti avatar profil
 - [ ] Validasi dan pengelolaan data profil yang lebih lengkap
 
 ## Prioritas 3 — Seller dan Produk
 
 - [x] Pengajuan menjadi seller
-- [x] Review seller oleh admin
-- [x] Role dan permission dasar
-- [ ] CRUD produk lengkap untuk seller
-- [ ] Approval produk oleh admin
-- [ ] Dashboard seller yang lebih lengkap
-- [ ] Manajemen gambar produk dan media koleksi yang lebih matang
-- [ ] Validasi input produk dan error handling
+- [x] Review seller oleh admin (approve, reject, ban, delete)
+- [x] Role dan permission dasar (Spatie Permission)
+- [x] CRUD produk lengkap untuk seller (form multi-step)
+- [x] Approval produk oleh admin (approve / reject dengan alasan)
+- [x] Dashboard seller (dasar)
+- [x] Manajemen gambar produk (upload, hapus individual, maks. 4 gambar)
+- [x] Validasi input produk per kategori dan error handling
+- [x] Modal detail produk di daftar produk seller
+- [ ] Dashboard seller yang lebih informatif (statistik, ringkasan penjualan)
 
 ## Prioritas 4 — Katalog dan Konten Publik
 
-- [x] Halaman landing page
-- [x] Halaman detail produk
+- [x] Halaman landing page dengan produk featured
+- [x] Halaman detail produk (termasuk detail spesifik per kategori)
 - [x] Halaman shop / koleksi produk
 - [x] Halaman about
-- [x] Halaman artikel
-- [ ] Filter pencarian dan sorting produk yang lebih baik
-- [ ] Kategori produk yang lebih terstruktur
+- [x] Halaman artikel (daftar + detail)
+- [x] Halaman care guide
+- [x] Filter pencarian berdasarkan kategori di halaman shop
+- [ ] Filter dan sorting produk yang lebih lengkap (harga, stok, dsb.)
 - [ ] Wishlist pengguna
 - [ ] Fitur pencarian full-text / pencarian lanjutan
 
 ## Prioritas 5 — Order dan Transaksi
 
-- [x] Keranjang belanja dasar
-- [x] Checkout sederhana
-- [ ] Integrasi order database yang lebih nyata
-- [ ] Riwayat pesanan yang lebih lengkap
-- [ ] Integrasi pembayaran resmi
+- [x] Keranjang belanja berbasis session
+- [x] Checkout sederhana (mock order)
+- [x] Download invoice PDF dari keranjang
+- [ ] Integrasi order database yang nyata (simpan ke tabel orders)
+- [ ] Riwayat pesanan yang menampilkan data nyata
+- [ ] Integrasi pembayaran resmi (Midtrans, Xendit, atau sejenisnya)
 - [ ] Status pesanan dan workflow fulfillment
 - [ ] Notifikasi order ke seller dan pembeli
 
@@ -59,10 +63,13 @@ Dokumen ini berfungsi sebagai acuan prioritas pengembangan dan pelengkapan fitur
 
 - [x] Dashboard admin dasar
 - [x] Pengelolaan role dan permission
-- [x] Pengelolaan permintaan seller
-- [ ] Dashboard admin yang lebih informatif
+- [x] Pengelolaan permintaan seller (approve, reject, ban, delete)
+- [x] Pengelolaan produk seller (approval, daftar produk approved)
+- [x] Master data: kategori produk, tag, species, kategori artikel
+- [x] Daftar semua seller aktif
+- [ ] Dashboard admin yang lebih informatif (statistik sistem)
 - [ ] Laporan penjualan / laporan admin
-- [ ] Export data produk dan pengguna
+- [ ] Export data produk dan pengguna (Maatwebsite Excel sudah tersedia)
 - [ ] Audit log yang lebih mudah dipantau
 - [ ] Pengaturan konten dan modul admin lanjutan
 
@@ -71,8 +78,8 @@ Dokumen ini berfungsi sebagai acuan prioritas pengembangan dan pelengkapan fitur
 - [ ] Menambah unit test dan feature test
 - [ ] Menutup celah keamanan pada fitur sensitif
 - [ ] Menambah validasi input di semua form
-- [ ] Menambahkan handling error yang konsisten
-- [ ] Menjaga log aktivitas tetap relevan dan tidak berlebihan
+- [x] Handling error yang konsisten (toast notification)
+- [x] Activity log untuk aksi penting (produk, seller, cart, checkout)
 
 ## Prioritas 8 — Deployment dan Production Readiness
 
@@ -86,8 +93,8 @@ Dokumen ini berfungsi sebagai acuan prioritas pengembangan dan pelengkapan fitur
 
 ## Rekomendasi Urutan Pengerjaan
 
-1. Selesaikan CRUD produk seller dan approval admin.
-2. Lengkapi alur order dan pembayaran.
-3. Perkuat admin dashboard dan laporan.
-4. Tambah test dan hardening.
+1. Implementasikan order database nyata dan riwayat pesanan.
+2. Lengkapi alur pembayaran (integrasi gateway).
+3. Perkuat admin dashboard dengan statistik dan laporan.
+4. Tambah test dan hardening keamanan.
 5. Siapkan deployment dan monitoring produksi.

@@ -4,13 +4,18 @@
 
 Menangani proses pembayaran setelah checkout selesai.
 
-## Fitur yang Tersedia
+## Status Implementasi
 
-- Menampilkan instruksi pembayaran.
-- Menerima status pembayaran dari sistem atau gateway.
-- Mengupdate status pesanan setelah pembayaran berhasil.
+**Belum diimplementasikan.** Saat ini checkout hanya menghasilkan mock order tanpa integrasi gateway pembayaran nyata. Pilihan metode pembayaran tersedia di form checkout sebagai placeholder.
+
+## Metode yang Direncanakan
+
+- Rekening bersama (biaya layanan Rp 10.000)
+- QRIS
+- COD (Cash on Delivery)
 
 ## Catatan Implementasi
 
-- Saat ini bisa dikembangkan secara manual atau terintegrasi dengan gateway pembayaran.
-- Bagian ini penting untuk memastikan siklus transaksi selesai secara rapi.
+- Integrasi pembayaran resmi (Midtrans, Xendit, atau sejenisnya) belum ada.
+- Untuk status mock order saat ini, lihat [checkout.md](checkout.md).
+- Setelah integrasi pembayaran tersedia, status pesanan perlu diperbarui otomatis berdasarkan callback dari gateway.

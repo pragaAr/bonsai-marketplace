@@ -68,7 +68,7 @@ input {
 
 .ts-wrapper .ts-control {
   width: 100% !important;
-  padding: 0.625rem 2.5rem 0.625rem 1rem !important; /* py-2.5 pl-4 pr-10 */
+  padding: 0.5rem 2.5rem 0.5rem 1rem !important; /* py-2 pl-4 pr-10 */
   border-radius: 0.75rem !important; /* rounded-xl */
   border: 1px solid rgba(45, 62, 47, 0.2) !important; /* border-primary/20 */
   background-color: #ffffff !important;
@@ -79,7 +79,8 @@ input {
   transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
   display: flex !important;
   align-items: center !important;
-  min-height: 42px !important; /* match standard input height */
+  min-height: 38px !important; /* match input: py-2 + text-sm + border */
+  height: 38px !important;
 }
 
 /* Focused state */
@@ -164,4 +165,3 @@ input {
   background-color: rgba(45, 62, 47, 0.05) !important;
   color: #2d3e2f !important;
 }
-

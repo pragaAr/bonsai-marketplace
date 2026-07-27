@@ -2,15 +2,20 @@
 
 ## Tujuan
 
-Mengelola data alamat pengguna untuk kebutuhan checkout dan pengiriman.
+Mengelola data alamat pengguna yang digunakan saat checkout.
+
+## Status Implementasi
+
+Sudah diimplementasikan sebagai bagian dari profil pengguna (field tunggal).
 
 ## Fitur yang Tersedia
 
-- Menyimpan alamat utama pengguna.
-- Mempermudah proses checkout.
-- Mendukung kebutuhan transaksi yang lebih terstruktur.
+- Menyimpan dan mengedit alamat pengiriman utama dari halaman profil.
+- Alamat otomatis diisi ke form checkout saat pengguna melakukan pemesanan.
 
 ## Catatan Implementasi
 
-- Data alamat biasanya terkait dengan profil pengguna.
-- Dapat dikembangkan menjadi multi-address di masa depan.
+- Alamat disimpan sebagai kolom `address` (string) di tabel `users`.
+- Tidak ada tabel alamat terpisah — sistem saat ini menggunakan satu alamat per pengguna.
+- Multi-address (lebih dari satu alamat per pengguna) belum diimplementasikan.
+- Untuk mengedit alamat, pengguna menggunakan halaman profil (`GET /profile`).

@@ -2,16 +2,20 @@
 
 ## Tujuan
 
-Memberikan gambaran ringkas bagi penjual atas aktivitas dan status toko mereka.
+Memberikan panel operasional sederhana untuk penjual yang sudah disetujui.
 
-## Fitur yang Diharapkan
+## Status Implementasi
 
-- Ringkasan produk yang terdaftar.
-- Informasi status toko dan status seller.
+Sudah diimplementasikan (dashboard dasar).
+
+## Fitur yang Tersedia
+
+- Halaman awal bagi seller setelah login.
 - Akses cepat ke fitur manajemen produk.
-- Tampilan yang berbeda dari dashboard admin dan pelanggan.
 
 ## Catatan Implementasi
 
-- Dashboard seller disediakan melalui komponen Livewire.
-- Akses halaman ini hanya untuk user dengan role seller.
+- Komponen Livewire: `App\Livewire\Seller\Dashboard`.
+- Route: `GET /seller/dashboard` dengan nama `seller.dashboard`.
+- Akses halaman ini hanya untuk user dengan role `seller`.
+- Layout menggunakan `layouts.dashboard`.
