@@ -116,6 +116,30 @@
       })();
     </script>
 
+    <!-- Session Flash Toast (triggered after wire:navigate redirect) -->
+    @if (session()->has('toast'))
+      <script>
+        (function () {
+          var payload = @js(session('toast'));
+
+          function fireSessionToast() {
+            if (window.showToast) {
+              window.showToast(payload);
+            }
+          }
+
+          // Livewire SPA: fire after navigate completes
+          document.addEventListener('livewire:navigate-end', fireSessionToast, { once: true });
+          // Fallback: fire on DOMContentLoaded if already on target page
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', fireSessionToast, { once: true });
+          } else {
+            setTimeout(fireSessionToast, 100);
+          }
+        })();
+      </script>
+    @endif
+
     <!-- Main Content -->
     <div class="flex-1 flex flex-col overflow-y-auto">
       <!-- Header with collapse button -->
