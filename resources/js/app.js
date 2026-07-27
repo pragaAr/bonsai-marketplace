@@ -119,6 +119,7 @@ const registerAlpinePlugins = () => {
             : true,
         maxItems: config.maxItems || 1,
         plugins: config.plugins || [],
+        dropdownParent: config.dropdownParent || null,
         onChange: (val) => {
           this.value = val;
           selectEl.value = val ?? "";
