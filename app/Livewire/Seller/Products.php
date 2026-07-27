@@ -23,11 +23,31 @@ class Products extends Component
 
     public bool $showDeleteModal = false;
 
+    public bool $showDetailModal = false;
+
     public ?int $deleteId = null;
+
+    public ?Product $selectedProduct = null;
 
     public function openFilter(): void
     {
         $this->showFilterModal = true;
+    }
+
+    public function showDetail(int $id): void
+    {
+        $product = Product::where('seller_id', auth()->id())
+            ->with(['category', 'productable', 'media', 'tags', 'approvedBy'])
+            ->findOrFail($id);
+
+        // Lazy-load species only for PlantDetail to avoid RelationNotFoundException
+        // on other productable types (PotDetail, ToolDetail, etc.)
+        if ($product->isPlant() && $product->productable) {
+            $product->productable->load('species');
+        }
+
+        $this->selectedProduct = $product;
+        $this->showDetailModal = true;
     }
 
     public function filterList(): void
@@ -94,7 +114,7 @@ class Products extends Component
     }
 
     #[Layout('layouts.dashboard')]
-    #[Title('Daftar Produk Saya')]
+    #[Title('Produk Saya')]
     public function render()
     {
         $query = Product::query()
