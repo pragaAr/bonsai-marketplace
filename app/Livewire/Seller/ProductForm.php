@@ -12,6 +12,7 @@ use App\Models\Species;
 use App\Models\Tag;
 use App\Models\ToolDetail;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -47,6 +48,40 @@ class ProductForm extends Component
     public array $existingImages = []; // Array of arrays: ['id' => x, 'url' => y]
 
     public array $imagesToDelete = []; // Array of media ids to delete
+
+    public bool $showSuccessModal = false;
+
+    public string $successMessage = '';
+
+    public function resetFormAndCreateAnother(): void
+    {
+        $this->reset([
+            'product',
+            'isEditing',
+            'name',
+            'price',
+            'stock',
+            'short_description',
+            'description',
+            'selectedTags',
+            'images',
+            'existingImages',
+            'imagesToDelete',
+            'showSuccessModal',
+            'successMessage',
+        ]);
+
+        $this->stock = 1;
+        $this->resetPolymorphicFields();
+
+        $firstCategory = Category::first();
+        if ($firstCategory) {
+            $this->category_id = $firstCategory->id;
+        }
+
+        $this->resetValidation();
+        $this->dispatch('product-step-changed', step: 1);
+    }
 
     // Polymorphic details - PlantDetail
     public ?int $species_id = null;
@@ -182,20 +217,67 @@ class ProductForm extends Component
         }
     }
 
+    public function updatedImages(): void
+    {
+        if (! is_array($this->images)) {
+            $this->images = [];
+        }
+
+        $this->images = collect($this->images)
+            ->filter(fn ($file) => $file instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
+            ->values()
+            ->all();
+
+        $maxImages = 4;
+        $totalExisting = count($this->existingImages);
+        $maxNewAllowed = max(0, $maxImages - $totalExisting);
+
+        if (count($this->images) > $maxNewAllowed) {
+            $this->addError('images', 'Maksimal 4 gambar produk. Gambar berlebih dihapus otomatis.');
+            $this->images = array_slice($this->images, 0, $maxNewAllowed);
+        } else {
+            $this->resetErrorBag('images');
+        }
+
+        try {
+            $this->validateOnly('images.*');
+        } catch (ValidationException $e) {
+            // Error bag automatically gets populated with images.* errors
+        }
+    }
+
     public function removeExistingImage(int $mediaId): void
     {
         $this->imagesToDelete[] = $mediaId;
         $this->existingImages = collect($this->existingImages)
             ->filter(fn ($img) => $img['id'] !== $mediaId)
+            ->values()
             ->toArray();
+
+        $this->checkImageCount();
     }
 
     public function removeUploadImage(int $index): void
     {
         array_splice($this->images, $index, 1);
+        $this->checkImageCount();
     }
 
-    protected function getValidationRules(): array
+    private function checkImageCount(): void
+    {
+        $maxImages = 4;
+        $totalImages = count($this->existingImages) + count($this->images);
+
+        if ($totalImages > $maxImages) {
+            $this->addError('images', "Maksimal total gambar adalah {$maxImages} file.");
+        } elseif ($totalImages < 1) {
+            $this->addError('images', 'Minimal harus mengunggah 1 gambar produk.');
+        } else {
+            $this->resetErrorBag('images');
+        }
+    }
+
+    public function rules(): array
     {
         $rules = [
             'name' => 'required|string|max:255',
@@ -204,6 +286,7 @@ class ProductForm extends Component
             'short_description' => 'required|string|max:255',
             'description' => 'required|string|max:5000',
             'category_id' => 'required|exists:categories,id',
+            'images' => 'array|max:4',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
 
@@ -243,7 +326,7 @@ class ProductForm extends Component
         return $rules;
     }
 
-    protected function getValidationMessages(): array
+    public function messages(): array
     {
         return [
             'name.required' => 'Nama produk wajib diisi.',
@@ -272,10 +355,74 @@ class ProductForm extends Component
             'fertilizer_weight.required' => 'Berat pupuk wajib diisi.',
             'tool_material.required' => 'Bahan alat wajib diisi.',
             'tool_brand.required' => 'Merek alat wajib diisi.',
+            'images.max' => 'Maksimal hanya boleh mengunggah total 4 gambar produk.',
             'images.*.image' => 'File harus berupa gambar.',
             'images.*.mimes' => 'Format gambar hanya boleh jpeg, png, jpg, webp.',
             'images.*.max' => 'Ukuran gambar maksimal 2MB.',
         ];
+    }
+
+    protected function showStepForValidationErrors(array $keys): void
+    {
+        $stepOneFields = [
+            'category_id', 'name', 'price', 'stock',
+            'short_description', 'description',
+        ];
+
+        $step = 3;
+
+        if (array_intersect($stepOneFields, $keys)) {
+            $step = 1;
+        } elseif (collect($keys)->contains(fn ($key) => str_starts_with($key, 'images'))) {
+            $step = 3;
+        } elseif (count($keys) > 0) {
+            $step = 2;
+        }
+
+        $this->dispatch('product-validation-failed', step: $step);
+    }
+
+    protected function getStepValidationRules(int $step): array
+    {
+        $rules = $this->rules();
+
+        if ($step === 1) {
+            return array_intersect_key($rules, array_flip([
+                'name', 'price', 'stock', 'short_description',
+                'description', 'category_id',
+            ]));
+        }
+
+        if ($step === 2) {
+            return array_diff_key($rules, array_flip([
+                'name', 'price', 'stock', 'short_description',
+                'description', 'category_id', 'images.*',
+            ]));
+        }
+
+        return ['images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048'];
+    }
+
+    public function nextStep(int $step): void
+    {
+        try {
+            $this->validate(
+                $this->getStepValidationRules($step),
+                $this->messages()
+            );
+        } catch (ValidationException $exception) {
+            $this->showStepForValidationErrors(
+                $exception->validator->errors()->keys()
+            );
+
+            throw $exception;
+        }
+
+        if ($step === 2) {
+            $this->dispatch('product-step-changed', step: 3);
+        } else {
+            $this->dispatch('product-step-changed', step: $step + 1);
+        }
     }
 
     public function save(string $statusType): void
@@ -284,17 +431,38 @@ class ProductForm extends Component
         $status = $statusType === 'pending' ? 'pending' : 'draft';
 
         // Validasi umum & dynamic
-        $this->validate($this->getValidationRules(), $this->getValidationMessages());
+        try {
+            $this->validate();
+        } catch (ValidationException $exception) {
+            $totalImages = count($this->existingImages) + count($this->images);
+
+            if ($totalImages < 1) {
+                $this->addError('images', 'Minimal harus mengunggah 1 gambar produk.');
+            } elseif ($totalImages > 4) {
+                $this->addError('images', 'Maksimal hanya boleh mengunggah total 4 gambar produk.');
+            }
+
+            $this->showStepForValidationErrors(
+                array_merge(
+                    $exception->validator->errors()->keys(),
+                    $this->getErrorBag()->keys()
+                )
+            );
+
+            throw $exception;
+        }
 
         // Validasi Jumlah Gambar (Total 1 - 4)
         $totalImages = count($this->existingImages) + count($this->images);
         if ($totalImages < 1) {
             $this->addError('images', 'Minimal harus mengunggah 1 gambar produk.');
+            $this->showStepForValidationErrors(['images']);
 
             return;
         }
         if ($totalImages > 4) {
-            $this->addError('images', 'Maksimal hanya boleh mengunggah 4 gambar produk.');
+            $this->addError('images', 'Maksimal hanya boleh mengunggah total 4 gambar produk.');
+            $this->showStepForValidationErrors(['images']);
 
             return;
         }
@@ -455,8 +623,15 @@ class ProductForm extends Component
             $message .= ' Menunggu persetujuan admin.';
         }
 
-        $this->dispatch('toast', message: $message, type: 'success');
-        $this->redirect(route('seller.products'), navigate: true);
+        if ($this->isEditing) {
+            session()->flash('toast', ['message' => $message, 'type' => 'success']);
+            $this->redirect(route('seller.products'), navigate: true);
+
+            return;
+        }
+
+        $this->successMessage = $message;
+        $this->showSuccessModal = true;
     }
 
     #[Layout('layouts.dashboard')]
