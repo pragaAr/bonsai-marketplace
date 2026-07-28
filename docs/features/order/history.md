@@ -10,7 +10,7 @@ Halaman tersedia namun **belum memiliki data nyata** — karena checkout saat in
 
 ## Catatan Implementasi
 
-- Komponen Livewire: `App\Livewire\ProfileOrders`.
-- Route: `GET /profile/orders` dengan nama `profile.orders`, middleware `auth`.
+- Komponen Livewire: `App\Livewire\Orders`.
+- Route: `GET /order/history` dengan nama `order.history`, middleware `auth`.
 - Halaman ini akan berisi data pesanan setelah integrasi order database selesai.
 - Lihat [checkout.md](checkout.md) untuk detail status implementasi checkout saat ini.
