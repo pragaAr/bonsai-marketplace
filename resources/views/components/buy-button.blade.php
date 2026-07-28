@@ -28,9 +28,7 @@ href="{{ route('checkout.product', $product->slug) }}"
     fill="none" stroke="currentColor" stroke-width="2"
     viewBox="0 0 24 24">
     <path stroke-linecap="round" stroke-linejoin="round"
-      d="M6.75 8.25h10.5l-.75 11.25h-9L6.75 8.25Z" />
-    <path stroke-linecap="round" stroke-linejoin="round"
-      d="M9 8.25V6.75a3 3 0 016 0v1.5" />
+      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
   </svg>
 
   @if ($label)

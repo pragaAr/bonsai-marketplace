@@ -4,7 +4,7 @@
   <svg class="w-5 h-5 text-primary" fill="none"
     stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
     <path stroke-linecap="round" stroke-linejoin="round"
-      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+      d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6M10 21a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />
   </svg>
   @if ($count > 0)
     <span wire:key="cart-badge-span-{{ $count }}"

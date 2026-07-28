@@ -116,11 +116,11 @@
               class="absolute right-0 z-20 mt-2 w-12 overflow-hidden rounded-xl border border-primary/10 bg-white shadow-lg"
               style="display: none;">
 
-              <!-- ... isi tombol dropdown sort Anda ... -->
               <button type="button"
                 wire:click="$set('sort', 'default')"
                 @click="open = false"
-                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'default' ? 'bg-primary/5' : '' }}">
+                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'default' ? 'bg-primary/5' : '' }}"
+                title="Default">
                 <svg xmlns="http://www.w3.org/2000/svg"
                   class="h-4 w-4" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor"
@@ -134,25 +134,29 @@
               <button type="button"
                 wire:click="$set('sort', 'price_asc')"
                 @click="open = false"
-                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_asc' ? 'bg-primary/5' : '' }}">
+                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_asc' ? 'bg-primary/5' : '' }}"
+                title="Murah ke Mahal">
                 <x-icons.arrow-down-up class="h-4 w-4" />
               </button>
               <button type="button"
                 wire:click="$set('sort', 'price_desc')"
                 @click="open = false"
-                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_desc' ? 'bg-primary/5' : '' }}">
+                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_desc' ? 'bg-primary/5' : '' }}"
+                title="Mahal ke Murah">
                 <x-icons.arrow-up-down class="h-4 w-4" />
               </button>
               <button type="button"
                 wire:click="$set('sort', 'name_asc')"
                 @click="open = false"
-                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_asc' ? 'bg-primary/5' : '' }}">
+                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_asc' ? 'bg-primary/5' : '' }}"
+                title="Dari A ke Z">
                 <x-icons.a-z class="h-5 w-5" />
               </button>
               <button type="button"
                 wire:click="$set('sort', 'name_desc')"
                 @click="open = false"
-                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_desc' ? 'bg-primary/5' : '' }}">
+                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_desc' ? 'bg-primary/5' : '' }}"
+                title="Dari Z ke A">
                 <x-icons.z-a class="h-5 w-5" />
               </button>
             </div>

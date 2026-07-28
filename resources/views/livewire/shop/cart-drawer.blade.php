@@ -1,5 +1,5 @@
 <div x-data x-init="$watch('$wire.isOpen', val => $dispatch(val ? 'cart-opened' : 'cart-closed'))"
-     x-on:livewire:navigated.document="$refs.backdrop.style.display = 'none'; $refs.panel.style.display = 'none'; $wire.isOpen = false;">
+  x-on:livewire:navigated.document="$refs.backdrop.style.display = 'none'; $refs.panel.style.display = 'none'; $wire.isOpen = false;">
   <!-- Backdrop -->
   <div x-ref="backdrop" x-show="$wire.isOpen"
     x-transition:enter="transition ease-out duration-300"
@@ -48,10 +48,10 @@
           class="flex flex-col items-center justify-center h-full text-center py-12">
           <svg class="w-16 h-16 text-primary/15 mb-4"
             fill="none" stroke="currentColor"
-            stroke-width="1.5" viewBox="0 0 24 24">
+            stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round"
               stroke-linejoin="round"
-              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6M10 21a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z" />
           </svg>
           <p class="text-primary/50 text-sm">Belum ada item
             di keranjang</p>
