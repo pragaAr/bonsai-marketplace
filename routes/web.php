@@ -20,9 +20,9 @@ use App\Livewire\Auth\Register;
 use App\Livewire\CareGuide;
 use App\Livewire\Checkout;
 use App\Livewire\LandingPage;
+use App\Livewire\Orders;
 use App\Livewire\ProductDetail;
 use App\Livewire\Profile;
-use App\Livewire\ProfileOrders;
 use App\Livewire\Seller\Dashboard as SellerDashboard;
 use App\Livewire\Seller\ProductForm as SellerProductForm;
 use App\Livewire\Seller\Products as SellerProducts;
@@ -77,7 +77,7 @@ Route::post('/logout', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', Profile::class)->name('profile');
-    Route::get('/profile/orders', ProfileOrders::class)->name('profile.orders');
+    Route::get('/order/history', Orders::class)->name('order.history');
 
     Route::middleware('can-apply-seller')->group(function () {
         Route::get('/seller/apply', SellerApply::class)->name('seller.apply');
