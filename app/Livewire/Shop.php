@@ -100,7 +100,7 @@ class Shop extends Component
             'slug' => $c->slug,
         ]));
 
-        return view('livewire.shop', [
+        return view('livewire.shop.index', [
             'products' => $products,
             'categories' => $categories,
         ])->layout('layouts.app');

@@ -106,7 +106,7 @@ class SellerApply extends Component
     {
         $user = Auth::user();
 
-        return view('livewire.seller-apply', [
+        return view('livewire.landing-page.seller-apply', [
             'name' => $this->owner_name = $user->name ?? '',
             'whatsapp' => $this->whatsapp = $user->whatsapp ?? '',
             'address' => $this->address = $user->address ?? '',

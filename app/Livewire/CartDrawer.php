@@ -154,7 +154,7 @@ class CartDrawer extends Component
         $cart = session()->get('cart', []);
         $subtotal = collect($cart)->sum(fn ($item) => $item['price'] * $item['qty']);
 
-        return view('livewire.cart-drawer', [
+        return view('livewire.shop.cart-drawer', [
             'cartItems' => $cart,
             'subtotal' => $subtotal,
         ]);

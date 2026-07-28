@@ -208,6 +208,6 @@ class Profile extends Component
     #[Title('Profil Saya')]
     public function render()
     {
-        return view('livewire.profile');
+        return view('livewire.landing-page.profile');
     }
 }

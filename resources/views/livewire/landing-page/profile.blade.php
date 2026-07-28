@@ -422,7 +422,7 @@
             </p>
 
             <div class="mt-6">
-              <a href="{{ route('profile.orders') }}"
+              <a href="{{ route('order.history') }}"
                 wire:navigate x-data="{ loading: false }"
                 @click="loading = true"
                 class="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90">

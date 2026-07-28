@@ -18,7 +18,7 @@ class CartBadge extends Component
         $cart = session()->get('cart', []);
         $count = collect($cart)->sum('qty');
 
-        return view('livewire.cart-badge', [
+        return view('livewire.shop.cart-badge', [
             'count' => $count,
         ]);
     }

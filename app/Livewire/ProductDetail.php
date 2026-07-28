@@ -39,7 +39,7 @@ class ProductDetail extends Component
             ->take(3)
             ->get();
 
-        return view('livewire.product-detail', [
+        return view('livewire.shop.product-detail', [
             'relatedProducts' => $relatedProducts,
         ])->layout('layouts.app');
     }

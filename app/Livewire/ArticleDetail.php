@@ -41,7 +41,7 @@ class ArticleDetail extends Component
             $relatedArticles = $relatedArticles->concat($backfill);
         }
 
-        return view('livewire.article-detail', [
+        return view('livewire.landing-page.article-detail', [
             'relatedArticles' => $relatedArticles,
         ])->layout('layouts.app');
     }

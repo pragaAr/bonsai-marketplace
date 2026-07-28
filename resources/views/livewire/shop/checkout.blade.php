@@ -97,7 +97,7 @@
         </div>
 
         <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-          <a href="{{ route('profile.orders') }}"
+          <a href="{{ route('order.history') }}"
             wire:navigate
             class="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90">
             Lihat history
