@@ -1,9 +1,37 @@
+@php
+  $referer = request()->headers->get('referer');
+  $refererPath = is_string($referer)
+      ? parse_url($referer, PHP_URL_PATH)
+      : null;
+  $refererSellerId = null;
+
+  if (
+      is_string($refererPath) &&
+      preg_match(
+          '#/seller/shop/(\d+)/?$#',
+          $refererPath,
+          $matches,
+      )
+  ) {
+      $refererSellerId = (int) $matches[1];
+  }
+
+  $backToSeller =
+      $refererSellerId === (int) $product->seller_id;
+  $backUrl = $backToSeller
+      ? route('seller.shop', $product->seller_id)
+      : route('shop');
+  $backLabel = $backToSeller
+      ? 'Kembali ke Toko'
+      : 'Kembali ke Koleksi';
+@endphp
+
 <div>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
     <!-- Back Button -->
     <div class="mb-8">
-      <a href="/shop" wire:navigate x-data="{ loading: false }"
-        @click="loading = true"
+      <a href="{{ $backUrl }}" wire:navigate
+        x-data="{ loading: false }" @click="loading = true"
         :class="loading ? 'opacity-80 pointer-events-none' : ''"
         class="inline-flex items-center gap-1.5 text-xs text-primary/60 hover:text-primary transition-colors">
         <x-icons.arrow-left x-show="!loading"
@@ -12,41 +40,48 @@
         <x-icons.spinner x-show="loading" x-cloak
           class="h-4 w-4 text-current" />
 
-        Kembali ke Koleksi
+        {{ $backLabel }}
       </a>
     </div>
 
     <!-- Product Layout Grid -->
     <div
-      class="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
+      class="grid md:grid-cols-2 gap-7 md:gap-10 items-start">
 
       <!-- Gallery Column -->
-      <div class="space-y-4">
+      @php
+        $galleryImages = $product
+            ->getMedia('images')
+            ->take(4)
+            ->values();
+        $mainImage =
+            $galleryImages->first()?->getUrl() ??
+            $product->image_url;
+      @endphp
+
+      <div class="space-y-4" x-data="{ mainImage: @js($mainImage), activeImage: 0 }">
         <div
           class="bg-white rounded-2xl overflow-hidden shadow-sm border border-primary/5">
-          <img src="{{ $product->image_url }}"
+          <img :src="mainImage"
             alt="{{ $product->name }} bonsai main"
-            class="w-full h-auto object-cover aspect-square" />
+            class="w-full h-full object-contain aspect-square p-4" />
         </div>
 
-        <!-- Gallery Variant Thumbnails (Mocked since we have 1 image per product, but we show variant crops to wow the user) -->
-        <div class="flex gap-3">
-          <button
-            class="gallery-thumb active w-20 h-20 rounded-lg overflow-hidden border-2 border-primary">
-            <img src="{{ $product->image_url }}"
-              class="w-full h-full object-cover" />
-          </button>
-          <button
-            class="gallery-thumb w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent">
-            <img src="{{ $product->image_url }}"
-              class="w-full h-full object-cover filter brightness-95 opacity-80" />
-          </button>
-          <button
-            class="gallery-thumb w-20 h-20 rounded-lg overflow-hidden border-2 border-transparent">
-            <img src="{{ $product->image_url }}"
-              class="w-full h-full object-cover filter saturate-50 opacity-80" />
-          </button>
-        </div>
+        @if ($galleryImages->count() > 1)
+          <div class="flex gap-3">
+            @foreach ($galleryImages as $index => $media)
+              <button type="button"
+                @click="mainImage = @js($media->getUrl()); activeImage = {{ $index }}"
+                :class="activeImage === {{ $index }} ?
+                    'border-primary' : 'border-transparent'"
+                class="gallery-thumb w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors cursor-pointer">
+                <img src="{{ $media->getUrl() }}"
+                  alt="{{ $product->name }} preview {{ $index + 1 }}"
+                  class="w-full h-full object-cover" />
+              </button>
+            @endforeach
+          </div>
+        @endif
       </div>
 
       <!-- Info Column -->
@@ -60,10 +95,11 @@
           <p class="text-xl font-bold text-primary mt-3">Rp
             {{ number_format($product->price, 0, ',', '.') }}
           </p>
-        </div>
 
-        <p class="text-sm text-primary/75 leading-relaxed">
-          {{ $product->description }}</p>
+          <p
+            class="text-sm text-primary/75 leading-relaxed">
+            {{ $product->short_description }}</p>
+        </div>
 
         <!-- Specifications Grid -->
         <div
@@ -226,16 +262,65 @@
               </p>
             </div>
           </div>
+
+          @if ($product->description != '')
+            <div class="border-t border-primary/10 pt-4">
+              <p
+                class="text-xs font-semibold text-primary uppercase tracking-wider mb-2">
+                Deskripsi</p>
+              <p
+                class="text-sm text-primary/75 leading-relaxed">
+                {{ $product->description }}</p>
+            </div>
+          @endif
+
+          @if ($product->tags->isNotEmpty())
+            <div class="border-t border-primary/10 pt-4">
+              <h3
+                class="text-xs font-semibold text-primary uppercase tracking-wider mb-2">
+                Tags Produk</h3>
+              <div class="flex flex-wrap gap-2">
+                @foreach ($product->tags as $tag)
+                  <span
+                    class="px-2.5 py-1 rounded-full bg-primary/[0.06] text-primary text-xs">
+                    #{{ $tag->name }}
+                  </span>
+                @endforeach
+              </div>
+            </div>
+          @endif
+
+          <div
+            class="flex items-center gap-2 border-t border-primary/10 pt-4 text-sm">
+            <span class="text-primary/60">Dijual oleh</span>
+            <span class="font-semibold text-primary">
+              {{ $product->seller?->sellerRequest?->store_name ?? ($product->seller?->name ?? 'Toko tidak tersedia') }}
+            </span>
+            @if ($product->seller)
+              <a href="{{ route('seller.shop', $product->seller_id) }}"
+                wire:navigate x-data="{ loading: false }"
+                @click="loading = true"
+                :class="loading ? 'opacity-80 pointer-events-none' :
+                    ''"
+                class="ml-auto inline-flex items-center gap-1 text-xs font-semibold text-accent hover:underline">
+                Kunjungi Toko
+
+                <!-- Arrow Icon -->
+                <x-icons.arrow-right x-show="!loading"
+                  aria-hidden="true" class="w-4 h-4" />
+
+                <!-- Spinner -->
+                <x-icons.spinner x-show="loading" x-cloak
+                  aria-hidden="true"
+                  class="h-4 w-4 text-current" />
+              </a>
+            @endif
+          </div>
+
         </div>
 
         <!-- Add & Buy Actions -->
         <div class="flex flex-col gap-3 w-full">
-
-          <div class="w-full">
-            <x-whatsapp-chat-link :product="$product"
-              label="Chat Penjual"
-              class="btn-lift flex items-center justify-center gap-1.5 bg-green-600 text-white text-xs py-3 px-3 rounded-lg hover:bg-green-700 transition-colors w-full" />
-          </div>
 
           <div class="flex gap-3 w-full">
             <x-cart-button :product="$product"
@@ -264,7 +349,8 @@
               produk yang mungkin Anda sukai</p>
           </div>
           <a href="/shop" wire:navigate
-            x-data="{ loading: false }" @click="loading = true"
+            x-data="{ loading: false }"
+            @click="loading = true"
             :class="loading ? 'opacity-80 pointer-events-none' : ''"
             class="text-xs text-accent hover:text-primary transition-colors flex items-center gap-1">
             Lihat semua
@@ -282,7 +368,7 @@
           @foreach ($relatedProducts as $related)
             <div
               class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
-              <a href="/shop/product/{{ $related->slug }}"
+              <a href="{{ route('product.detail', $related->slug) }}"
                 class="block">
                 <div
                   class="product-img-wrapper overflow-hidden bg-primary/[0.02]">
@@ -293,7 +379,7 @@
                 </div>
               </a>
               <div class="p-4 flex flex-col flex-1">
-                <a href="/shop/product/{{ $related->slug }}"
+                <a href="{{ route('product.detail', $related->slug) }}"
                   class="block flex-1">
                   <h3
                     class="font-semibold text-primary text-sm md:text-base leading-tight line-clamp-1 hover:text-accent transition-colors">
