@@ -26,6 +26,7 @@ use App\Livewire\Profile;
 use App\Livewire\Seller\Dashboard as SellerDashboard;
 use App\Livewire\Seller\ProductForm as SellerProductForm;
 use App\Livewire\Seller\Products as SellerProducts;
+use App\Livewire\SellerShop;
 use App\Livewire\SellerApply;
 use App\Livewire\Shop;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +45,7 @@ Route::get('/', LandingPage::class)->name('home');
 
 Route::get('/shop', Shop::class)->name('shop');
 Route::get('/shop/product/{slug}', ProductDetail::class)->name('product.detail');
+Route::get('/seller/shop/{seller}', SellerShop::class)->name('seller.shop');
 
 Route::get('/about', About::class)->name('about');
 
