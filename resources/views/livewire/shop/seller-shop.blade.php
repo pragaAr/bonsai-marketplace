@@ -18,7 +18,7 @@
 
     <!-- Store Header -->
     <section
-      class="bg-primary rounded-2xl p-6 md:p-8 text-cream shadow-sm">
+      class="bg-[#C65A3A] text-white rounded-2xl p-6 md:p-8 shadow-sm">
       <div
         class="flex flex-col md:flex-row md:items-center gap-5">
         <div
@@ -30,14 +30,14 @@
         <div class="flex-1">
           <p
             class="text-xs uppercase tracking-wider text-cream/60">
-            Toko bonsai</p>
+            Seller kami</p>
           <h1
             class="text-2xl md:text-3xl font-semibold mt-1">
             {{ $seller->sellerRequest?->store_name ?? $seller->name }}
           </h1>
           <p class="text-sm text-cream/70 mt-2">
-            Koleksi tanaman dan perlengkapan pilihan dari
-            seller kami.
+            {{ $seller->sellerRequest?->notes ??
+                'Koleksi tanaman dan perlengkapan pilihan dari seller kami.' }}
           </p>
         </div>
         <div class="flex gap-6 text-sm md:text-right">
