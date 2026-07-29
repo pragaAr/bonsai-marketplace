@@ -109,151 +109,15 @@
             Detail produk</h3>
           <div
             class="grid grid-cols-2 gap-y-4 gap-x-6 text-sm">
-            @if ($product->isPlant())
+            @foreach ($product->specifications() as $label => $value)
               <div>
                 <p
                   class="text-xs text-primary/45 uppercase">
-                  Jenis</p>
+                  {{ $label }}</p>
                 <p class="font-medium text-primary mt-0.5">
-                  {{ optional($product->productable->species)->scientific_name ?? '' }}
-                </p>
+                  {{ $value }}</p>
               </div>
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Tingkat Perawatan</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->care_level }}
-                </p>
-              </div>
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Pencahayaan</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->light }}</p>
-              </div>
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Penyiraman</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->watering }}</p>
-              </div>
-              @if ($product->productable->pot_size)
-                <div>
-                  <p
-                    class="text-xs text-primary/45 uppercase">
-                    Ukuran Pot</p>
-                  <p
-                    class="font-medium text-primary mt-0.5">
-                    {{ $product->productable->pot_size }}
-                  </p>
-                </div>
-              @endif
-            @elseif ($product->isPot())
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Bahan</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->material }}</p>
-              </div>
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Bentuk</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->shape }}</p>
-              </div>
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Dimensi</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->dimensions }}
-                </p>
-              </div>
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Warna</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->color }}</p>
-              </div>
-            @elseif ($product->isMedia())
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Tipe</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->type }}</p>
-              </div>
-              @if ($product->productable->weight)
-                <div>
-                  <p
-                    class="text-xs text-primary/45 uppercase">
-                    Berat</p>
-                  <p
-                    class="font-medium text-primary mt-0.5">
-                    {{ $product->productable->weight }}</p>
-                </div>
-              @endif
-              @if ($product->productable->volume)
-                <div>
-                  <p
-                    class="text-xs text-primary/45 uppercase">
-                    Volume</p>
-                  <p
-                    class="font-medium text-primary mt-0.5">
-                    {{ $product->productable->volume }}</p>
-                </div>
-              @endif
-            @elseif ($product->isFertilizer())
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Tipe</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->type }}</p>
-              </div>
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Formulasi</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->form }}</p>
-              </div>
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Berat/Isi</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->weight }}</p>
-              </div>
-            @elseif ($product->isTool())
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Bahan</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->material }}</p>
-              </div>
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Merek</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->brand }}</p>
-              </div>
-              <div>
-                <p
-                  class="text-xs text-primary/45 uppercase">
-                  Berat</p>
-                <p class="font-medium text-primary mt-0.5">
-                  {{ $product->productable->weight }}</p>
-              </div>
-            @endif
+            @endforeach
             <div>
               <p class="text-xs text-primary/45 uppercase">
                 Stok</p>
@@ -349,8 +213,7 @@
               produk yang mungkin Anda sukai</p>
           </div>
           <a href="/shop" wire:navigate
-            x-data="{ loading: false }"
-            @click="loading = true"
+            x-data="{ loading: false }" @click="loading = true"
             :class="loading ? 'opacity-80 pointer-events-none' : ''"
             class="text-xs text-accent hover:text-primary transition-colors flex items-center gap-1">
             Lihat semua
