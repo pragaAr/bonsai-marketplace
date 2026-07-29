@@ -14,4 +14,13 @@ class FertilizerDetail extends Model
     {
         return $this->morphOne(Product::class, 'productable');
     }
+
+    public function specifications(): array
+    {
+        return [
+            'Tipe' => $this->type,
+            'Formulasi' => $this->form,
+            'Berat/Isi' => $this->weight,
+        ];
+    }
 }

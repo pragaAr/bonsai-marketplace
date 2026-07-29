@@ -13,4 +13,14 @@ class PotDetail extends Model
     {
         return $this->morphOne(Product::class, 'productable');
     }
+
+    public function specifications(): array
+    {
+        return [
+            'Bahan' => $this->material,
+            'Bentuk' => $this->shape,
+            'Dimensi' => $this->dimensions,
+            'Warna' => $this->color,
+        ];
+    }
 }

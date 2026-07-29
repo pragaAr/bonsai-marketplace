@@ -18,4 +18,15 @@ class PlantDetail extends Model
     {
         return $this->belongsTo(Species::class);
     }
+
+    public function specifications(): array
+    {
+        return [
+            'Jenis' => $this->species?->scientific_name,
+            'Tingkat Perawatan' => $this->care_level,
+            'Pencahayaan' => $this->light,
+            'Penyiraman' => $this->watering,
+            'Ukuran Pot' => $this->pot_size,
+        ];
+    }
 }

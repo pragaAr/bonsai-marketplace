@@ -70,6 +70,14 @@ class Product extends Model implements HasMedia
         return $this->morphTo();
     }
 
+    public function specifications(): array
+    {
+        return array_filter(
+            $this->productable?->specifications() ?? [],
+            fn ($value) => filled($value)
+        );
+    }
+
     public function isPlant(): bool
     {
         return $this->productable instanceof PlantDetail;

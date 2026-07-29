@@ -13,4 +13,13 @@ class MediaDetail extends Model
     {
         return $this->morphOne(Product::class, 'productable');
     }
+
+    public function specifications(): array
+    {
+        return [
+            'Tipe' => $this->type,
+            'Berat' => $this->weight,
+            'Volume' => $this->volume,
+        ];
+    }
 }

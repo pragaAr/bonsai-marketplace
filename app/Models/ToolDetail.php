@@ -13,4 +13,13 @@ class ToolDetail extends Model
     {
         return $this->morphOne(Product::class, 'productable');
     }
+
+    public function specifications(): array
+    {
+        return [
+            'Bahan' => $this->material,
+            'Merek' => $this->brand,
+            'Berat' => $this->weight,
+        ];
+    }
 }
