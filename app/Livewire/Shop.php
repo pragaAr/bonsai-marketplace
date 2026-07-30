@@ -38,9 +38,19 @@ class Shop extends Component
         $this->resetPage();
     }
 
+    public function updatedPage(): void
+    {
+        $this->dispatch('shop-page-updated');
+    }
+
     public function selectCategory($catSlug)
     {
         $this->category = $catSlug;
+    }
+
+    public function setSort(string $sort): void
+    {
+        $this->sort = $sort;
     }
 
     #[Title('Koleksi')]

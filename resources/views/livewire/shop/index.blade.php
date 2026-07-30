@@ -1,4 +1,5 @@
-<div>
+<div x-data
+  @shop-page-updated.window="window.scrollTo({ top: 0, behavior: 'smooth' })">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
     <!-- Shop Header -->
     <div class="mb-8 pb-4 border-b border-primary/10">
@@ -117,7 +118,8 @@
               style="display: none;">
 
               <button type="button"
-                wire:click="$set('sort', 'default')"
+                wire:click="setSort('default')"
+                wire:loading.attr="disabled" wire:target="setSort"
                 @click="open = false"
                 class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'default' ? 'bg-primary/5' : '' }}"
                 title="Default">
@@ -132,28 +134,32 @@
                 </svg>
               </button>
               <button type="button"
-                wire:click="$set('sort', 'price_asc')"
+                wire:click="setSort('price_asc')"
+                wire:loading.attr="disabled" wire:target="setSort"
                 @click="open = false"
                 class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_asc' ? 'bg-primary/5' : '' }}"
                 title="Murah ke Mahal">
                 <x-icons.arrow-down-up class="h-4 w-4" />
               </button>
               <button type="button"
-                wire:click="$set('sort', 'price_desc')"
+                wire:click="setSort('price_desc')"
+                wire:loading.attr="disabled" wire:target="setSort"
                 @click="open = false"
                 class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_desc' ? 'bg-primary/5' : '' }}"
                 title="Mahal ke Murah">
                 <x-icons.arrow-up-down class="h-4 w-4" />
               </button>
               <button type="button"
-                wire:click="$set('sort', 'name_asc')"
+                wire:click="setSort('name_asc')"
+                wire:loading.attr="disabled" wire:target="setSort"
                 @click="open = false"
                 class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_asc' ? 'bg-primary/5' : '' }}"
                 title="Dari A ke Z">
                 <x-icons.a-z class="h-5 w-5" />
               </button>
               <button type="button"
-                wire:click="$set('sort', 'name_desc')"
+                wire:click="setSort('name_desc')"
+                wire:loading.attr="disabled" wire:target="setSort"
                 @click="open = false"
                 class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_desc' ? 'bg-primary/5' : '' }}"
                 title="Dari Z ke A">
@@ -167,6 +173,13 @@
     </div>
 
     <!-- Product Grid -->
+    <div wire:loading.flex
+      wire:target="previousPage, nextPage, gotoPage, setSort"
+      class="my-10 items-center justify-center text-center text-base font-medium text-primary/60 animate-pulse"
+      aria-live="polite">
+      Memuat...
+    </div>
+
     @if ($products->isEmpty())
       <div
         class="text-center py-20 bg-white rounded-xl border border-primary/5 shadow-sm">
@@ -192,7 +205,8 @@
         </button>
       </div>
     @else
-      <div
+      <div wire:loading.class="hidden"
+        wire:target="previousPage, nextPage, gotoPage, setSort"
         class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 stagger-children">
         @foreach ($products as $product)
           <div
@@ -253,6 +267,8 @@
         <div class="mt-12 flex justify-center gap-2">
           {{-- Previous Page Button --}}
           <button wire:click="previousPage"
+            wire:loading.attr="disabled"
+            wire:target="previousPage, nextPage, gotoPage"
             @if ($products->onFirstPage()) disabled @endif
             aria-label="Previous page"
             class="p-2.5 rounded-lg border border-primary/15 hover:bg-primary/5 transition-colors disabled:opacity-30 disabled:pointer-events-none min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer">
@@ -268,6 +284,8 @@
           @for ($i = 1; $i <= $products->lastPage(); $i++)
             <button
               wire:click="gotoPage({{ $i }})"
+              wire:loading.attr="disabled"
+              wire:target="previousPage, nextPage, gotoPage"
               aria-label="Page {{ $i }}"
               class="page-btn min-w-[44px] min-h-[44px] rounded-lg border border-primary/15 text-sm font-medium transition-colors hover:bg-primary/5 flex items-center justify-center cursor-pointer {{ $i === $products->currentPage() ? 'active' : '' }}">
               {{ $i }}
@@ -276,6 +294,8 @@
 
           {{-- Next Page Button --}}
           <button wire:click="nextPage"
+            wire:loading.attr="disabled"
+            wire:target="previousPage, nextPage, gotoPage"
             @if (!$products->hasMorePages()) disabled @endif
             aria-label="Next page"
             class="p-2.5 rounded-lg border border-primary/15 hover:bg-primary/5 transition-colors disabled:opacity-30 disabled:pointer-events-none min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer">
