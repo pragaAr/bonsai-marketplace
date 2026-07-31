@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class UserService
@@ -52,14 +53,14 @@ class UserService
     {
         return DB::transaction(function () use ($data) {
             $user = User::create([
-                'google_id'         => null,
-                'name'              => $data['name'],
-                'email'             => $data['email'],
-                'whatsapp'          => $data['whatsapp'],
-                'address'           => $data['address'],
+                'google_id' => null,
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'whatsapp' => $data['whatsapp'],
+                'address' => $data['address'],
                 'email_verified_at' => now(),
-                'avatar'            => null,
-                'password'          => $data['password'],
+                'avatar' => null,
+                'password' => $data['password'],
             ]);
 
             $user->syncRoles([$data['role']]);
@@ -78,10 +79,10 @@ class UserService
     {
         return DB::transaction(function () use ($user, $data) {
             $user->update([
-                'name'     => $data['name'],
-                'email'    => $data['email'],
+                'name' => $data['name'],
+                'email' => $data['email'],
                 'whatsapp' => $data['whatsapp'],
-                'address'  => $data['address'],
+                'address' => $data['address'],
             ]);
 
             if (! empty($data['password'])) {
@@ -97,7 +98,7 @@ class UserService
     /**
      * Hapus user berdasarkan ID.
      *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ModelNotFoundException
      */
     public function deleteUser(int $id): void
     {
