@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\SellerRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -47,9 +48,19 @@ class SellerApply extends Component
 
     public function submit(): void
     {
+        $existingRequest = SellerRequest::query()
+            ->where('user_id', Auth::id())
+            ->first();
+
         $validated = $this->validate(
             [
-                'store_name' => ['required', 'string', 'max:255'],
+                'store_name' => [
+                    'required',
+                    'string',
+                    'max:100',
+                    'regex:/^[A-Za-z0-9 -]+$/',
+                    Rule::unique('seller_requests', 'store_name')->ignore($existingRequest?->id),
+                ],
                 'owner_name' => ['required', 'string', 'max:255'],
                 'province_name' => ['required', 'string', 'max:255'],
                 'city_name' => ['required', 'string', 'max:255'],
@@ -59,6 +70,8 @@ class SellerApply extends Component
             ],
             [
                 'store_name.required' => 'Nama toko wajib diisi.',
+                'store_name.regex' => 'Nama toko hanya boleh mengandung huruf, angka, spasi, dan tanda hubung (-).',
+                'store_name.unique' => 'Nama toko sudah dipakai. Silakan gunakan nama toko lain.',
                 'owner_name.required' => 'Nama pemilik wajib diisi.',
                 'province_name.required' => 'Provinsi wajib diisi.',
                 'city_name.required' => 'Kota wajib diisi.',
