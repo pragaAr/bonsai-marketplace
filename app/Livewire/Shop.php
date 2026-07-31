@@ -46,11 +46,24 @@ class Shop extends Component
     public function selectCategory($catSlug)
     {
         $this->category = $catSlug;
+        $this->resetPage();
     }
 
     public function setSort(string $sort): void
     {
         $this->sort = $sort;
+    }
+
+    public function queryStringHandlesPagination(): array
+    {
+        return [
+            'paginators.page' => [
+                'history' => true,
+                'as' => 'page',
+                'keep' => false,
+                'except' => 1,
+            ],
+        ];
     }
 
     #[Title('Koleksi')]
