@@ -38,7 +38,7 @@
         message: @js('Silakan login terlebih dahulu untuk menambahkan produk ke keranjang.'), 
         duration: 3000, 
         actionText: 'Login', 
-        actionUrl: @js(route('login')) 
+        actionUrl: @js(route('login'))
     })"
     aria-label="Add {{ $product->name }} to cart"
     {{ $attributes }}>
