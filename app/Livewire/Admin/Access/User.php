@@ -306,7 +306,7 @@ class User extends Component
                 filterRole: $this->filterRole,
                 isGoogleUser: $this->isGoogleUser,
             ),
-            'allRoles' => Role::whereNotIn('name', ['system_admin'])->orderBy('name')->get(),
+            'allRoles' => Role::whereNotIn('name', ['system_admin', 'seller'])->orderBy('name')->get(),
             'allPermissions' => Permission::orderBy('name')->get(),
             'selectedUser' => $this->selectedUserId ? UserModel::find($this->selectedUserId) : null,
             'title' => 'Manajemen User',
