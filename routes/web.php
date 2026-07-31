@@ -45,7 +45,7 @@ Route::get('/', LandingPage::class)->name('home');
 
 Route::get('/shop', Shop::class)->name('shop');
 Route::get('/shop/product/{slug}', ProductDetail::class)->name('product.detail');
-Route::get('/seller/shop/{seller}', SellerShop::class)->name('seller.shop');
+Route::get('/seller/shop/{seller_slug}', SellerShop::class)->name('seller.shop');
 
 Route::get('/about', About::class)->name('about');
 
@@ -56,7 +56,7 @@ Route::get('/article/{slug}', ArticleDetail::class)->name('article.detail');
 
 // ============================================================
 // Autentikasi (guest only)
-// ============================================================
+// ============================================================ 
 Route::middleware('guest')->group(function () {
     Route::get('/login', Login::class)->name('login');
     Route::get('/register', Register::class)->name('register');
