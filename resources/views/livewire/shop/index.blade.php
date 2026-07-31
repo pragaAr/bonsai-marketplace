@@ -119,8 +119,8 @@
 
               <button type="button"
                 wire:click="setSort('default')"
-                wire:loading.attr="disabled" wire:target="setSort"
-                @click="open = false"
+                wire:loading.attr="disabled"
+                wire:target="setSort" @click="open = false"
                 class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'default' ? 'bg-primary/5' : '' }}"
                 title="Default">
                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -135,23 +135,24 @@
               </button>
               <button type="button"
                 wire:click="setSort('price_asc')"
-                wire:loading.attr="disabled" wire:target="setSort"
-                @click="open = false"
+                wire:loading.attr="disabled"
+                wire:target="setSort" @click="open = false"
                 class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_asc' ? 'bg-primary/5' : '' }}"
                 title="Murah ke Mahal">
                 <x-icons.arrow-down-up class="h-4 w-4" />
               </button>
               <button type="button"
                 wire:click="setSort('price_desc')"
-                wire:loading.attr="disabled" wire:target="setSort"
-                @click="open = false"
+                wire:loading.attr="disabled"
+                wire:target="setSort" @click="open = false"
                 class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_desc' ? 'bg-primary/5' : '' }}"
                 title="Mahal ke Murah">
                 <x-icons.arrow-up-down class="h-4 w-4" />
               </button>
               <button type="button"
                 wire:click="setSort('name_asc')"
-                wire:loading.attr="disabled" wire:target="setSort"
+                wire:loading.attr="disabled"
+                wire:target="setSort"
                 @click="open = false"
                 class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_asc' ? 'bg-primary/5' : '' }}"
                 title="Dari A ke Z">
@@ -159,7 +160,8 @@
               </button>
               <button type="button"
                 wire:click="setSort('name_desc')"
-                wire:loading.attr="disabled" wire:target="setSort"
+                wire:loading.attr="disabled"
+                wire:target="setSort"
                 @click="open = false"
                 class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_desc' ? 'bg-primary/5' : '' }}"
                 title="Dari Z ke A">
@@ -214,7 +216,7 @@
             wire:key="product-{{ $product->id }}">
 
             <!-- Product Gallery Click -->
-            <a href="/shop/product/{{ $product->slug }}"
+            <a href="{{ route('product.detail', $product->slug) }}"
               wire:navigate class="block">
               <div
                 class="product-img-wrapper overflow-hidden bg-primary/[0.02]">
@@ -227,7 +229,7 @@
 
             <!-- Product Specs -->
             <div class="p-4 flex flex-col flex-1">
-              <a href="/shop/product/{{ $product->slug }}"
+              <a href="{{ route('product.detail', $product->slug) }}"
                 wire:navigate class="block flex-1">
                 <h3
                   class="font-semibold text-primary text-sm md:text-base leading-tight line-clamp-1 hover:text-accent transition-colors">
