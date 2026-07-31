@@ -3,23 +3,23 @@
   $refererPath = is_string($referer)
       ? parse_url($referer, PHP_URL_PATH)
       : null;
-  $refererSellerId = null;
+  $refererSellerSlug = null;
 
   if (
       is_string($refererPath) &&
       preg_match(
-          '#/seller/shop/(\d+)/?$#',
+          '#/seller/shop/([^/?]+)/?$#',
           $refererPath,
           $matches,
       )
   ) {
-      $refererSellerId = (int) $matches[1];
+      $refererSellerSlug = $matches[1];
   }
 
   $backToSeller =
-      $refererSellerId === (int) $product->seller_id;
+      $refererSellerSlug === $product->seller?->sellerRequest?->store_slug;
   $backUrl = $backToSeller
-      ? route('seller.shop', $product->seller_id)
+      ? route('seller.shop', ['seller_slug' => $refererSellerSlug])
       : route('shop');
   $backLabel = $backToSeller
       ? 'Kembali ke Toko'
@@ -160,8 +160,8 @@
             <span class="font-semibold text-primary">
               {{ $product->seller?->sellerRequest?->store_name ?? ($product->seller?->name ?? 'Toko tidak tersedia') }}
             </span>
-            @if ($product->seller)
-              <a href="{{ route('seller.shop', $product->seller_id) }}"
+            @if ($product->seller?->sellerRequest?->store_slug)
+              <a href="{{ route('seller.shop', ['seller_slug' => $product->seller->sellerRequest->store_slug]) }}"
                 wire:navigate x-data="{ loading: false }"
                 @click="loading = true"
                 :class="loading ? 'opacity-80 pointer-events-none' :
