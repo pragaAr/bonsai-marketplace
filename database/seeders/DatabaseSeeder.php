@@ -11,6 +11,7 @@ use App\Models\PlantDetail;
 use App\Models\PotDetail;
 use App\Models\Product;
 use App\Models\Role;
+use App\Models\SellerRequest;
 use App\Models\Species;
 use App\Models\Tag;
 use App\Models\ToolDetail;
@@ -118,6 +119,36 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
         $seller2->assignRole($sellerRole);
+
+        SellerRequest::create([
+            'user_id' => $seller->id,
+            'store_name' => 'Budi Bonsai Nusantara',
+            'store_slug' => 'budi-bonsai-nusantara',
+            'owner_name' => 'Budi Santoso',
+            'city_name' => 'Bandung',
+            'province_name' => 'Jawa Barat',
+            'agreement' => true,
+            'whatsapp' => '081234567890',
+            'notes' => 'Koleksi bonsai dan tanaman pilihan.',
+            'status' => 'approved',
+            'reviewed_at' => now(),
+            'reviewed_by' => $admin->id,
+        ]);
+
+        SellerRequest::create([
+            'user_id' => $seller2->id,
+            'store_name' => 'Ani Bonsai Garden',
+            'store_slug' => 'ani-bonsai-garden',
+            'owner_name' => 'Ani Lestari',
+            'city_name' => 'Yogyakarta',
+            'province_name' => 'DI Yogyakarta',
+            'agreement' => true,
+            'whatsapp' => '081298765432',
+            'notes' => 'Tanaman hias dan perlengkapan bonsai.',
+            'status' => 'approved',
+            'reviewed_at' => now(),
+            'reviewed_by' => $admin->id,
+        ]);
 
         $customer = User::create([
             'name' => 'Rian Wijaya',
