@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class CartBadge extends Component
 {
@@ -15,8 +16,7 @@ class CartBadge extends Component
 
     public function render()
     {
-        $cart = session()->get('cart', []);
-        $count = collect($cart)->sum('qty');
+        $count = Auth::user()?->cart?->items()->sum('qty') ?? 0;
 
         return view('livewire.shop.cart-badge', [
             'count' => $count,
