@@ -34,7 +34,5 @@ href="{{ route('checkout.product', $product->slug) }}"
   @if ($label)
     <span class="{{ $spanClass }}"
       x-show="!loading">{{ $label }}</span>
-    <span class="{{ $spanClass }}" x-show="loading"
-      x-cloak>Memproses…</span>
   @endif
 </a>

@@ -28,8 +28,6 @@
     @if ($label)
       <span class="{{ $spanClass }}"
         x-show="!loading">{{ $label }}</span>
-      <span class="{{ $spanClass }}" x-show="loading"
-        x-cloak>Menambahkan…</span>
     @endif
   </button>
 @else
