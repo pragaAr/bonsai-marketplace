@@ -7,6 +7,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model implements HasMedia
 {
@@ -128,6 +129,11 @@ class Product extends Model implements HasMedia
     public function seller()
     {
         return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
     }
 
     /**
