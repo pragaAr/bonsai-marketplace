@@ -201,15 +201,14 @@
               x-data="{ loading: false }" @click="loading = true"
               :class="loading ? 'opacity-85 pointer-events-none' :
                   ''"
-              class="hidden md:inline-flex items-center justify-center gap-2 rounded px-4 py-1.5 text-sm font-semibold text-primary border border-primary/15 hover:bg-primary/5 transition-colors cursor-pointer">
+              class="hidden md:inline-flex items-center justify-center gap-1 rounded px-4 py-1.5 text-sm font-semibold text-primary border border-primary/15 hover:bg-primary/5 transition-colors cursor-pointer">
+
+              <span>Masuk</span>
 
               <!-- Spinner -->
               <x-icons.spinner x-show="loading" x-cloak
                 class="h-4 w-4 text-current" />
 
-              <span x-text="loading ? 'Memuat...' : 'Masuk'">
-                Masuk
-              </span>
             </a>
           @endauth
 
@@ -365,8 +364,18 @@
             </div>
           @else
             <a href="{{ route('login') }}" wire:navigate
-              class="mt-4 inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-base font-semibold text-cream transition-colors hover:bg-primary/90">
-              Masuk/Daftar
+              x-data="{ loading: false }"
+              @click="loading = true"
+              :class="loading ? 'opacity-85 pointer-events-none' :
+                  ''"
+              class="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-base font-semibold text-cream transition-colors hover:bg-primary/90">
+
+              <span>Masuk/Daftar</span>
+
+              <!-- Spinner -->
+              <x-icons.spinner x-show="loading" x-cloak
+                class="h-4 w-4 text-current" />
+
             </a>
           @endauth
         </div>

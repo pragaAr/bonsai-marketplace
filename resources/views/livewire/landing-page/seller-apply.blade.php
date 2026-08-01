@@ -231,25 +231,25 @@
 
         <div class="flex flex-col sm:flex-row gap-3 pt-2">
           <button type="submit"
-            class="flex-1 inline-flex items-center gap-2 justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90 cursor-pointer"
+            class="flex-1 inline-flex items-center gap-2 justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
             wire:loading.attr="disabled">
+
+            <span>Ajukan Menjadi Penjual</span>
 
             <x-icons.spinner wire:loading
               wire:target="submit"
               class="h-4 w-4 text-current" />
-
-            Kirim pengajuan
           </button>
           <a href="{{ route('profile') }}" wire:navigate
             wire:navigate x-data="{ loading: false }"
             @click="loading = true"
             class="flex-1 inline-flex items-center justify-center gap-2 rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5">
 
+            <span>Kembali ke profil</span>
+
             <x-icons.spinner x-show="loading" x-cloak
               class="h-4
               w-4 text-current" />
-
-            Kembali ke profil
           </a>
         </div>
       </form>

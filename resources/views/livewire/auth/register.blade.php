@@ -136,16 +136,10 @@
           wire:loading.class="opacity-70"
           wire:target="register">
 
-          <span wire:loading.remove wire:target="register">
-            Daftar
-          </span>
-          <span wire:loading.flex wire:target="register"
-            class="items-center gap-2">
-            <div
-              class="spinner h-4 w-4 border-2 border-white/30 border-t-white">
-            </div>
-            Memproses...
-          </span>
+          <span> Daftar</span>
+          <x-icons.spinner wire:loading
+            wire:target="register"
+            class="h-3.5 w-3.5 text-current" />
         </button>
       </form>
       <p class="mt-4 text-center text-sm text-primary">

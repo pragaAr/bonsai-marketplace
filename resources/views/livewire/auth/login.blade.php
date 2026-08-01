@@ -98,9 +98,11 @@
         <button type="submit"
           class="w-full bg-primary text-cream text-sm py-2 rounded hover:bg-primary/90 transition-colors inline-flex cursor-pointer disabled:opacity-50 items-center justify-center gap-2"
           wire:loading.attr="disabled" wire:target="login">
+
+          <span>Masuk</span>
+
           <x-icons.spinner wire:loading wire:target="login"
             class="h-3.5 w-3.5 text-current" />
-          <span>Masuk</span>
         </button>
       </form>
 
