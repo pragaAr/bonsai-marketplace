@@ -121,9 +121,9 @@
               Selesaikan pembelian</h1>
             <p
               class="mt-3 max-w-2xl text-sm leading-6 text-primary/70">
-              Pilih metode pembayaran dummy untuk simulasi
-              proses beli. Data order belum disimpan ke
-              database.
+              Lengkapi form dan pilih metode pembayaran
+              untuk
+              menyelesaikan pesanan.
             </p>
           </div>
 
