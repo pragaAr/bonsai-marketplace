@@ -63,8 +63,14 @@
         <div class="space-y-4">
           @foreach ($cartItems as $item)
             <div
-              class="flex gap-4 py-4 border-b border-primary/5 last:border-0"
+              class="flex gap-4 py-4 border-b border-primary/5 last:border-0 {{ !$item['isAvailable'] ? 'opacity-60' : '' }}"
               wire:key="cart-item-{{ $item['id'] }}">
+              <input type="checkbox"
+                wire:model.live="selectedItemIds"
+                value="{{ $item['id'] }}"
+                @disabled(!$item['isAvailable'])
+                aria-label="Pilih {{ $item['name'] }}"
+                class="mt-1 h-4 w-4 shrink-0 accent-primary disabled:cursor-not-allowed" />
               <img src="{{ $item['image'] }}"
                 alt="{{ $item['name'] }}"
                 class="w-20 h-20 object-cover rounded-lg flex-shrink-0" />
@@ -75,18 +81,31 @@
                 <p class="text-sm text-accent mt-0.5">Rp
                   {{ number_format($item['price'], 0, ',', '.') }}
                 </p>
+                @if (!$item['isAvailable'])
+                  <p
+                    class="mt-1 text-xs font-medium text-red-600">
+                    Produk tidak tersedia
+                  </p>
+                @endif
                 <div class="flex items-center gap-3 mt-2">
                   <button
                     wire:click="updateQuantity('{{ $item['id'] }}', {{ $item['qty'] - 1 }})"
+                    @disabled(!$item['isAvailable'])
                     aria-label="Decrease quantity"
-                    class="w-7 h-7 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/5 text-sm cursor-pointer">-</button>
+                    class="w-5 h-5 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/5 text-sm cursor-pointer">-</button>
                   <span
                     class="text-sm font-medium text-primary w-5 text-center">{{ $item['qty'] }}</span>
                   <button
                     wire:click="updateQuantity('{{ $item['id'] }}', {{ $item['qty'] + 1 }})"
+                    @disabled(!$item['isAvailable'] || $item['qty'] >= $item['stock'])
                     aria-label="Increase quantity"
-                    class="w-7 h-7 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/5 text-sm cursor-pointer">+</button>
+                    class="w-5 h-5 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/5 text-sm cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">+</button>
                 </div>
+                @if ($item['isAvailable'])
+                  <p class="mt-1 text-xs text-primary/45">
+                    Stok
+                    tersedia: {{ $item['stock'] }}</p>
+                @endif
               </div>
               <button
                 wire:click="removeFromCart('{{ $item['id'] }}')"
@@ -119,17 +138,14 @@
           <!-- Checkout -->
           <button wire:click="checkout"
             wire:loading.attr="disabled"
-            class="w-full bg-primary text-cream py-3 rounded-lg text-sm font-semibold hover:bg-opacity-90 transition-colors cursor-pointer duration-200 btn-lift flex items-center justify-center gap-2">
+            class="w-full bg-primary text-cream py-3 rounded-lg text-sm font-semibold hover:bg-opacity-90 transition-colors cursor-pointer duration-200 btn-lift flex items-center justify-center gap-2 disabled:opacity-50">
+
+            <span>Buat Pesanan</span>
 
             <!-- Spinner -->
             <x-icons.spinner wire:loading
               wire:target="checkout"
               class="h-4 w-4 text-cream" />
-
-            <span wire:loading.remove
-              wire:target="checkout">Buat Pesanan</span>
-            <span wire:loading
-              wire:target="checkout">Memproses...</span>
           </button>
 
           <!-- Download PDF Invoice -->

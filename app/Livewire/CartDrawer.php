@@ -13,6 +13,10 @@ class CartDrawer extends Component
 {
     public $isOpen = false;
 
+    public array $selectedItemIds = [];
+
+    public bool $selectionInitialized = true;
+
     #[On('open-cart')]
     public function openDrawer()
     {
@@ -44,21 +48,30 @@ class CartDrawer extends Component
             return;
         }
 
-        $cart = session()->get('cart', []);
+        $cart = Auth::user()->cart()->firstOrCreate();
+        $cartItem = $cart->items()->where('product_id', $productId)->first();
 
-        if (isset($cart[$productId])) {
-            $cart[$productId]['qty']++;
+        if ($cartItem) {
+            if ($product->status !== 'approved' || $cartItem->qty >= $product->stock) {
+                $message = $product->status !== 'approved'
+                    ? "'{$product->name}' sedang tidak tersedia."
+                    : "Stok '{$product->name}' hanya tersedia {$product->stock} item.";
+                $this->dispatch('toast', message: $message, duration: 3000);
+
+                return;
+            }
+
+            $cartItem->increment('qty');
         } else {
-            $cart[$productId] = [
-                'id' => $productId,
-                'name' => $product->name,
-                'price' => $product->price,
-                'image' => $product->getFirstMediaUrl('images') ?: asset('images/bonsai-1.png'),
-                'qty' => 1,
-            ];
+            if ($product->status !== 'approved' || $product->stock < 1) {
+                $this->dispatch('toast', message: "'{$product->name}' sedang habis.", duration: 3000);
+
+                return;
+            }
+
+            $cart->items()->create(['product_id' => $productId, 'qty' => 1]);
         }
 
-        session()->put('cart', $cart);
         $this->dispatch('cart-updated');
 
         // Log Activity using Spatie Activitylog
@@ -70,33 +83,37 @@ class CartDrawer extends Component
         // Dispatch browser toast notification
         $this->dispatch('toast', message: "'{$product->name}' dimasukkan ke keranjang!", duration: 3000);
 
-        // Auto open drawer to delight user (Disabled as per user request)
-        // $this->isOpen = true;
     }
 
     public function updateQuantity($productId, $qty)
     {
-        $cart = session()->get('cart', []);
+        $cart = Auth::user()->cart;
+        $cartItem = $cart?->items()->where('product_id', $productId)->first();
 
-        if (isset($cart[$productId])) {
+        if ($cartItem) {
             if ($qty <= 0) {
-                unset($cart[$productId]);
+                $cartItem->delete();
             } else {
-                $cart[$productId]['qty'] = $qty;
+                $product = Product::find($productId);
+                if (! $product || $product->status !== 'approved' || $product->stock < 1) {
+                    $cartItem->delete();
+                } else {
+                    $cartItem->update(['qty' => min((int) $qty, $product->stock)]);
+                }
             }
-            session()->put('cart', $cart);
             $this->dispatch('cart-updated');
         }
     }
 
     public function removeFromCart($productId)
     {
-        $cart = session()->get('cart', []);
+        $cart = Auth::user()->cart;
+        $cartItem = $cart?->items()->with('product')->where('product_id', $productId)->first();
 
-        if (isset($cart[$productId])) {
-            $name = $cart[$productId]['name'];
-            unset($cart[$productId]);
-            session()->put('cart', $cart);
+        if ($cartItem) {
+            $this->selectedItemIds = array_values(array_diff($this->selectedItemIds, [(string) $productId, (int) $productId]));
+            $name = $cartItem->product?->name ?? 'Item';
+            $cartItem->delete();
             $this->dispatch('cart-updated');
 
             $this->dispatch('toast', message: "'{$name}' dihapus dari keranjang", duration: 3000);
@@ -105,31 +122,55 @@ class CartDrawer extends Component
 
     public function clearCart()
     {
-        session()->forget('cart');
+        Auth::user()->cart?->items()->delete();
         $this->dispatch('cart-updated');
         $this->dispatch('toast', message: 'Keranjang berhasil dibersihkan', duration: 3000);
     }
 
     public function checkout()
     {
-        $cart = session()->get('cart', []);
-        if (empty($cart)) {
+        $cart = Auth::user()->cart;
+        if (! $cart || ! $cart->items()->exists()) {
+            return;
+        }
+
+        $selectedIds = collect($this->selectedItemIds)->map(fn ($id) => (int) $id)->filter()->unique();
+        if ($selectedIds->isEmpty()) {
+            $this->dispatch('toast', message: 'Pilih minimal satu produk untuk checkout.', duration: 3000);
+
+            return;
+        }
+
+        $hasUnavailableItem = $cart->items()
+            ->whereIn('product_id', $selectedIds)
+            ->where(function ($query) {
+                $query->whereHas('product', fn ($productQuery) => $productQuery
+                    ->where('status', '!=', 'approved')
+                    ->orWhere('stock', '<=', 0))
+                    ->orWhereDoesntHave('product');
+            })
+            ->exists();
+
+        if ($hasUnavailableItem) {
+            $this->dispatch('toast', message: 'Hapus produk yang tidak tersedia sebelum checkout.', duration: 4000);
+
             return;
         }
 
         $this->isOpen = false;
 
-        return $this->redirect(route('checkout'), navigate: true);
+        return $this->redirect(route('checkout', ['items' => $selectedIds->implode(',')]), navigate: true);
     }
 
     public function downloadInvoice()
     {
-        $cart = session()->get('cart', []);
-        if (empty($cart)) {
+        $cart = Auth::user()->cart;
+        $cartItems = $cart?->items()->with('product')->get() ?? collect();
+        if ($cartItems->isEmpty()) {
             return;
         }
 
-        $subtotal = collect($cart)->sum(fn ($item) => $item['price'] * $item['qty']);
+        $subtotal = $cartItems->sum(fn ($item) => $item->product->price * $item->qty);
 
         // Log PDF generation in Activitylog
         activity()
@@ -137,7 +178,11 @@ class CartDrawer extends Component
             ->log('Downloaded PDF Invoice for a total of Rp '.number_format($subtotal, 0, ',', '.'));
 
         $pdf = Pdf::loadView('pdf.invoice', [
-            'cart' => $cart,
+            'cart' => $cartItems->map(fn ($item) => [
+                'name' => $item->product->name,
+                'price' => $item->product->price,
+                'qty' => $item->qty,
+            ])->all(),
             'subtotal' => $subtotal,
             'invoiceNumber' => 'INV-'.date('Ymd').'-'.strtoupper(Str::random(4)),
             'date' => now()->format('d M Y'),
@@ -151,11 +196,45 @@ class CartDrawer extends Component
 
     public function render()
     {
-        $cart = session()->get('cart', []);
-        $subtotal = collect($cart)->sum(fn ($item) => $item['price'] * $item['qty']);
+        $user = Auth::user();
+        if (! $user) {
+            return view('livewire.shop.cart-drawer', [
+                'cartItems' => [],
+                'subtotal' => 0,
+            ]);
+        }
+
+        $cart = $user->cart;
+        $items = $cart?->items()->with('product')->get() ?? collect();
+        $this->selectedItemIds = array_values(array_intersect(
+            array_map('strval', $this->selectedItemIds),
+            $items->pluck('product_id')->map(fn ($id) => (string) $id)->all()
+        ));
+
+        $cartItems = $items->mapWithKeys(function ($item) {
+            $product = $item->product;
+            $isAvailable = $product
+                && $product->status === 'approved'
+                && $product->stock > 0;
+
+            return [$item->product_id => [
+                'id' => $item->product_id,
+                'name' => $product?->name ?? 'Produk tidak tersedia',
+                'price' => $product?->price ?? 0,
+                'image' => $product?->image_url ?? asset('images/bonsai-1.png'),
+                'qty' => $item->qty,
+                'stock' => $product?->stock ?? 0,
+                'isAvailable' => $isAvailable,
+                'isSelected' => in_array((string) $item->product_id, array_map('strval', $this->selectedItemIds), true),
+            ]];
+        })->all();
+
+        $subtotal = collect($cartItems)
+            ->filter(fn ($item) => $item['isAvailable'] && $item['isSelected'])
+            ->sum(fn ($item) => $item['price'] * $item['qty']);
 
         return view('livewire.shop.cart-drawer', [
-            'cartItems' => $cart,
+            'cartItems' => $cartItems,
             'subtotal' => $subtotal,
         ]);
     }
