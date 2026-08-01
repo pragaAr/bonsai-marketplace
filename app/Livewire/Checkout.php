@@ -42,7 +42,31 @@ class Checkout extends Component
         if ($slug) {
             $this->product = Product::where('slug', $slug)->firstOrFail();
         } else {
-            $this->cartItems = session()->get('cart', []);
+            $cartItems = $user?->cart?->items()->with('product')->get() ?? collect();
+            $selectedIds = collect(explode(',', (string) request()->query('items')))
+                ->map(fn ($id) => (int) $id)
+                ->filter()
+                ->all();
+
+            if ($selectedIds) {
+                $cartItems = $cartItems->whereIn('product_id', $selectedIds)->values();
+            }
+
+            $this->cartItems = $cartItems->mapWithKeys(function ($item) {
+                $product = $item->product;
+
+                return [$item->product_id => [
+                    'id' => $item->product_id,
+                    'name' => $product?->name ?? 'Produk tidak tersedia',
+                    'price' => $product?->price ?? 0,
+                    'image' => $product?->image_url ?? asset('images/bonsai-1.png'),
+                    'qty' => $item->qty,
+                    'isAvailable' => $product
+                        && $product->status === 'approved'
+                        && $product->stock > 0,
+                ]];
+            })->all();
+
             if (empty($this->cartItems)) {
                 $this->redirect(route('shop'), navigate: true);
             }
@@ -75,6 +99,12 @@ class Checkout extends Component
             'paymentMethod.required' => 'Metode pembayaran wajib dipilih.',
         ]);
 
+        if (! $this->product && collect($this->cartItems)->contains(fn ($item) => ! $item['isAvailable'])) {
+            $this->dispatch('toast', message: 'Ada produk yang tidak tersedia di keranjang.', duration: 4000);
+
+            return;
+        }
+
         if ($this->product) {
             $this->quantity = (int) $validated['quantity'];
         }
@@ -91,7 +121,7 @@ class Checkout extends Component
                 ->event('mock_order_created')
                 ->log("Created mock order {$this->orderNumber} for cart checkout");
 
-            session()->forget('cart');
+            Auth::user()?->cart?->items()->delete();
             $this->dispatch('cart-updated');
         }
 
