@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use App\Models\PlantDetail;
 use App\Models\Product;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -66,6 +67,7 @@ class Shop extends Component
         ];
     }
 
+    #[Layout('layouts.app')]
     #[Title('Koleksi')]
     public function render()
     {
@@ -126,6 +128,6 @@ class Shop extends Component
         return view('livewire.shop.index', [
             'products' => $products,
             'categories' => $categories,
-        ])->layout('layouts.app');
+        ]);
     }
 }

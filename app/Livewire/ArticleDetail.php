@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\JournalEntry;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -23,6 +24,7 @@ class ArticleDetail extends Component
         }
     }
 
+    #[Layout('layouts.app')]
     #[Title('Detail Artikel')]
     public function render()
     {

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Product;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -29,6 +30,7 @@ class ProductDetail extends Component
             ->log("Viewed details of '{$this->product->name}'");
     }
 
+    #[Layout('layouts.app')]
     #[Title('Detail Produk')]
     public function render()
     {
@@ -41,6 +43,6 @@ class ProductDetail extends Component
 
         return view('livewire.shop.product-detail', [
             'relatedProducts' => $relatedProducts,
-        ])->layout('layouts.app');
+        ]);
     }
 }
