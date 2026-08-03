@@ -24,6 +24,9 @@ class SellerShop extends Component
     #[Url(as: 'category')]
     public string $category = 'all';
 
+    #[Url(as: 'sort')]
+    public string $sort = 'default';
+
     public function mount(string $seller_slug): void
     {
         $sellerRequest = SellerRequest::query()
@@ -48,6 +51,14 @@ class SellerShop extends Component
     public function selectCategory(string $category): void
     {
         $this->category = $category;
+        $this->resetPage();
+    }
+
+    public function setSort(string $sort): void
+    {
+        $allowedSorts = ['default', 'price_asc', 'price_desc', 'name_asc', 'name_desc'];
+
+        $this->sort = in_array($sort, $allowedSorts, true) ? $sort : 'default';
         $this->resetPage();
     }
 
@@ -102,7 +113,11 @@ class SellerShop extends Component
                     $query->where('slug', $this->category);
                 });
             })
-            ->latest();
+            ->when($this->sort === 'price_asc', fn ($query) => $query->orderBy('price', 'asc'))
+            ->when($this->sort === 'price_desc', fn ($query) => $query->orderBy('price', 'desc'))
+            ->when($this->sort === 'name_asc', fn ($query) => $query->orderBy('name', 'asc'))
+            ->when($this->sort === 'name_desc', fn ($query) => $query->orderBy('name', 'desc'))
+            ->when($this->sort === 'default', fn ($query) => $query->latest());
 
         $products = $query->paginate(12, ['*'], $this->paginationPageName());
 
