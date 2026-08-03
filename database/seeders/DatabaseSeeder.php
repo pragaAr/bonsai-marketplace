@@ -530,7 +530,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
             // Seed Image via Spatie MediaLibrary
-            $imagePath = base_path('images/'.$imageName);
+            $imagePath = public_path('images/'.$imageName);
             if (file_exists($imagePath)) {
                 $product->addMedia($imagePath)
                     ->preservingOriginal()
@@ -592,7 +592,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'approved',
             ]);
 
-            $imagePath = base_path('images/'.$data['image']);
+            $imagePath = public_path('images/'.$data['image']);
             if (file_exists($imagePath)) {
                 $product->addMedia($imagePath)->preservingOriginal()->toMediaCollection('images');
             }
@@ -649,7 +649,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'approved',
             ]);
 
-            $imagePath = base_path('images/'.$data['image']);
+            $imagePath = public_path('images/'.$data['image']);
             if (file_exists($imagePath)) {
                 $product->addMedia($imagePath)->preservingOriginal()->toMediaCollection('images');
             }
@@ -706,7 +706,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'approved',
             ]);
 
-            $imagePath = base_path('images/'.$data['image']);
+            $imagePath = public_path('images/'.$data['image']);
             if (file_exists($imagePath)) {
                 $product->addMedia($imagePath)->preservingOriginal()->toMediaCollection('images');
             }
@@ -763,7 +763,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'approved',
             ]);
 
-            $imagePath = base_path('images/'.$data['image']);
+            $imagePath = public_path('images/'.$data['image']);
             if (file_exists($imagePath)) {
                 $product->addMedia($imagePath)->preservingOriginal()->toMediaCollection('images');
             }
@@ -814,18 +814,12 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($journalsData as $data) {
-            $imageName = $data['image'];
+            // Journal images are served from public/images via the model fallback.
+            // Do not add them to Spatie MediaLibrary, so seed data stays within
+            // the products/ and users/ storage structure.
             unset($data['image']);
 
             $journal = JournalEntry::create($data);
-
-            // Seed Image via Spatie MediaLibrary
-            $imagePath = base_path('images/'.$imageName);
-            if (file_exists($imagePath)) {
-                $journal->addMedia($imagePath)
-                    ->preservingOriginal()
-                    ->toMediaCollection('images');
-            }
         }
     }
 }
