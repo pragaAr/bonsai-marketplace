@@ -2,9 +2,9 @@
 
 namespace App\Livewire;
 
-use App\Models\Category;
-use App\Models\PlantDetail;
 use App\Models\Product;
+use App\Services\CategoryService;
+use App\Services\ProductQueryService;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -75,49 +75,15 @@ class Shop extends Component
 
     #[Layout('layouts.app')]
     #[Title('Koleksi')]
-    public function render()
+    public function render(ProductQueryService $productService, CategoryService $categoryService)
     {
-        $searchTerm = trim($this->search);
+        $baseQuery = Product::query()->approved();
 
-        $products = Product::query()
-            ->where('status', 'approved')
-            ->with(['category', 'productable'])
-            // Filter Search
-            ->when($searchTerm !== '', function ($query) use ($searchTerm) {
-                $term = "%{$searchTerm}%";
-
-                $query->where(function ($q) use ($term) {
-                    $q->where('name', 'like', $term)
-                        ->orWhere('short_description', 'like', $term)
-                        ->orWhere('description', 'like', $term)
-                        ->orWhereHasMorph('productable', [PlantDetail::class], function ($query) use ($term) {
-                            $query->whereHas('species', function ($speciesQuery) use ($term) {
-                                $speciesQuery->where('scientific_name', 'like', $term)
-                                    ->orWhere('common_name', 'like', $term);
-                            });
-                        });
-                });
-            })
-            // Filter Category
-            ->when($this->category !== 'all', function ($query) {
-                $query->whereHas('category', fn ($q) => $q->where('slug', $this->category));
-            })
-            // Sorting
-            ->when($this->sort === 'price_asc', fn ($q) => $q->orderBy('price', 'asc'))
-            ->when($this->sort === 'price_desc', fn ($q) => $q->orderBy('price', 'desc'))
-            ->when($this->sort === 'name_asc', fn ($q) => $q->orderBy('name', 'asc'))
-            ->when($this->sort === 'name_desc', fn ($q) => $q->orderBy('name', 'desc'))
-            ->when(! in_array($this->sort, ['price_asc', 'price_desc', 'name_asc', 'name_desc']), function ($q) {
-                $q->orderBy('featured', 'desc')->orderBy('id', 'desc');
-            })
+        $products = $productService
+            ->buildFilteredQuery($baseQuery, $this->search, $this->category, $this->sort)
             ->paginate(12);
 
-        // Ambil kategori DB & tambahkan opsi "Semua" di awal
-        $dbCategories = Category::query()->orderBy('name')->get(['name', 'slug']);
-
-        $categories = collect([
-            (object) ['name' => 'Semua', 'slug' => 'all'],
-        ])->concat($dbCategories);
+        $categories = $categoryService->getGlobalCategories();
 
         return view('livewire.shop.index', [
             'products' => $products,
