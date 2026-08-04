@@ -2,7 +2,7 @@
   <!-- Hero Section -->
   <section id="hero-section"
     class="relative w-full h-[90vh] md:h-[100vh] overflow-hidden">
-    <img src="{{ asset('images/hero2.png') }}"
+    <img src="{{ asset('images/hero.webp') }}"
       alt="Beautiful bonsai tree in a serene setting"
       class="absolute inset-0 w-full h-full object-cover"
       loading="eager" />
