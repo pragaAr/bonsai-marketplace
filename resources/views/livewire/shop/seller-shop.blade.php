@@ -1,4 +1,5 @@
-<div>
+<div x-data
+  @shop-page-updated.window="document.getElementById('scrollTarget')?.scrollIntoView({ behavior: 'smooth' })">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
     <div class="mb-8">
       <a href="{{ route('shop') }}" wire:navigate
@@ -54,7 +55,9 @@
       </div>
     </section>
 
-    <div class="flex items-end justify-between mt-10 mb-5">
+    <div
+      class="flex items-end justify-between mt-10 mb-5 scroll-mt-24"
+      id="scrollTarget">
       <div>
         <p
           class="text-xs uppercase tracking-wider text-accent font-semibold">
@@ -73,18 +76,6 @@
         <!-- Category Pills -->
         <div
           class="flex w-full items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide whitespace-nowrap md:overflow-x-hidden xl:w-auto">
-          <button type="button"
-            wire:click="selectCategory('all')"
-            wire:loading.attr="disabled"
-            wire:target="selectCategory('all')"
-            class="filter-btn flex-shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-xs font-medium border border-primary/20 hover:border-primary transition-colors duration-200 cursor-pointer {{ $category === 'all' ? 'active' : '' }}">
-
-            <x-icons.spinner wire:loading
-              wire:target="selectCategory('all')"
-              class="h-3 w-3 text-current" />
-
-            Semua Produk
-          </button>
 
           @foreach ($categories as $categoryItem)
             <button type="button"
@@ -198,17 +189,27 @@
 
     @if ($products->isEmpty())
       <div
-        class="bg-white rounded-xl border border-primary/5 shadow-sm text-center py-16">
-        <p class="text-sm text-primary/50">
-          {{ $search || $category !== 'all' ? 'Produk tidak ditemukan.' : 'Toko ini belum memiliki produk yang tersedia.' }}
+        class="text-center py-20 bg-white rounded-xl border border-primary/5 shadow-sm">
+        <svg class="w-16 h-16 text-primary/10 mx-auto mb-4"
+          fill="none" stroke="currentColor"
+          stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <h3 class="text-base font-semibold text-primary">
+          Produk tidak ditemukan</h3>
+        <p
+          class="text-xs text-primary/50 mt-1 max-w-xs mx-auto">
+          Kami tidak dapat menemukan apa yang anda cari.
+          <br>
+          Ubah keyword yang anda masukkan.
         </p>
-        @if ($search || $category !== 'all')
-          <button type="button"
-            wire:click="$set('category', 'all'); $set('search', '')"
-            class="mt-3 inline-flex text-xs text-accent hover:underline cursor-pointer">
-            Reset filter
-          </button>
-        @endif
+        <button
+          wire:click="$set('category', 'all'); $set('search', ''); $set('sort', 'default')"
+          class="mt-4 inline-flex text-xs text-accent hover:underline">
+          Reset Filters
+        </button>
       </div>
     @else
       <div wire:loading.class="hidden"

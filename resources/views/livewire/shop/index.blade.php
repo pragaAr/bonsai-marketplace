@@ -164,10 +164,10 @@
           class="text-xs text-primary/50 mt-1 max-w-xs mx-auto">
           Kami tidak dapat menemukan apa yang anda cari.
           <br>
-          Coba ubah keyword yang anda masukkan.
+          Ubah keyword yang anda masukkan.
         </p>
         <button
-          wire:click="$set('category', 'All'); $set('search', ''); $set('sort', 'default')"
+          wire:click="$set('category', 'all'); $set('search', ''); $set('sort', 'default')"
           class="mt-4 inline-flex text-xs text-accent hover:underline">
           Reset Filters
         </button>
