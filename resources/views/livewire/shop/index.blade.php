@@ -54,7 +54,7 @@
 
         <!-- Bagian Search & Sort -->
         <div
-          class="flex w-full gap-3 items-center xl:ml-auto xl:max-w-[560px] xl:justify-end">
+          class="flex w-full gap-2 items-center xl:ml-auto xl:max-w-[560px] xl:justify-end">
 
           <div class="relative flex-1">
             <svg
@@ -64,18 +64,20 @@
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.35-4.35" />
             </svg>
-            <input type="search"
+            <input type="search" name="search"
+              id="search"
               wire:model.live.debounce.300ms="search"
               placeholder="Cari produk.."
+              aria-label="Cari produk.."
               class="w-full rounded-lg border border-primary/15 bg-white py-2.5 pl-10 pr-3 text-xs text-primary placeholder:text-primary/35 focus:border-primary/40 focus:outline-none" />
           </div>
 
           <div x-data="{ open: false }"
-            class="relative w-12 flex-none">
+            class="relative w-10 flex-none">
             <button type="button" @click="open = !open"
               :aria-expanded="open"
               aria-label="Ubah urutan produk"
-              class="flex h-[42px] w-full items-center justify-center rounded-lg border border-primary/15 bg-white text-primary transition-colors hover:border-primary/30 hover:bg-primary/5 cursor-pointer">
+              class="flex h-[40px] w-full items-center justify-center rounded-lg border border-primary/15 bg-white text-primary transition-colors hover:border-primary/30 hover:bg-primary/5 cursor-pointer">
               <span
                 class="inline-flex items-center justify-center">
                 @if ($sort === 'price_asc')
@@ -91,82 +93,46 @@
                   <x-icons.z-a
                     class="h-5 w-5 text-primary" />
                 @else
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4 text-primary"
-                    viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <polygon
-                      points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3">
-                    </polygon>
-                  </svg>
+                  <x-icons.filter class="h-4 w-4" />
                 @endif
               </span>
             </button>
 
             <!-- Dropdown menu -->
-            <div x-show="open"
-              x-transition:enter="transition ease-out duration-150"
-              x-transition:enter-start="opacity-0 translate-y-1"
-              x-transition:enter-end="opacity-100 translate-y-0"
-              x-transition:leave="transition ease-in duration-100"
-              x-transition:leave-start="opacity-100 translate-y-0"
-              x-transition:leave-end="opacity-0 translate-y-1"
+            <div x-show="open" x-transition
               @click.away="open = false"
-              class="absolute right-0 z-20 mt-2 w-12 overflow-hidden rounded-xl border border-primary/10 bg-white shadow-lg"
+              class="absolute right-0 z-20 mt-2 w-10 overflow-hidden rounded-lg border border-primary/10 bg-white shadow-lg"
               style="display: none;">
 
-              <button type="button"
-                wire:click="setSort('default')"
-                wire:loading.attr="disabled"
-                wire:target="setSort" @click="open = false"
-                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'default' ? 'bg-primary/5' : '' }}"
-                title="Default">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor"
-                  stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <polygon
-                    points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3">
-                  </polygon>
-                </svg>
-              </button>
-              <button type="button"
-                wire:click="setSort('price_asc')"
-                wire:loading.attr="disabled"
-                wire:target="setSort" @click="open = false"
-                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_asc' ? 'bg-primary/5' : '' }}"
-                title="Murah ke Mahal">
-                <x-icons.arrow-down-up class="h-4 w-4" />
-              </button>
-              <button type="button"
-                wire:click="setSort('price_desc')"
-                wire:loading.attr="disabled"
-                wire:target="setSort" @click="open = false"
-                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'price_desc' ? 'bg-primary/5' : '' }}"
-                title="Mahal ke Murah">
-                <x-icons.arrow-up-down class="h-4 w-4" />
-              </button>
-              <button type="button"
-                wire:click="setSort('name_asc')"
-                wire:loading.attr="disabled"
-                wire:target="setSort"
-                @click="open = false"
-                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_asc' ? 'bg-primary/5' : '' }}"
-                title="Dari A ke Z">
-                <x-icons.a-z class="h-5 w-5" />
-              </button>
-              <button type="button"
-                wire:click="setSort('name_desc')"
-                wire:loading.attr="disabled"
-                wire:target="setSort"
-                @click="open = false"
-                class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === 'name_desc' ? 'bg-primary/5' : '' }}"
-                title="Dari Z ke A">
-                <x-icons.z-a class="h-5 w-5" />
-              </button>
+              @foreach ([
+        'default' => ['title' => 'Default', 'icon' => 'default'],
+        'price_asc' => ['title' => 'Murah ke Mahal', 'icon' => 'price_asc'],
+        'price_desc' => ['title' => 'Mahal ke Murah', 'icon' => 'price_desc'],
+        'name_asc' => ['title' => 'Dari A ke Z', 'icon' => 'name_asc'],
+        'name_desc' => ['title' => 'Dari Z ke A', 'icon' => 'name_desc'],
+    ] as $sortOption => $option)
+                <button type="button"
+                  wire:click="setSort('{{ $sortOption }}')"
+                  wire:loading.attr="disabled"
+                  wire:target="setSort"
+                  @click="open = false"
+                  title="{{ $option['title'] }}"
+                  class="flex w-full items-center justify-center py-3 px-2 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === $sortOption ? 'bg-primary/5' : '' }}">
+                  @if ($option['icon'] === 'price_asc')
+                    <x-icons.arrow-down-up
+                      class="h-4 w-4" />
+                  @elseif ($option['icon'] === 'price_desc')
+                    <x-icons.arrow-up-down
+                      class="h-4 w-4" />
+                  @elseif ($option['icon'] === 'name_asc')
+                    <x-icons.a-z class="h-5 w-5" />
+                  @elseif ($option['icon'] === 'name_desc')
+                    <x-icons.z-a class="h-5 w-5" />
+                  @else
+                    <x-icons.filter class="h-4 w-4" />
+                  @endif
+                </button>
+              @endforeach
             </div>
           </div>
 

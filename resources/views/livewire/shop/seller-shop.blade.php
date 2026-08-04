@@ -104,7 +104,7 @@
 
         <!-- Search -->
         <div
-          class="flex w-full gap-3 items-center xl:ml-auto xl:max-w-[560px] xl:justify-end">
+          class="flex w-full gap-2 items-center xl:ml-auto xl:max-w-[560px] xl:justify-end">
           <div class="relative flex-1">
             <svg
               class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary/40"
@@ -113,58 +113,73 @@
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.35-4.35" />
             </svg>
-            <input type="search"
+            <input type="search" name="search"
+              id="search"
               wire:model.live.debounce.300ms="search"
               placeholder="Cari produk di toko ini..."
               aria-label="Cari produk di toko ini"
               class="w-full rounded-lg border border-primary/15 bg-white py-2.5 pl-10 pr-3 text-xs text-primary placeholder:text-primary/35 focus:border-primary/40 focus:outline-none" />
           </div>
 
-          <div x-data="{ open: false }" class="relative w-12 flex-none">
+          <div x-data="{ open: false }"
+            class="relative w-10 flex-none">
             <button type="button" @click="open = !open"
-              :aria-expanded="open" aria-label="Ubah urutan produk"
-              class="flex h-[42px] w-full items-center justify-center rounded-lg border border-primary/15 bg-white text-primary transition-colors hover:border-primary/30 hover:bg-primary/5 cursor-pointer">
+              :aria-expanded="open"
+              aria-label="Ubah urutan produk"
+              class="flex h-[40px] w-full items-center justify-center rounded-lg border border-primary/15 bg-white text-primary transition-colors hover:border-primary/30 hover:bg-primary/5 cursor-pointer">
               @if ($sort === 'price_asc')
-                <x-icons.arrow-down-up class="h-4 w-4 text-primary" />
+                <x-icons.arrow-down-up
+                  class="h-4 w-4 text-primary" />
               @elseif ($sort === 'price_desc')
-                <x-icons.arrow-up-down class="h-4 w-4 text-primary" />
+                <x-icons.arrow-up-down
+                  class="h-4 w-4 text-primary" />
               @elseif ($sort === 'name_asc')
                 <x-icons.a-z class="h-5 w-5 text-primary" />
               @elseif ($sort === 'name_desc')
                 <x-icons.z-a class="h-5 w-5 text-primary" />
               @else
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary"
-                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 text-primary"
+                  viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <polygon
+                    points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
                 </svg>
               @endif
             </button>
 
-            <div x-show="open" x-transition @click.away="open = false"
-              class="absolute right-0 z-20 mt-2 w-12 overflow-hidden rounded-xl border border-primary/10 bg-white shadow-lg"
+            <div x-show="open" x-transition
+              @click.away="open = false"
+              class="absolute right-0 z-20 mt-2 w-10 overflow-hidden rounded-lg border border-primary/10 bg-white shadow-lg"
               style="display: none;">
               @foreach ([
-                  'default' => ['title' => 'Default', 'icon' => 'default'],
-                  'price_asc' => ['title' => 'Murah ke Mahal', 'icon' => 'price_asc'],
-                  'price_desc' => ['title' => 'Mahal ke Murah', 'icon' => 'price_desc'],
-                  'name_asc' => ['title' => 'Dari A ke Z', 'icon' => 'name_asc'],
-                  'name_desc' => ['title' => 'Dari Z ke A', 'icon' => 'name_desc'],
-              ] as $sortOption => $option)
-                <button type="button" wire:click="setSort('{{ $sortOption }}')"
-                  wire:loading.attr="disabled" wire:target="setSort"
-                  @click="open = false" title="{{ $option['title'] }}"
-                  class="flex w-full items-center justify-center p-3 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === $sortOption ? 'bg-primary/5' : '' }}">
+        'default' => ['title' => 'Default', 'icon' => 'default'],
+        'price_asc' => ['title' => 'Murah ke Mahal', 'icon' => 'price_asc'],
+        'price_desc' => ['title' => 'Mahal ke Murah', 'icon' => 'price_desc'],
+        'name_asc' => ['title' => 'Dari A ke Z', 'icon' => 'name_asc'],
+        'name_desc' => ['title' => 'Dari Z ke A', 'icon' => 'name_desc'],
+    ] as $sortOption => $option)
+                <button type="button"
+                  wire:click="setSort('{{ $sortOption }}')"
+                  wire:loading.attr="disabled"
+                  wire:target="setSort"
+                  @click="open = false"
+                  title="{{ $option['title'] }}"
+                  class="flex w-full items-center justify-center py-3 px-2 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === $sortOption ? 'bg-primary/5' : '' }}">
                   @if ($option['icon'] === 'price_asc')
-                    <x-icons.arrow-down-up class="h-4 w-4" />
+                    <x-icons.arrow-down-up
+                      class="h-4 w-4" />
                   @elseif ($option['icon'] === 'price_desc')
-                    <x-icons.arrow-up-down class="h-4 w-4" />
+                    <x-icons.arrow-up-down
+                      class="h-4 w-4" />
                   @elseif ($option['icon'] === 'name_asc')
                     <x-icons.a-z class="h-5 w-5" />
                   @elseif ($option['icon'] === 'name_desc')
                     <x-icons.z-a class="h-5 w-5" />
                   @else
-                    <span class="text-sm">↕</span>
+                    <x-icons.filter class="h-4 w-4" />
                   @endif
                 </button>
               @endforeach
