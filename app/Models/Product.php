@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model implements HasMedia
 {
@@ -164,40 +165,56 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * Get the product image URL with a fallback strategy.
+     * Get the URL of the product's primary image.
      */
     public function getImageUrlAttribute(): string
     {
-        if ($this->hasMedia('images')) {
-            $url = $this->getFirstMediaUrl('images');
-            if (! empty($url)) {
-                return $url;
-            }
-        }
+        return $this->getFirstMediaUrl('images');
+    }
 
-        $slugToImageMap = [
-            'ficus-ginseng-01' => 'bonsai-1.png',
-            'japanese-maple-01' => 'bonsai-2.png',
-            'juniper-cascade-01' => 'bonsai-3.png',
-            'chinese-elm-01' => 'bonsai-4.png',
-            'bougainvillea-01' => 'bonsai-5.png',
-            'cherry-blossom-01' => 'bonsai-6.png',
-            'jade-bonsai-01' => 'bonsai-1.png',
-            'satsuki-azalea-01' => 'bonsai-6.png',
-            'black-pine-01' => 'bonsai-3.png',
-            'serissa-01' => 'bonsai-4.png',
-            'hawaiian-umbrella-01' => 'bonsai-1.png',
-            'brazilian-rain-01' => 'bonsai-5.png',
-            'fukien-tea-01' => 'bonsai-2.png',
-            'pomegranate-01' => 'bonsai-5.png',
-            'trident-maple-01' => 'bonsai-2.png',
-            'money-tree-01' => 'bonsai-4.png',
-            'tiger-bark-ficus-01' => 'bonsai-3.png',
-            'wisteria-01' => 'bonsai-6.png',
-        ];
+    public function scopeApproved(Builder $query): Builder
+    {
+        return $query->where('status', 'approved');
+    }
 
-        $imageName = $slugToImageMap[$this->slug] ?? 'bonsai-1.png';
+    public function scopeSearch(Builder $query, string $search): Builder
+    {
+        $term = trim($search);
 
-        return asset('images/'.$imageName);
+        return $query->when($term !== '', function ($q) use ($term) {
+            $likeTerm = "%{$term}%";
+
+            $q->where(function ($innerQuery) use ($likeTerm) {
+                $innerQuery->where('name', 'like', $likeTerm)
+                    ->orWhere('short_description', 'like', $likeTerm)
+                    ->orWhere('description', 'like', $likeTerm)
+                    ->orWhereHasMorph('productable', [PlantDetail::class], function ($plantQuery) use ($likeTerm) {
+                        $plantQuery->whereHas('species', function ($speciesQuery) use ($likeTerm) {
+                            $speciesQuery->where('scientific_name', 'like', $likeTerm)
+                                ->orWhere('common_name', 'like', $likeTerm);
+                        });
+                    });
+            });
+        });
+    }
+
+    public function scopeByCategory(Builder $query, string $categorySlug): Builder
+    {
+        return $query->when($categorySlug !== 'all', function ($q) use ($categorySlug) {
+            $q->whereHas('category', fn ($catQuery) => $catQuery->where('slug', $categorySlug));
+        });
+    }
+
+    public function scopeSortBy(Builder $query, string $sortOption, string $defaultSort = 'featured'): Builder
+    {
+        return match ($sortOption) {
+            'price_asc' => $query->orderBy('price', 'asc'),
+            'price_desc' => $query->orderBy('price', 'desc'),
+            'name_asc' => $query->orderBy('name', 'asc'),
+            'name_desc' => $query->orderBy('name', 'desc'),
+            default => $defaultSort === 'latest'
+                ? $query->latest()
+                : $query->orderBy('featured', 'desc')->orderBy('id', 'desc'),
+        };
     }
 }
