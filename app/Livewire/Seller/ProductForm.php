@@ -286,7 +286,9 @@ class ProductForm extends Component
             'short_description' => 'required|string|max:255',
             'description' => 'required|string|max:5000',
             'category_id' => 'required|exists:categories,id',
-            'images' => 'array|max:4',
+            'images' => $this->isEditing
+                ? 'array|max:4'
+                : 'required|array|min:1|max:4',
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
 
@@ -356,6 +358,8 @@ class ProductForm extends Component
             'tool_material.required' => 'Bahan alat wajib diisi.',
             'tool_brand.required' => 'Merek alat wajib diisi.',
             'images.max' => 'Maksimal hanya boleh mengunggah total 4 gambar produk.',
+            'images.required' => 'Minimal harus mengunggah 1 gambar produk.',
+            'images.min' => 'Minimal harus mengunggah 1 gambar produk.',
             'images.*.image' => 'File harus berupa gambar.',
             'images.*.mimes' => 'Format gambar hanya boleh jpeg, png, jpg, webp.',
             'images.*.max' => 'Ukuran gambar maksimal 2MB.',
@@ -396,11 +400,16 @@ class ProductForm extends Component
         if ($step === 2) {
             return array_diff_key($rules, array_flip([
                 'name', 'price', 'stock', 'short_description',
-                'description', 'category_id', 'images.*',
+                'description', 'category_id', 'images', 'images.*',
             ]));
         }
 
-        return ['images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048'];
+        return [
+            'images' => $this->isEditing
+                ? 'array|max:4'
+                : 'required|array|min:1|max:4',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+        ];
     }
 
     public function nextStep(int $step): void
