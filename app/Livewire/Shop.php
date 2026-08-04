@@ -19,7 +19,7 @@ class Shop extends Component
     public $search = '';
 
     #[Url(as: 'category')]
-    public $category = 'All';
+    public $category = 'all';
 
     #[Url(as: 'sort')]
     public $sort = 'default';
@@ -34,8 +34,14 @@ class Shop extends Component
         $this->resetPage();
     }
 
-    public function updatingSort()
+    public function updatingSort(&$value): void
     {
+        $allowedSorts = ['default', 'price_asc', 'price_desc', 'name_asc', 'name_desc'];
+
+        if (! in_array($value, $allowedSorts, true)) {
+            $value = 'default';
+        }
+
         $this->resetPage();
     }
 
@@ -71,59 +77,47 @@ class Shop extends Component
     #[Title('Koleksi')]
     public function render()
     {
-        $query = Product::where('status', 'approved')->with(['category', 'productable']);
+        $searchTerm = trim($this->search);
 
-        // Search name, description & species details for plant products
-        if (! empty(trim($this->search))) {
-            $term = '%'.trim($this->search).'%';
-            $query->where(function ($q) use ($term) {
-                $q->where('name', 'like', $term)
-                    ->orWhere('description', 'like', $term)
-                    ->orWhereHasMorph('productable', [PlantDetail::class], function ($query) use ($term) {
-                        $query->whereHas('species', function ($speciesQuery) use ($term) {
-                            $speciesQuery->where('scientific_name', 'like', $term)
-                                ->orWhere('common_name', 'like', $term);
+        $products = Product::query()
+            ->where('status', 'approved')
+            ->with(['category', 'productable'])
+            // Filter Search
+            ->when($searchTerm !== '', function ($query) use ($searchTerm) {
+                $term = "%{$searchTerm}%";
+
+                $query->where(function ($q) use ($term) {
+                    $q->where('name', 'like', $term)
+                        ->orWhere('short_description', 'like', $term)
+                        ->orWhere('description', 'like', $term)
+                        ->orWhereHasMorph('productable', [PlantDetail::class], function ($query) use ($term) {
+                            $query->whereHas('species', function ($speciesQuery) use ($term) {
+                                $speciesQuery->where('scientific_name', 'like', $term)
+                                    ->orWhere('common_name', 'like', $term);
+                            });
                         });
-                    });
-            });
-        }
+                });
+            })
+            // Filter Category
+            ->when($this->category !== 'all', function ($query) {
+                $query->whereHas('category', fn ($q) => $q->where('slug', $this->category));
+            })
+            // Sorting
+            ->when($this->sort === 'price_asc', fn ($q) => $q->orderBy('price', 'asc'))
+            ->when($this->sort === 'price_desc', fn ($q) => $q->orderBy('price', 'desc'))
+            ->when($this->sort === 'name_asc', fn ($q) => $q->orderBy('name', 'asc'))
+            ->when($this->sort === 'name_desc', fn ($q) => $q->orderBy('name', 'desc'))
+            ->when(! in_array($this->sort, ['price_asc', 'price_desc', 'name_asc', 'name_desc']), function ($q) {
+                $q->orderBy('featured', 'desc')->orderBy('id', 'desc');
+            })
+            ->paginate(12);
 
-        // Category filter
-        if ($this->category !== 'All') {
-            $query->whereHas('category', function ($q) {
-                $q->where('slug', $this->category);
-            });
-        }
+        // Ambil kategori DB & tambahkan opsi "Semua" di awal
+        $dbCategories = Category::query()->orderBy('name')->get(['name', 'slug']);
 
-        // Sorting
-        switch ($this->sort) {
-            case 'price_asc':
-                $query->orderBy('price', 'asc');
-                break;
-            case 'price_desc':
-                $query->orderBy('price', 'desc');
-                break;
-            case 'name_asc':
-                $query->orderBy('name', 'asc');
-                break;
-            case 'name_desc':
-                $query->orderBy('name', 'desc');
-                break;
-            default:
-                // Default featured or id order
-                $query->orderBy('featured', 'desc')->orderBy('id', 'desc');
-                break;
-        }
-
-        $products = $query->paginate(12);
-
-        $dbCategories = Category::all();
         $categories = collect([
-            (object) ['name' => 'Semua', 'slug' => 'All'],
-        ])->concat($dbCategories->map(fn ($c) => (object) [
-            'name' => $c->name,
-            'slug' => $c->slug,
-        ]));
+            (object) ['name' => 'Semua', 'slug' => 'all'],
+        ])->concat($dbCategories);
 
         return view('livewire.shop.index', [
             'products' => $products,
