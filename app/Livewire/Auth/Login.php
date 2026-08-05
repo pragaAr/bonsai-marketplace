@@ -117,7 +117,7 @@ class Login extends Component
     }
 
     #[Layout('layouts.guest')]
-    #[Title('Login')]
+    #[Title('Login - Bonsaiku')]
     public function render()
     {
         return view('livewire.auth.login');
