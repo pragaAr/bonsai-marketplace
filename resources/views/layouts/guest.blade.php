@@ -8,7 +8,7 @@
   <meta name="description"
     content="Toko Online - Menjual berbagai jenis tanaman bonsai, alat perawatan, dan aksesori untuk para pecinta bonsai. Temukan koleksi lengkap kami dengan harga terbaik dan layanan pengiriman cepat.">
   <title>
-    {{ $title ?? 'bonsaiku' }}
+    {{ $title ?? 'Bonsaiku' }}
   </title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com"

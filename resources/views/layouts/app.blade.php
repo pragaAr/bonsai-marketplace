@@ -6,7 +6,7 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0" />
   <title>
-    bonsaiku {{ $title ? '| ' . $title : '' }}
+    Bonsaiku {{ $title ? '| ' . $title : '' }}
   </title>
   <meta name="description"
     content="Curated bonsai collection for mindful living. Premium indoor and outdoor bonsai trees, care guides, and expert advice." />

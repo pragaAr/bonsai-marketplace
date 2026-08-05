@@ -6,7 +6,7 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0" />
   <title>
-    {{ $title ?? 'Dashboard - bonsaiku' }}
+    {{ $title ?? 'Dashboard - Bonsaiku' }}
   </title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   <!-- Toastify -->
@@ -119,7 +119,7 @@
     <!-- Session Flash Toast (triggered after wire:navigate redirect) -->
     @if (session()->has('toast'))
       <script>
-        (function () {
+        (function() {
           var payload = @js(session('toast'));
 
           function fireSessionToast() {
@@ -129,10 +129,16 @@
           }
 
           // Livewire SPA: fire after navigate completes
-          document.addEventListener('livewire:navigate-end', fireSessionToast, { once: true });
+          document.addEventListener('livewire:navigate-end',
+            fireSessionToast, {
+              once: true
+            });
           // Fallback: fire on DOMContentLoaded if already on target page
           if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', fireSessionToast, { once: true });
+            document.addEventListener('DOMContentLoaded',
+              fireSessionToast, {
+                once: true
+              });
           } else {
             setTimeout(fireSessionToast, 100);
           }
