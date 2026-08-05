@@ -19,38 +19,64 @@
 
     <!-- Store Header -->
     <section
-      class="bg-[#C65A3A] text-white rounded-2xl p-6 md:p-8 shadow-sm">
+      class="bg-gradient-to-br from-[#C65A3A] via-[#B24D30] to-[#8C3A22] text-white rounded-2xl p-6 md:p-8 shadow-md relative overflow-hidden">
+
       <div
-        class="flex flex-col md:flex-row md:items-center gap-5">
+        class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full blur-2xl pointer-events-none">
+      </div>
+
+      <div
+        class="flex flex-col sm:flex-row items-start sm:items-center gap-5 relative z-10">
+
+        <!-- Avatar / Logo Inisial -->
         <div
-          class="w-20 h-20 rounded-2xl bg-cream/10 flex items-center justify-center shrink-0">
-          <span class="text-3xl font-semibold">
+          class="w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-md ring-1 ring-white/20 flex items-center justify-center shrink-0 shadow-inner">
+          <span
+            class="text-3xl font-bold text-white tracking-wider">
             {{ Str::upper(Str::substr($seller->sellerRequest?->store_name ?? $seller->name, 0, 1)) }}
           </span>
         </div>
-        <div class="flex-1">
-          <p
-            class="text-xs uppercase tracking-wider text-cream/60">
-            Seller kami</p>
-          <h1
-            class="text-2xl md:text-3xl font-semibold mt-1">
-            {{ $seller->sellerRequest?->store_name ?? $seller->name }}
-          </h1>
-          <p class="text-sm text-cream/70 mt-2">
-            {{ $seller->sellerRequest?->notes ??
-                'Koleksi tanaman dan perlengkapan pilihan dari seller kami.' }}
-          </p>
-        </div>
-        <div class="flex gap-6 text-sm md:text-right">
-          <div>
-            <p class="text-xl font-semibold">
-              {{ $productCount }}</p>
-            <p class="text-cream/60 text-xs">Produk</p>
+
+        <!-- Info Toko & Statistik -->
+        <div
+          class="flex flex-col md:flex-row md:items-center justify-between gap-4 flex-1 min-w-0 w-full">
+
+          <div class="min-w-0 flex-1">
+            <h1
+              class="text-2xl md:text-3xl font-bold tracking-tight truncate">
+              {{ $seller->sellerRequest?->store_name ?? $seller->name }}
+            </h1>
+            <p
+              class="text-sm text-white/80 mt-1.5 line-clamp-2 max-w-xl leading-relaxed">
+              {{ $seller->sellerRequest?->notes ?? 'Koleksi tanaman dan perlengkapan pilihan dari seller kami.' }}
+            </p>
           </div>
-          <div>
-            <p class="text-xl font-semibold">Aktif</p>
-            <p class="text-cream/60 text-xs">Status toko</p>
+
+          <div
+            class="flex items-center gap-6 pt-4 md:pt-0 border-t border-white/10 md:border-t-0 shrink-0">
+            <div class="flex flex-col">
+              <span class="text-xl font-bold leading-none">
+                {{ $productCount }}
+              </span>
+              <span
+                class="text-xs text-white/70 mt-1">Produk</span>
+            </div>
+
+            <div class="h-8 w-[1px] bg-white/15"></div>
+
+            <div class="flex flex-col">
+              <div class="flex items-center gap-1.5">
+                <span
+                  class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span
+                  class="text-base font-semibold leading-none">Aktif</span>
+              </div>
+              <span
+                class="text-xs text-white/70 mt-1">Status
+                Toko</span>
+            </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -68,118 +94,12 @@
       </div>
     </div>
 
-    <!-- Toolbar: Filters & Search -->
-    <div class="mb-5 space-y-4">
-      <div
-        class="flex flex-wrap gap-4 xl:flex-row xl:items-center xl:justify-between">
+    <!-- Toolbar: Filters, Search & Sort -->
+    <x-shop-toolbar :categories="$categories" :selected-category="$category"
+      :selected-sort="$sort"
+      search-placeholder="Cari produk di toko ini..." />
 
-        <!-- Category Pills -->
-        <div
-          class="flex w-full items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide whitespace-nowrap md:overflow-x-hidden xl:w-auto">
-
-          @foreach ($categories as $categoryItem)
-            <button type="button"
-              wire:click="selectCategory('{{ $categoryItem->slug }}')"
-              wire:loading.attr="disabled"
-              wire:target="selectCategory('{{ $categoryItem->slug }}')"
-              class="filter-btn flex-shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-xs font-medium border border-primary/20 hover:border-primary transition-colors duration-200 cursor-pointer {{ $category === $categoryItem->slug ? 'active' : '' }}">
-
-              <x-icons.spinner wire:loading
-                wire:target="selectCategory('{{ $categoryItem->slug }}')"
-                class="h-3 w-3 text-current" />
-
-              {{ $categoryItem->name }}
-            </button>
-          @endforeach
-        </div>
-
-        <!-- Search -->
-        <div
-          class="flex w-full gap-2 items-center xl:ml-auto xl:max-w-[560px] xl:justify-end">
-          <div class="relative flex-1">
-            <svg
-              class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary/40"
-              fill="none" stroke="currentColor"
-              stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
-            <input type="search" name="search"
-              id="search"
-              wire:model.live.debounce.300ms="search"
-              placeholder="Cari produk di toko ini..."
-              aria-label="Cari produk di toko ini"
-              class="w-full rounded-lg border border-primary/15 bg-white py-2.5 pl-10 pr-3 text-xs text-primary placeholder:text-primary/35 focus:border-primary/40 focus:outline-none" />
-          </div>
-
-          <div x-data="{ open: false }"
-            class="relative w-10 flex-none">
-            <button type="button" @click="open = !open"
-              :aria-expanded="open"
-              aria-label="Ubah urutan produk"
-              class="flex h-[40px] w-full items-center justify-center rounded-lg border border-primary/15 bg-white text-primary transition-colors hover:border-primary/30 hover:bg-primary/5 cursor-pointer">
-              @if ($sort === 'price_asc')
-                <x-icons.arrow-down-up
-                  class="h-4 w-4 text-primary" />
-              @elseif ($sort === 'price_desc')
-                <x-icons.arrow-up-down
-                  class="h-4 w-4 text-primary" />
-              @elseif ($sort === 'name_asc')
-                <x-icons.a-z class="h-5 w-5 text-primary" />
-              @elseif ($sort === 'name_desc')
-                <x-icons.z-a class="h-5 w-5 text-primary" />
-              @else
-                <svg xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4 text-primary"
-                  viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <polygon
-                    points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-                </svg>
-              @endif
-            </button>
-
-            <div x-show="open" x-transition
-              @click.away="open = false"
-              class="absolute right-0 z-20 mt-2 w-10 overflow-hidden rounded-lg border border-primary/10 bg-white shadow-lg"
-              style="display: none;">
-              @foreach ([
-        'default' => ['title' => 'Default', 'icon' => 'default'],
-        'price_asc' => ['title' => 'Murah ke Mahal', 'icon' => 'price_asc'],
-        'price_desc' => ['title' => 'Mahal ke Murah', 'icon' => 'price_desc'],
-        'name_asc' => ['title' => 'Dari A ke Z', 'icon' => 'name_asc'],
-        'name_desc' => ['title' => 'Dari Z ke A', 'icon' => 'name_desc'],
-    ] as $sortOption => $option)
-                <button type="button"
-                  wire:click="setSort('{{ $sortOption }}')"
-                  wire:loading.attr="disabled"
-                  wire:target="setSort"
-                  @click="open = false"
-                  title="{{ $option['title'] }}"
-                  class="flex w-full items-center justify-center py-3 px-2 text-primary hover:bg-primary/5 cursor-pointer {{ $sort === $sortOption ? 'bg-primary/5' : '' }}">
-                  @if ($option['icon'] === 'price_asc')
-                    <x-icons.arrow-down-up
-                      class="h-4 w-4" />
-                  @elseif ($option['icon'] === 'price_desc')
-                    <x-icons.arrow-up-down
-                      class="h-4 w-4" />
-                  @elseif ($option['icon'] === 'name_asc')
-                    <x-icons.a-z class="h-5 w-5" />
-                  @elseif ($option['icon'] === 'name_desc')
-                    <x-icons.z-a class="h-5 w-5" />
-                  @else
-                    <x-icons.filter class="h-4 w-4" />
-                  @endif
-                </button>
-              @endforeach
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <!-- Product Grid -->
     <div wire:loading.flex
       wire:target="previousPage, nextPage, gotoPage, setSort"
       class="my-10 items-center justify-center text-center text-base font-medium text-primary/60 animate-pulse"
@@ -188,121 +108,18 @@
     </div>
 
     @if ($products->isEmpty())
-      <div
-        class="text-center py-20 bg-white rounded-xl border border-primary/5 shadow-sm">
-        <svg class="w-16 h-16 text-primary/10 mx-auto mb-4"
-          fill="none" stroke="currentColor"
-          stroke-width="1.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-        </svg>
-        <h3 class="text-base font-semibold text-primary">
-          Produk tidak ditemukan</h3>
-        <p
-          class="text-xs text-primary/50 mt-1 max-w-xs mx-auto">
-          Kami tidak dapat menemukan apa yang anda cari.
-          <br>
-          Ubah keyword yang anda masukkan.
-        </p>
-        <button
-          wire:click="$set('category', 'all'); $set('search', ''); $set('sort', 'default')"
-          class="mt-4 inline-flex text-xs text-accent hover:underline">
-          Reset Filters
-        </button>
-      </div>
+      <x-empty-products />
     @else
       <div wire:loading.class="hidden"
         wire:target="previousPage, nextPage, gotoPage, setSort"
         class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         @foreach ($products as $product)
-          <div
-            class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full"
-            wire:key="product-{{ $product->id }}">
-
-            <!-- Product Gallery Click -->
-            <a href="{{ route('product.detail', $product->slug) }}"
-              wire:navigate class="block">
-              <div
-                class="product-img-wrapper overflow-hidden bg-primary/[0.02]">
-                <img src="{{ $product->image_url }}"
-                  alt="{{ $product->name }} bonsai"
-                  class="product-image-aspect w-full object-cover transition-transform duration-500 hover:scale-105"
-                  loading="lazy" />
-              </div>
-            </a>
-
-            <!-- Product Specs -->
-            <div class="p-4 flex flex-col flex-1">
-              <a href="{{ route('product.detail', $product->slug) }}"
-                wire:navigate class="block flex-1">
-                <h3
-                  class="font-semibold text-primary text-sm md:text-base leading-tight line-clamp-1 hover:text-accent transition-colors">
-                  {{ $product->name }}</h3>
-                <p
-                  class="text-xs text-accent mt-1 line-clamp-1">
-                  {{ Str::limit($product->short_description, 20, '…') }}
-                </p>
-                <p
-                  class="text-primary font-bold text-sm mt-2">
-                  Rp
-                  {{ number_format($product->price, 0, ',', '.') }}
-                </p>
-              </a>
-
-              <!-- Cart & Buy Actions -->
-              <div
-                class="flex flex-wrap flex-shrink gap-2 mt-4 pt-3 border-t border-primary/5">
-                <!-- Add to Cart (Livewire Event dispatch) -->
-                <x-cart-button :product="$product"
-                  label="Keranjang"
-                  spanClass="hidden sm:inline"
-                  class="btn-lift flex-1 flex items-center justify-center gap-1.5 bg-primary text-cream text-xs py-2.5 px-3 rounded-lg transition-colors cursor-pointer hover:bg-opacity-90" />
-
-                <x-buy-button :product="$product"
-                  label="Beli"
-                  spanClass="hidden sm:inline"
-                  class="btn-lift flex-1 flex items-center justify-center gap-1.5 bg-[#C65A3A] text-white text-xs font-semibold py-2.5 px-3 rounded-lg hover:bg-[#A94B31] transition-colors" />
-              </div>
-            </div>
-          </div>
+          <x-product-card :product="$product"
+            :key="$product->id" />
         @endforeach
       </div>
 
-      @if ($products->hasPages())
-        <div class="mt-10 flex justify-center gap-2">
-          <button type="button"
-            wire:click="previousPage('{{ $products->getPageName() }}')"
-            wire:loading.attr="disabled"
-            wire:target="previousPage, nextPage, gotoPage"
-            @if ($products->onFirstPage()) disabled @endif
-            aria-label="Halaman sebelumnya"
-            class="min-w-[44px] min-h-[44px] rounded-lg border border-primary/15 p-2.5 flex items-center justify-center hover:bg-primary/5 transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
-            <x-icons.arrow-left class="w-4 h-4" />
-          </button>
-
-          @for ($i = 1; $i <= $products->lastPage(); $i++)
-            <button type="button"
-              wire:click="gotoPage({{ $i }}, '{{ $products->getPageName() }}')"
-              wire:loading.attr="disabled"
-              wire:target="previousPage, nextPage, gotoPage"
-              aria-label="Halaman {{ $i }}"
-              class="min-w-[44px] min-h-[44px] rounded-lg border border-primary/15 text-sm font-medium flex items-center justify-center hover:bg-primary/5 transition-colors cursor-pointer {{ $i === $products->currentPage() ? 'bg-primary text-cream border-primary' : '' }}">
-              {{ $i }}
-            </button>
-          @endfor
-
-          <button type="button"
-            wire:click="nextPage('{{ $products->getPageName() }}')"
-            wire:loading.attr="disabled"
-            wire:target="previousPage, nextPage, gotoPage"
-            @if (!$products->hasMorePages()) disabled @endif
-            aria-label="Halaman berikutnya"
-            class="min-w-[44px] min-h-[44px] rounded-lg border border-primary/15 p-2.5 flex items-center justify-center hover:bg-primary/5 transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
-            <x-icons.arrow-right class="w-4 h-4" />
-          </button>
-        </div>
-      @endif
+      <x-pagination :paginator="$products" />
     @endif
   </div>
 </div>
