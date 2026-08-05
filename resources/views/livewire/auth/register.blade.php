@@ -53,7 +53,7 @@
         </div>
         <div class="mb-4">
           <label for="address"
-            class="block text-sm font-medium text-primary mb-1">Address</label>
+            class="block text-sm font-medium text-primary mb-1">Alamat</label>
           <input wire:model.defer="address" type="text"
             name="address" id="address"
             class="w-full border border-primary/15 rounded px-3 py-2 focus:outline-none focus:border-primary/40"
@@ -98,7 +98,7 @@
         </div>
         <div x-data="{ showPassword: false }" class="mb-4">
           <label for="password_confirmation"
-            class="block text-sm font-medium text-primary mb-1">Confirm
+            class="block text-sm font-medium text-primary mb-1">Ulangi
             Password</label>
           <div>
             <div class="relative">
