@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Auth\VerificationController;
 use App\Livewire\About;
 use App\Livewire\Admin\Access\Permission;
 use App\Livewire\Admin\Access\Role;
@@ -50,6 +51,11 @@ Route::get('/seller/shop/{seller_slug}', SellerShop::class)->name('seller.shop')
 Route::get('/about', About::class)->name('about');
 
 Route::get('/care-guide', CareGuide::class)->name('care-guide');
+
+// Verifikasi email pendaftaran manual. 
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+    ->middleware('signed')
+    ->name('verification.verify');
 
 Route::get('/article', Article::class)->name('article');
 Route::get('/article/{slug}', ArticleDetail::class)->name('article.detail');
