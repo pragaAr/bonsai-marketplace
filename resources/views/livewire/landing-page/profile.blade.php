@@ -38,11 +38,11 @@
     <div class="flex-1 overflow-y-auto">
       <form wire:submit="saveProfile" class="p-6 sm:p-8">
 
-        @if ($isGoogleOnly)
+        @if ($hasGoogleAccount)
           <div
-            class="mb-6 rounded-2xl border border-primary/10 bg-white px-4 py-3 text-xs leading-5 text-primary/70">
+            class="mb-6 rounded-2xl border border-primary/10 bg-red-400 px-4 py-3 text-xs leading-5 text-white">
             Akun Anda terhubung dengan Google. Email tidak
-            dapat diubah secara langsung di sini.
+            dapat diubah.
           </div>
         @endif
 
@@ -60,17 +60,28 @@
               @enderror
             </div>
 
-            <div>
-              <label for="email"
-                class="mb-2 block text-sm font-medium text-primary">Email</label>
-              <input id="email" type="email"
-                wire:model.defer="email"
-                class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors placeholder:text-primary/35 focus:border-primary/35" />
-              @error('email')
-                <p class="mt-1.5 text-xs text-red-600">
-                  {{ $message }}</p>
-              @enderror
-            </div>
+            @if ($hasGoogleAccount)
+              <div>
+                <label for="email_locked"
+                  class="mb-2 block text-sm font-medium text-primary">Email</label>
+                <input id="email_locked" type="email"
+                  value="{{ $email }}" disabled
+                  class="w-full rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3 text-sm text-primary/60 outline-none" />
+              </div>
+            @else
+              <div>
+                <label for="email"
+                  class="mb-2 block text-sm font-medium text-primary">Email</label>
+                <input id="email" type="email"
+                  wire:model.defer="email"
+                  class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors placeholder:text-primary/35 focus:border-primary/35" />
+                @error('email')
+                  <p class="mt-1.5 text-xs text-red-600">
+                    {{ $message }}</p>
+                @enderror
+              </div>
+            @endif
+
           @endif
 
           <div>
@@ -108,7 +119,7 @@
                 wire:model="avatarFile"
                 wire:loading.attr="disabled"
                 accept=".jpg,.jpeg,.png,image/jpeg,image/png"
-                class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-cream" />
+                class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary cursor-pointer outline-none transition-colors file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-cream" />
               <p wire:loading wire:target="avatarFile"
                 class="mt-2 animate-pulse text-xs font-medium text-primary/60">
                 Mengupload...
@@ -118,45 +129,53 @@
                   {{ $message }}</p>
               @enderror
             </div>
+          @endif
 
-            <div class="border-t border-primary/10 pt-5">
+          <div class="border-t border-primary/10 pt-5">
+            <p
+              class="mb-4 text-sm font-medium text-primary">
+              {{ $isGoogleOnly ? 'Buat Password Manual' : 'Password Baru' }}
+              <span
+                class="text-primary/45 font-normal">(Opsional)</span>
+            </p>
+            @if ($isGoogleOnly)
               <p
-                class="mb-4 text-sm font-medium text-primary">
-                Password Baru <span
-                  class="text-primary/45 font-normal">(Opsional)</span>
+                class="mb-4 text-xs leading-5 text-primary/60">
+                Setelah password dibuat, akun ini bisa login
+                memakai Google maupun email dan password.
               </p>
-              <div class="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label for="password"
-                    class="mb-2 block text-xs text-primary/60">Password
-                    baru</label>
-                  <input id="password" type="password"
-                    wire:model.defer="password"
-                    placeholder="Min. 8 karakter"
-                    class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors placeholder:text-primary/35 focus:border-primary/35" />
-                  @error('password')
-                    <p class="mt-1.5 text-xs text-red-600">
-                      {{ $message }}</p>
-                  @enderror
-                </div>
-                <div>
-                  <label for="password_confirmation"
-                    class="mb-2 block text-xs text-primary/60">Konfirmasi</label>
-                  <input id="password_confirmation"
-                    type="password"
-                    wire:model.defer="password_confirmation"
-                    placeholder="Ulangi password"
-                    class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors placeholder:text-primary/35 focus:border-primary/35" />
-                </div>
+            @endif
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label for="password"
+                  class="mb-2 block text-xs text-primary/60">Password
+                  baru</label>
+                <input id="password" type="password"
+                  wire:model.defer="password"
+                  placeholder="Min. 8 karakter"
+                  class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors placeholder:text-primary/35 focus:border-primary/35" />
+                @error('password')
+                  <p class="mt-1.5 text-xs text-red-600">
+                    {{ $message }}</p>
+                @enderror
+              </div>
+              <div>
+                <label for="password_confirmation"
+                  class="mb-2 block text-xs text-primary/60">Konfirmasi</label>
+                <input id="password_confirmation"
+                  type="password"
+                  wire:model.defer="password_confirmation"
+                  placeholder="Ulangi password"
+                  class="w-full rounded-2xl border border-primary/15 bg-white px-4 py-3 text-sm text-primary outline-none transition-colors placeholder:text-primary/35 focus:border-primary/35" />
               </div>
             </div>
-          @endif
+          </div>
         </div>
 
         <div
           class="mt-8 flex flex-wrap gap-3 border-t border-primary/10 pt-6">
           <button type="submit"
-            class="inline-flex items-center gap-2 justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
+            class="inline-flex flex-1 items-center gap-2 justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
             wire:loading.attr="disabled"
             wire:target="saveProfile">
             <span>
@@ -169,7 +188,7 @@
           </button>
           <button type="button"
             @click="$wire.closeEditor()"
-            class="inline-flex items-center justify-center rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5 cursor-pointer">
+            class="inline-flex flex-1 items-center justify-center rounded-full border border-primary/15 bg-white px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/5 cursor-pointer">
             Batal
           </button>
         </div>

@@ -41,6 +41,8 @@ class Profile extends Component
 
     public bool $isGoogleOnly = false;
 
+    public bool $hasGoogleAccount = false;
+
     public bool $showEditor = false;
 
     public bool $hasGoogleAvatar = false;
@@ -57,7 +59,8 @@ class Profile extends Component
         $this->whatsapp = $user->whatsapp ?? '';
         $this->avatar = $user->avatar ?? '';
 
-        $this->isGoogleOnly = filled($user->google_id) && blank($user->password);
+        $this->hasGoogleAccount = filled($user->google_id);
+        $this->isGoogleOnly = $this->hasGoogleAccount && blank($user->password);
         $this->sellerStatus = $user->seller_status;
         $this->sellerLabel = $user->seller_label;
         $this->rejectionReason = $user->sellerRequest?->rejection_reason;
@@ -93,29 +96,55 @@ class Profile extends Component
         $user = Auth::user();
 
         if ($this->isGoogleOnly) {
-            $validated = $this->validate([
+            $rules = [
                 'whatsapp' => ['nullable', 'string', 'max:20'],
                 'address' => ['nullable', 'string', 'max:1000'],
-            ], [
+            ];
+
+            if (filled($this->password)) {
+                $rules['password'] = ['required', 'string', 'min:8', 'confirmed'];
+            }
+
+            $validated = $this->validate($rules, [
                 'whatsapp.max' => 'Nomor WhatsApp maksimal 20 karakter.',
                 'address.max' => 'Alamat maksimal 1000 karakter.',
+                'password.required' => 'Password baru wajib diisi.',
+                'password.min' => 'Password minimal 8 karakter.',
+                'password.confirmed' => 'Konfirmasi password tidak cocok.',
             ]);
 
-            $user->update([
+            $updateData = [
                 'whatsapp' => $validated['whatsapp'],
                 'address' => $validated['address'],
-            ]);
+            ];
+
+            if (filled($this->password)) {
+                $updateData['password'] = Hash::make($this->password);
+            }
+
+            $user->update($updateData);
 
             $this->whatsapp = $validated['whatsapp'] ?? '';
             $this->address = $validated['address'] ?? '';
+            $this->password = '';
+            $this->password_confirmation = '';
+
+            $freshUser = $user->fresh();
+            $this->hasGoogleAccount = filled($freshUser->google_id);
+            $this->isGoogleOnly = $this->hasGoogleAccount && blank($freshUser->password);
         } else {
+            $hasGoogleAccount = filled($user->google_id);
+
             $rules = [
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore(Auth::id())],
                 'whatsapp' => ['nullable', 'string', 'max:20'],
                 'address' => ['nullable', 'string', 'max:1000'],
                 'avatarFile' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             ];
+
+            if (! $hasGoogleAccount) {
+                $rules['email'] = ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore(Auth::id())];
+            }
 
             if (filled($this->password)) {
                 $rules['password'] = ['required', 'string', 'min:8', 'confirmed'];
@@ -139,16 +168,30 @@ class Profile extends Component
 
             $updateData = [
                 'name' => $validated['name'],
-                'email' => $validated['email'],
                 'whatsapp' => $validated['whatsapp'],
                 'address' => $validated['address'],
             ];
+
+            $emailChanged = false;
+
+            if (! $hasGoogleAccount) {
+                $updateData['email'] = $validated['email'];
+                $emailChanged = $user->email !== $validated['email'];
+            }
+
+            if ($emailChanged) {
+                $updateData['email_verified_at'] = null;
+            }
 
             if (filled($this->password)) {
                 $updateData['password'] = Hash::make($this->password);
             }
 
             $user->update($updateData);
+
+            if ($emailChanged) {
+                $user->sendEmailVerificationNotification();
+            }
 
             if ($this->avatarFile) {
                 $user->clearMediaCollection('avatar');
@@ -160,7 +203,7 @@ class Profile extends Component
             }
 
             $this->name = $validated['name'];
-            $this->email = $validated['email'];
+            $this->email = $user->fresh()->email;
             $this->whatsapp = $validated['whatsapp'] ?? '';
             $this->address = $validated['address'] ?? '';
             $this->avatar = $user->fresh()->avatar ?? '';
