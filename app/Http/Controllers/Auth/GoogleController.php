@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\GoogleAvatarCache;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -41,19 +42,31 @@ class GoogleController extends Controller
             // User sudah pernah login via Google sebelumnya — selalu update URL avatar
             // dengan URL terbaru dari Google (URL bisa berubah antar sesi OAuth).
             // GoogleAvatarCache akan pakai URL ini saat re-download jika file lokal hilang.
-            $user->update([
+            $updateData = [
                 'avatar' => $googleUser->getAvatar(),
-            ]);
+            ];
+
+            if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+                $updateData['email_verified_at'] = now();
+            }
+
+            $user->update($updateData);
         } else {
             // Cari berdasarkan email (mungkin sudah daftar manual sebelumnya)
             $user = User::where('email', $googleUser->getEmail())->first();
 
             if ($user) {
                 // Akun email sudah ada — hubungkan dengan Google
-                $user->update([
+                $updateData = [
                     'google_id' => $googleUser->getId(),
                     'avatar' => $googleUser->getAvatar(),
-                ]);
+                ];
+
+                if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+                    $updateData['email_verified_at'] = now();
+                }
+
+                $user->update($updateData);
             } else {
                 // Buat akun baru dari Google
                 $user = User::create([
