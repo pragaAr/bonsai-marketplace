@@ -17,10 +17,10 @@ Dokumen ini berfungsi sebagai acuan prioritas pengembangan dan pelengkapan fitur
 - [x] Login manual
 - [x] Login Google / OAuth
 - [x] Register pengguna
-- [ ] Verifikasi email pengguna
+- [x] Verifikasi email pengguna
 - [ ] Reset password
 - [x] Upload dan ganti avatar profil
-- [ ] Validasi dan pengelolaan data profil yang lebih lengkap
+- [x] Validasi dan pengelolaan data profil yang lebih lengkap ?
 
 ## Prioritas 3 — Seller dan Produk
 
@@ -85,7 +85,7 @@ Dokumen ini berfungsi sebagai acuan prioritas pengembangan dan pelengkapan fitur
 
 - [x] Dokumentasi deployment dasar
 - [x] Langkah deploy ke Hostinger / subdomain
-- [ ] Setup CI/CD sederhana jika tersedia
+- [ ] Setup CI/CD sederhana
 - [ ] Automasi backup database
 - [ ] Monitoring error dan log produksi
 - [ ] Optimasi cache dan asset production
