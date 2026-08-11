@@ -3,7 +3,9 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
@@ -85,6 +87,39 @@ class Login extends Component
         }
 
         $user = User::where('email', $this->email)->first();
+
+        if ($user && filled($user->google_id) && blank($user->password)) {
+            RateLimiter::hit($this->throttleKey());
+            session()->flash('error', 'Akun ini terdaftar dengan Google. Silakan login menggunakan tombol "Masuk dengan Google".');
+
+            return;
+        }
+
+        // Jangan memanggil Auth::attempt() untuk user yang belum terverifikasi.
+        // Auth::attempt() mengubah sesi (termasuk session ID), sementara aksi ini
+        // masih berjalan sebagai request Livewire. Perubahan sesi tersebut dapat
+        // membuat snapshot/CSRF Livewire tidak sinkron dan memunculkan dialog 419.
+        if ($user
+            && $user instanceof MustVerifyEmail
+            && ! $user->hasVerifiedEmail()
+            && filled($user->password)
+            && Hash::check($this->password, $user->password)) {
+            RateLimiter::clear($this->throttleKey());
+
+            if ($user->hasActiveEmailVerificationLink()) {
+                session()->flash(
+                    'error',
+                    'Email Anda belum diverifikasi. Link verifikasi sebelumnya masih aktif. Silahkan cek inbox atau spam dan klik link tersebut.'
+                );
+
+                return;
+            }
+
+            $user->sendEmailVerificationNotification();
+            session()->flash('error', 'Email Anda belum diverifikasi. Link verifikasi baru telah dikirim ke email Anda.');
+
+            return;
+        }
 
         if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             RateLimiter::hit($this->throttleKey());

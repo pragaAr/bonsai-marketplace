@@ -2,19 +2,21 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\VerifyEmailNotification;
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasRoles, InteractsWithMedia, Notifiable;
@@ -54,8 +56,31 @@ class User extends Authenticatable implements HasMedia
     {
         return [
             'email_verified_at' => 'datetime',
+            'email_verification_sent_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new VerifyEmailNotification);
+
+        $this->forceFill([
+            'email_verification_sent_at' => now(),
+        ])->save();
+    }
+
+    public function hasActiveEmailVerificationLink(): bool
+    {
+        return ! $this->hasVerifiedEmail()
+            && $this->emailVerificationExpiresAt()?->isFuture();
+    }
+
+    public function emailVerificationExpiresAt(): ?Carbon
+    {
+        return $this->email_verification_sent_at?->copy()->addMinutes(
+            config('auth.verification.expire', 60)
+        );
     }
 
     public function registerMediaCollections(): void

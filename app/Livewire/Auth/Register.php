@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -26,7 +27,7 @@ class Register extends Component
         $rules = [
             'name' => 'required|string|max:255',
             'whatsapp' => 'required|string|max:20',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
             'address' => 'required|string',
         ];
@@ -35,7 +36,6 @@ class Register extends Component
             'name.required' => 'Nama wajib diisi.',
             'whatsapp.required' => 'Nomor WhatsApp wajib diisi.',
             'email.required' => 'Email wajib diisi.',
-            'email.unique' => 'Email sudah terdaftar.',
             'password.required' => 'Password wajib diisi.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
             'password.min' => 'Password minimal 8 karakter.',
@@ -43,6 +43,18 @@ class Register extends Component
         ];
 
         $this->validate($rules, $messages);
+
+        $existingUser = User::where('email', $this->email)->first();
+
+        if ($existingUser) {
+            $message = filled($existingUser->google_id) && blank($existingUser->password)
+                ? 'Email ini terdaftar dengan Google. Silakan login menggunakan tombol "Masuk dengan Google".'
+                : 'Email sudah terdaftar.';
+
+            throw ValidationException::withMessages([
+                'email' => $message,
+            ]);
+        }
 
         $user = User::create([
             'name' => $this->name,
@@ -53,6 +65,7 @@ class Register extends Component
         ]);
 
         $user->assignRole('user');
+        $user->sendEmailVerificationNotification();
 
         activity('user_registration')
             ->performedOn($user)
@@ -60,7 +73,7 @@ class Register extends Component
             ->event('register')
             ->log("User {$user->name} mendaftar");
 
-        session()->flash('success', 'Pendaftaran berhasil! Silahkan login untuk melanjutkan.');
+        session()->flash('success', 'Pendaftaran berhasil! Silakan cek email Anda dan klik link verifikasi sebelum login.');
 
         return redirect()->route('login');
     }
