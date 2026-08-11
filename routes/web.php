@@ -27,17 +27,11 @@ use App\Livewire\Profile;
 use App\Livewire\Seller\Dashboard as SellerDashboard;
 use App\Livewire\Seller\ProductForm as SellerProductForm;
 use App\Livewire\Seller\Products as SellerProducts;
-use App\Livewire\SellerShop;
 use App\Livewire\SellerApply;
+use App\Livewire\SellerShop;
 use App\Livewire\Shop;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes — Bonsai Marketplace
-|--------------------------------------------------------------------------
-*/
 
 // ============================================================
 // Halaman publik
@@ -52,7 +46,7 @@ Route::get('/about', About::class)->name('about');
 
 Route::get('/care-guide', CareGuide::class)->name('care-guide');
 
-// Verifikasi email pendaftaran manual. 
+// Verifikasi email pendaftaran manual.
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
     ->middleware('signed')
     ->name('verification.verify');
@@ -62,7 +56,7 @@ Route::get('/article/{slug}', ArticleDetail::class)->name('article.detail');
 
 // ============================================================
 // Autentikasi (guest only)
-// ============================================================ 
+// ============================================================
 Route::middleware('guest')->group(function () {
     Route::get('/login', Login::class)->name('login');
     Route::get('/register', Register::class)->name('register');
