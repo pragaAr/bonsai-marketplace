@@ -14,11 +14,11 @@ Sudah diimplementasikan (form registrasi manual tersedia).
 2. Sistem menampilkan form nama, email, dan password.
 3. Setelah submit, akun dibuat dan disimpan ke database.
 4. Pengguna otomatis diberi role default `user`.
-5. Pengguna diarahkan ke halaman utama setelah registrasi berhasil.
+5. Pengguna diarahkan ke halaman login setelah registrasi berhasil.
+6. Email verifikasi dikirim ke email pendaftar dan aktif selama 60 menit.
 
 ## Catatan Implementasi
 
 - Komponen Livewire: `App\Livewire\Auth\Register`.
 - Route: `GET /register` dengan middleware `guest`.
 - Email yang sama tidak boleh diduplikasi (validasi unique).
-- Verifikasi email belum diimplementasikan (lihat todo.md).
