@@ -127,14 +127,14 @@
         </div>
       </div>
 
-      <!-- Kutipan Filosofi — jembatan organik -->
+      <!-- Kutipan Filosofi -->
       <div
         class="border-t border-primary/10 pt-12 max-w-2xl mx-auto text-center">
         <p
           class="text-base md:text-lg text-primary/70 leading-relaxed italic">
-          "Bonsai mengajarkan bahwa keindahan tidak
-          diciptakan secara instan — melainkan dirawat
-          melalui perhatian kecil yang konsisten."
+          "Bukan sekadar tentang apa yang kita miliki,
+          tetapi tentang apa yang kita pelajari, bagikan,
+          dan tumbuhkan bersama"
         </p>
         <span
           class="block mt-4 text-xs text-primary/40 uppercase tracking-wider">Filosofi
