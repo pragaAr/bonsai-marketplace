@@ -498,7 +498,8 @@
             bonsaiku</h3>
           <p
             class="text-sm leading-relaxed text-cream/60 max-w-xs">
-            Dari komunitas untuk komunitas.</p>
+            Berbagi pengetahuan, bertukar pengalaman, dan
+            tumbuh bersama dalam satu komunitas.</p>
         </div>
         <div>
           <h4
