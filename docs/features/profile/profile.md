@@ -12,7 +12,7 @@ Sudah diimplementasikan sepenuhnya.
 
 - Menampilkan dan mengedit data profil: nama, email, alamat, nomor WhatsApp.
 - Upload dan ganti foto profil (avatar) melalui file upload.
-- Mengubah password (khusus pengguna yang tidak login hanya melalui Google).
+- Mengubah password baik user yang daftar manual maupun login google, sehingga dapat login hybrid.
 - Menampilkan status seller (pending, approved, rejected, banned) beserta alasan penolakan jika ada.
 - Akses cepat ke halaman riwayat pesanan.
 
